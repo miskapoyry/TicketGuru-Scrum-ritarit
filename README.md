@@ -40,9 +40,21 @@ tietoa ja keskittyä siihen.
 
 ## Käyttöliittymä
 
+### Käyttöliittymäkaavio
+
 Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
 
 Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+
+### Kirjatuminen
+
+### Lippujen myynti
+
+![alt text](kayttoliittyma_kuvat/lipunmyynti.png)
+
+### Hallinnointi
+
+### Raportointi
 
 ## Tietokanta
 
