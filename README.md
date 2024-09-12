@@ -17,7 +17,7 @@ TicketGuru tarjoaa lipunmyyjille työkalut lipunmyyntiin, tulostukseen ja lipun 
 
 ### Toteutus- ja toimintaympäristö lyhyesti:
 
--   Palvelinpuolen ratkaisut ja teknologiat: SpringBoot, MariaDB
+-   Palvelinpuolen ratkaisut ja teknologiat: SpringBoot, MariaDB, Bootstrap
 -   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), Mobiililaitteet (Android ja iOS)
 
 ### Mitä valmiina, kun projekti päättyy?
