@@ -1,18 +1,27 @@
-# Projektin nimi
+# TicketGuru
 
-Tiimi: Etunimi Sukunimi, Etunimi Sukunimi
+SCRUM-Ritarit
+Tiimi: Miska Pöyry, Tuomas Sirviö, Hanna-Riikka Happonen, Roosa Karjalainen, Pekka Näätsaari, Jesse Ritola
 
 ## Johdanto
 
-Johdantoon kirjoitetaan lyhyt, ytimekäs kuvaus siitä, mikä on projektin aihe,
-kuka on asiakas (käyttäjä), mitä hän haluaa ja saa järjestelmältä, mitä
-tekniikoita käytetään ja mitä konkreettisesti on valmiina, kun projekti päättyy.
+### Projektin aihe
+TicketGuru on lipunmyyntijärjestelmä, joka on suunniteltu lipputoimistolle. Sen pääasiallinen tarkoitus on mahdollistaa lippujen myynti ja tulostus myyntipisteessä. Järjestelmä mahdollistaa tapahtumien määrittämisen, lippujen myynnin sekä niiden käytön tarkastamisen ovella (paperiset liput sekä mobiililiput QR-koodilla).
 
--   Järjestelmän tarkoitus ja tiivis kuvaus siitä, mistä on kyse ja kenelle järjestelmä on tarkoitettu.
--   Toteutus- ja toimintaympäristö lyhyesti:  
-    -   Palvelinpuolen ratkaisut ja teknologiat (esim. palvelinteknologia, mikä tietokantajärjestelmä on käytössä)
-    -   Käyttöliittymäratkaisut ja teknologiat (esim. päätelaitteet: puhelin,
-    täppäri, desktop)
+### Asiakas
+Asiakkaamme on lipputoimisto, joka tarvitsee sähköisen järjestelmän lippujen myyntiin sekä hallintaan. Järjestelmä mahdollistaa lipunmyyjien myyvän ja tulostavan liput asiakkaille sekä hallitsevan lippujen jäljellä olevia määriä. Ennakkomyynnin jälkeen jääneet liput voidaan tulostaa ovella myytäviksi.
+
+### Mitä asiakas saa järjestelmältä
+TicketGuru tarjoaa lipunmyyjille työkalut lipunmyyntiin, tulostukseen ja lipun tarkastukseen. Järjestelmässä on myös mahdollisuus määritellä tapahtumia ja niiden lippumääriä. Tulevaisuudessa järjestelmään aiotaan lisätä verkkokauppa, jonka kautta asiakkaat voivat itse ostaa lippuja.
+
+### Toteutus- ja toimintaympäristö lyhyesti
+
+-   Palvelinpuolen ratkaisut ja teknologiat: SpringBoot, MariaDB
+-   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), Mobiililaitteet (Android ja iOS)
+
+### Mitä valmiina, kun projekti päättyy?
+
+Projektin päättyessä ovat valmiina seuraavat osa-alueet: lipunmyyntijärjestelmä, tapahtumien hallinta, lipun tulostus ja käytön tarkastaminen. Verkkokaupan integrointi on suunnitteilla seuraavaan vaiheeseen. Projektin päättyessä on valmiina myös kaikki tarvittava dokumentointi projektin kulusta ja siitä kaikesta mitä ollaan tehty. 
 
 ## Järjestelmän määrittely
 
