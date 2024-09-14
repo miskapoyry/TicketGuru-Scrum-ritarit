@@ -26,6 +26,35 @@ Projektin päättyessä ovat valmiina seuraavat osa-alueet: lipunmyyntijärjeste
 
 ## Järjestelmän määrittely
 
+### Käyttäjäryhmät (roolit):
+
+#### Järjestelmän ylläpitäjä (lipputoimisto)
+-   Lisää ja hallinnoi tapahtumia järjestelmässä
+-   Luo ja tarvittaessa päivittää lipputyypit
+-   Tuottaa myyntiraportteja mm. myynnin analysoimiseksi
+
+#### Lipunmyyjä
+-   Myy liput asiakkaille myyntipisteessä
+-   Tulostaa liput asiakkaille ja ovella myytäviksi ennakkomyynnin jälkeen
+-   Tarkastaa liput ovella (merkitään käytetyiksi)
+
+### Käyttäjätarinat
+
+#### Lipunmyyjä
+-   Lipunmyyjänä haluan myydä ja tulostaa lippuja asiakkaille, että he voivat osallistua tapahtumaan.
+-   Lipunmyyjänä haluan merkitä liput käytetyiksi ovella varmistuakseni, että vain maksaneet asiakkaat pääsevät osallistumaan tapahtumaan.
+-   Lipunmyyjänä haluan tarkastella tulevia tapahtumia ja lipputilannetta, että voin tarjota sopivia vaihtoehtoja asiakkaille.
+-   Lipunmyyjänä haluan, että järjestelmä on saatavilla 99,9 % ajasta, että voin myydä asiakkaille lippuja ja tarkastaa niitä ilman keskeytyksiä.
+-   Lipunmyyjänä haluan, että lipun myyntitapahtuma kestää alle 2 sekuntia, että voin myydä lippuja nopeasti ilman asiakaspalvelun ruuhkautumista.
+
+#### Järjestelmän ylläpitäjä
+-   Järjestelmän ylläpitäjänä haluan lisätä järjestelmään uusia tapahtumia, että lippuja voidaan myydä tuleviin tapahtumiin.
+-   Järjestelmän ylläpitäjänä haluan luoda ja muokata lipputyyppejä (esim. aikuinen, lapsi, opiskelija), että asiakkailla on sopivia hintavaihtoehtoja.
+-   Järjestelmän ylläpitäjänä haluan luoda myyntiraportteja, että pysyn ajan tasalla myynnin tilasta ja siitä, minkälaiset tapahtumat kiinnostavat asiakkaita.
+-   Järjestelmän ylläpitäjänä haluan, että tiedonhaku menneiden tapahtumien myyntitiedoista on helppoa, nopeaa ja tehokasta.
+-   Järjestelmän ylläpitäjänä haluan, että vain ylläpitäjillä on pääsy lippujen ja tapahtumien ylläpitoon.
+
+
 Määrittelyssä järjestelmää tarkastellaan käyttäjän näkökulmasta. Järjestelmän
 toiminnot hahmotellaan käyttötapausten tai käyttäjätarinoiden kautta, ja kuvataan järjestelmän
 käyttäjäryhmät.
