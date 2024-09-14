@@ -43,7 +43,7 @@ Projektin päättyessä ovat valmiina seuraavat osa-alueet: lipunmyyntijärjeste
 #### Lipunmyyjä
 -   Lipunmyyjänä haluan myydä ja tulostaa lippuja asiakkaille, että he voivat osallistua tapahtumaan.
 -   Lipunmyyjänä haluan merkitä liput käytetyiksi ovella varmistuakseni, että vain maksaneet asiakkaat pääsevät osallistumaan tapahtumaan.
--   Lipunmyyjänä haluan tarkastella tulevia tapahtumia ja lipputilannetta, että voin tarjota sopivia vaihtoehtoja asiakkaille.
+-   Lipunmyyjänä haluan tarkastella tulevia tapahtumia ja lipputilannetta, että voin etsiä ja tarjota sopivia vaihtoehtoja asiakkaille.
 
 
 #### Järjestelmän ylläpitäjä
