@@ -58,7 +58,7 @@ Lipunmyynti on avoinna Myyjille ja siellä myyjä kykenee valitsemaan tapahtuman
 
 Hallinnointiin pääsee "admin" tasoisilla tunnuksilla. Siellä käyttäjä kykenee luomaan uuden tapahtuman, tarkastelemaan tapahtumia ja niiden menetystä tai muokkaamaan valitun tapahtuman tietoja.
 
-![hallinnointi_hahmotelma](kayttoliittyma_kuvat/tapahtumat_nayttohahmotelma.png)
+![hallinnointi_hahmotelma](kayttoliittyma_kuvat/hallinnointi_nayttohahmotelma.png)
 
 ## Tietokanta
 
