@@ -50,11 +50,15 @@ Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
 
 ### Lippujen myynti
 
-![alt text](kayttoliittyma_kuvat/lipunmyynti.png)
+Lipunmyynti on avoinna Myyjille ja siellä myyjä kykenee valitsemaan tapahtuman, lippujen määrän ja tyypin sekä tulostamaan liput ostamisen jälkeen.
+
+![lipunmyynti_hahmotelma](kayttoliittyma_kuvat/lipunmyynti_nayttohahmotelma.png)
 
 ### Hallinnointi
 
-### Raportointi
+Hallinnointiin pääsee "admin" tasoisilla tunnuksilla. Siellä käyttäjä kykenee luomaan uuden tapahtuman, tarkastelemaan tapahtumia ja niiden menetystä tai muokkaamaan valitun tapahtuman tietoja.
+
+![hallinnointi_hahmotelma](kayttoliittyma_kuvat/tapahtumat_nayttohahmotelma.png)
 
 ## Tietokanta
 
