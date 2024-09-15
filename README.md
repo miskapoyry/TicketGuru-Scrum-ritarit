@@ -60,6 +60,10 @@ Hallinnointiin pääsee "admin" tasoisilla tunnuksilla. Siellä käyttäjä kyke
 
 ![hallinnointi_hahmotelma](kayttoliittyma_kuvat/hallinnointi_nayttohahmotelma.png)
 
+### Kayttoliittymahahmotelmat
+
+Hahmotelmat on loydettavissa [täältä](https://www.canva.com/design/DAGQ1kQ8OUA/b28P_8oSvLwuQQcILEEJBg/edit?utm_content=DAGQ1kQ8OUA&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+
 ## Tietokanta
 
 Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
