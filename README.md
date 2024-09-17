@@ -59,9 +59,9 @@ Projektin päättyessä ovat valmiina seuraavat osa-alueet: lipunmyyntijärjeste
 
 ### Käyttöliittymäkaavio
 
-Esitetään käyttöliittymän tärkeimmät (vain ne!) näkymät sekä niiden väliset siirtymät käyttöliittymäkaaviona. 
+Tässä on alustava käyttöliittymäkaavio. Jokainen järjestelmän käyttäjä on velvoitettu kirjautumaan, jonka jälkeen peruskäyttäjän ja adminin käyttötapausten perusteella toiminta eroaa hiukan. Admin toimii siis ikään kuin hallinnoivana elimenä, eikä täten osallistu suoranaisesti lippujen myymiseen. Hän kuitenkin kykenee hallinnoimaan tapahtumia, tarkastelemaan niitä ja lisäämään uusia. Peruskäyttäjä, eli tässä tapauksessa myyjä voi puolestaan myydä valitsemiaan lippuja valitsemaansa tapahtumaan, mikäli ne ovat vapaana. Käyttöliittymäkaaviosta on alustavasti tarkasteltavissa pääkäyttötapaukset ja niiden väliset suhteet.
 
-Jos näkymän tarkoitus ei ole itsestään selvä, se pitää kuvata lyhyesti.
+![alustava_kayttoliittymakaavio](<kayttoliittyma_kuvat/TicketGuru käyttöliittymä.PNG>)
 
 ### Kirjatuminen
 
