@@ -23,10 +23,10 @@ public class Event {
     private String location;
 
     @Column(name="total_tickets", nullable = false)
-    private Integer totalTicket;
+    private int totalTicket;
 
     @Column(name="available_tickets", nullable = false)
-    private Integer availableTickets;
+    private int availableTickets;
 
     public Event() {
     }
