@@ -7,7 +7,7 @@ public class Event {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id", nullable = false, updatable = false)
+    @Column(name="event_id", nullable = false, updatable = false)
     private Long eventId;
 
     @Column(name="created_by", nullable = false)
