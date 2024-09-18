@@ -1,8 +1,12 @@
 package ticketguru.domain;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
+@Table(name="appuser")
 public class AppUser {
 
     @Id
@@ -18,6 +22,9 @@ public class AppUser {
 
     @Column(name = "userrole", nullable = false)
     private String role;
+
+    @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Event> events = new ArrayList<>();
 
     public AppUser() {
     }

@@ -10,8 +10,9 @@ public class Event {
     @Column(name="event_id", nullable = false, updatable = false)
     private Long eventId;
 
-    @Column(name="created_by", nullable = false)
-    private AppUser createdBy; 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "created_by", nullable = false)
+    private AppUser createdBy;
 
     @Column(name="event_name", nullable = false)
     private String eventName;
