@@ -8,42 +8,42 @@ public class Sale {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="sale_id", nullable = false, updatable = false)
-    private Long eventId;
+    @Column(name = "sale_id", nullable = false, updatable = false)
+    private Long saleId;
     
-    @Column(name="ticket_id", nullable = false)
+    @Column(name = "ticket_id", nullable = false)
     private Long ticketId;
 
-    @Column(name="sold_by", nullable = false)
-    private Long Id;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "sold_by", nullable = false)
+    private AppUser soldBy;
 
-    @Column(name="sale_timestamp", nullable = false)
+    @Column(name = "sale_timestamp", nullable = false)
     private String saleTimestamp;
 
-    @Column(name="payment_method", nullable = false)
+    @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
-    @Column(name="total_price", nullable = false)
+    @Column(name = "total_price", nullable = false)
     private int totalPrice;
 
     public Sale() {
     }
 
-    public Sale(Long eventId, Long ticketId, Long id, String saleTimestamp, String paymentMethod, int totalPrice) {
-        this.eventId = eventId;
+    public Sale(Long ticketId, AppUser soldBy, String saleTimestamp, String paymentMethod, int totalPrice) {
         this.ticketId = ticketId;
-        Id = id;
+        this.soldBy = soldBy;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
     }
 
-    public Long getEventId() {
-        return eventId;
+    public Long getSaleId() {
+        return saleId;
     }
 
-    public void setEventId(Long eventId) {
-        this.eventId = eventId;
+    public void setSaleId(Long saleId) {
+        this.saleId = saleId;
     }
 
     public Long getTicketId() {
@@ -54,12 +54,12 @@ public class Sale {
         this.ticketId = ticketId;
     }
 
-    public Long getId() {
-        return Id;
+    public AppUser getSoldBy() {
+        return soldBy;
     }
 
-    public void setId(Long id) {
-        Id = id;
+    public void setSoldBy(AppUser soldBy) {
+        this.soldBy = soldBy;
     }
 
     public String getSaleTimestamp() {
@@ -85,6 +85,5 @@ public class Sale {
     public void setTotalPrice(int totalPrice) {
         this.totalPrice = totalPrice;
     }
-
     
 }
