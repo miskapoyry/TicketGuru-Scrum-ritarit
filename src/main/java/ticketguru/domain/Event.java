@@ -1,5 +1,7 @@
 package ticketguru.domain;
 
+import java.util.*;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -29,11 +31,14 @@ public class Event {
     @Column(name="available_tickets", nullable = false)
     private int availableTickets;
 
+    @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
+
     public Event() {
     }
 
     public Event(Long eventId, AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
-            int availableTickets) {
+            int availableTickets, List<Ticket> tickets) {
         this.eventId = eventId;
         this.createdBy = createdBy;
         this.eventName = eventName;
@@ -41,6 +46,7 @@ public class Event {
         this.location = location;
         this.totalTicket = totalTicket;
         this.availableTickets = availableTickets;
+        this.tickets = tickets;
     }
 
     public Long getEventId() {
@@ -97,6 +103,14 @@ public class Event {
 
     public void setAvailableTickets(int availableTickets) {
         this.availableTickets = availableTickets;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
     
 }
