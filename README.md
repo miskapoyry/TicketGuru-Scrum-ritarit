@@ -99,11 +99,15 @@ Hahmotelmat ovat löydettävissä ja muokattavissa [täältä](https://www.canva
 
 Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallintaa tehokkaasti ja joustavasti. Seuraavaksi esitetään tietohakemisto, joka sisältää tärkeimmät taulut, niiden kentät ja kuvaus niiden käyttötarkoituksesta. Ohessa on myös ER-kaavio, joka havainnollistaa tietokannan rakennetta ja suhteita eri taulujen välillä. 
 
+### Tietokantakaavio
+
+![tietokantakaavio_scrum-ritarit](https://github.com/user-attachments/assets/dfdbfd3d-20d4-42ec-8e11-52bf95ff2392)
+
 ### Tietohakemisto
 
 > ### _user_
 > _user-taulu sisältää käyttäjätilin tiedot. Tili kuuluu aina vain yhdelle käyttäjälle._
->
+
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > user_id | Long PK | Käyttäjän yksilöivä tunniste
