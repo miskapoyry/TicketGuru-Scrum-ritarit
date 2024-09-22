@@ -32,8 +32,8 @@ public class Event {
     public Event() {
     }
 
-    public Event(Long eventId, AppUser createdBy, String eventName, String eventDate, String location,
-            Integer totalTicket, Integer availableTickets) {
+    public Event(Long eventId, AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
+            int availableTickets) {
         this.eventId = eventId;
         this.createdBy = createdBy;
         this.eventName = eventName;
@@ -83,19 +83,19 @@ public class Event {
         this.location = location;
     }
 
-    public Integer getTotalTicket() {
+    public int getTotalTicket() {
         return totalTicket;
     }
 
-    public void setTotalTicket(Integer totalTicket) {
+    public void setTotalTicket(int totalTicket) {
         this.totalTicket = totalTicket;
     }
 
-    public Integer getAvailableTickets() {
+    public int getAvailableTickets() {
         return availableTickets;
     }
 
-    public void setAvailableTickets(Integer availableTickets) {
+    public void setAvailableTickets(int availableTickets) {
         this.availableTickets = availableTickets;
     }
     
