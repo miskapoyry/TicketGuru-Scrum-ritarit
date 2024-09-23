@@ -3,7 +3,7 @@ package ticketguru.domain;
 import jakarta.persistence.*;
 
 @Entity
-
+@Table(name = "Sale")
 public class Sale {
 
     @Id
