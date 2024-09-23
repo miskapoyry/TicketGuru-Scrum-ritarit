@@ -3,6 +3,7 @@ package ticketguru.domain;
 import jakarta.persistence.*;
 
 @Entity
+@Table(name = "event_ticket_type")
 public class EventTicketType {
 
     @Id
