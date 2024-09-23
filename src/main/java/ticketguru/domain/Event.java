@@ -33,21 +33,20 @@ public class Event {
     private int availableTickets;
 
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
+    private List<EventTicketType> eventTicketTypes;
 
     public Event() {
     }
 
-    public Event(Long eventId, AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
-            int availableTickets, List<Ticket> tickets) {
-        this.eventId = eventId;
+    public Event(AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
+            int availableTickets, List<EventTicketType> eventTicketTypes) {
         this.createdBy = createdBy;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.location = location;
         this.totalTicket = totalTicket;
         this.availableTickets = availableTickets;
-        this.tickets = tickets;
+        this.eventTicketTypes = eventTicketTypes;
     }
 
     public Long getEventId() {
@@ -106,12 +105,11 @@ public class Event {
         this.availableTickets = availableTickets;
     }
 
-    public List<Ticket> getTickets() {
-        return tickets;
+    public List<EventTicketType> getEventTicketTypes() {
+        return eventTicketTypes;
     }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
+    public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
+        this.eventTicketTypes = eventTicketTypes;
     }
-    
 }

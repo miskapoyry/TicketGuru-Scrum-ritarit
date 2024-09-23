@@ -1,5 +1,8 @@
 package ticketguru.domain;
 
+import java.sql.Timestamp;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -22,28 +25,30 @@ public class Ticket {
     @JoinColumn(name="ticket_type_id", nullable = false)
     private TicketType ticketType;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="sold_by", nullable = false)
-    private AppUser soldBy;
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleTicket> saleTickets;
 
     @Column(name = "sale_timestamp", nullable = false)
-    private String saleTimestamp;
+    private Timestamp saleTimestamp;
 
     @Column(name = "is_used", nullable = false)
     private boolean isUsed;
 
+    @Column(name = "used_timestamp")
+    private Timestamp usedTimestamp;
+
     public Ticket() {
     }
 
-    public Ticket(Long ticketId, String ticketNumber, Event event, TicketType ticketType, AppUser soldBy,
-            String saleTimestamp, boolean isUsed) {
-        this.ticketId = ticketId;
+    public Ticket(String ticketNumber, Event event, TicketType ticketType, List<SaleTicket> saleTickets,
+            Timestamp saleTimestamp, boolean isUsed, Timestamp usedTimestamp) {
         this.ticketNumber = ticketNumber;
         this.event = event;
         this.ticketType = ticketType;
-        this.soldBy = soldBy;
+        this.saleTickets = saleTickets;
         this.saleTimestamp = saleTimestamp;
         this.isUsed = isUsed;
+        this.usedTimestamp = usedTimestamp;
     }
 
     public Long getTicketId() {
@@ -78,19 +83,19 @@ public class Ticket {
         this.ticketType = ticketType;
     }
 
-    public AppUser getSoldBy() {
-        return soldBy;
+    public List<SaleTicket> getSaleTickets() {
+        return saleTickets;
     }
 
-    public void setSoldBy(AppUser soldBy) {
-        this.soldBy = soldBy;
+    public void setSaleTickets(List<SaleTicket> saleTickets) {
+        this.saleTickets = saleTickets;
     }
 
-    public String getSaleTimestamp() {
+    public Timestamp getSaleTimestamp() {
         return saleTimestamp;
     }
 
-    public void setSaleTimestamp(String saleTimestamp) {
+    public void setSaleTimestamp(Timestamp saleTimestamp) {
         this.saleTimestamp = saleTimestamp;
     }
 
@@ -100,5 +105,13 @@ public class Ticket {
 
     public void setUsed(boolean isUsed) {
         this.isUsed = isUsed;
+    }
+
+    public Timestamp getUsedTimestamp() {
+        return usedTimestamp;
+    }
+
+    public void setUsedTimestamp(Timestamp usedTimestamp) {
+        this.usedTimestamp = usedTimestamp;
     }
 }
