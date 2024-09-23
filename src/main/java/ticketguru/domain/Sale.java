@@ -1,5 +1,9 @@
 package ticketguru.domain;
 
+import java.math.BigDecimal;
+import java.sql.Timestamp;
+import java.util.List;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -10,29 +14,31 @@ public class Sale {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sale_id", nullable = false, updatable = false)
     private Long saleId;
-    
-    @Column(name = "ticket_id", nullable = false)
-    private Long ticketId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sold_by", nullable = false)
     private AppUser soldBy;
 
+    @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SaleTicket> saleTickets;
+
     @Column(name = "sale_timestamp", nullable = false)
-    private String saleTimestamp;
+    private Timestamp saleTimestamp;
 
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
-    @Column(name = "total_price", nullable = false)
-    private int totalPrice;
+    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
+    private BigDecimal totalPrice;
 
     public Sale() {
     }
 
-    public Sale(Long ticketId, AppUser soldBy, String saleTimestamp, String paymentMethod, int totalPrice) {
-        this.ticketId = ticketId;
+    public Sale(Long saleId, AppUser soldBy, List<SaleTicket> saleTickets, Timestamp saleTimestamp,
+            String paymentMethod, BigDecimal totalPrice) {
+        this.saleId = saleId;
         this.soldBy = soldBy;
+        this.saleTickets = saleTickets;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
@@ -46,14 +52,6 @@ public class Sale {
         this.saleId = saleId;
     }
 
-    public Long getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
-    }
-
     public AppUser getSoldBy() {
         return soldBy;
     }
@@ -62,11 +60,19 @@ public class Sale {
         this.soldBy = soldBy;
     }
 
-    public String getSaleTimestamp() {
+    public List<SaleTicket> getSaleTickets() {
+        return saleTickets;
+    }
+
+    public void setSaleTickets(List<SaleTicket> saleTickets) {
+        this.saleTickets = saleTickets;
+    }
+
+    public Timestamp getSaleTimestamp() {
         return saleTimestamp;
     }
 
-    public void setSaleTimestamp(String saleTimestamp) {
+    public void setSaleTimestamp(Timestamp saleTimestamp) {
         this.saleTimestamp = saleTimestamp;
     }
 
@@ -78,12 +84,12 @@ public class Sale {
         this.paymentMethod = paymentMethod;
     }
 
-    public int getTotalPrice() {
+    public BigDecimal getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(int totalPrice) {
+    public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
-    
+
 }
