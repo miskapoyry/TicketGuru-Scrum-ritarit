@@ -38,9 +38,8 @@ public class Event {
     public Event() {
     }
 
-    public Event(Long eventId, AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
+    public Event(AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
             int availableTickets, List<EventTicketType> eventTicketTypes) {
-        this.eventId = eventId;
         this.createdBy = createdBy;
         this.eventName = eventName;
         this.eventDate = eventDate;

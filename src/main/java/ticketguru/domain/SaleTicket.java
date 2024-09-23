@@ -22,8 +22,7 @@ public class SaleTicket {
     public SaleTicket() {
     }
 
-    public SaleTicket(Long saleTicketId, Ticket ticket, Sale sale) {
-        this.saleTicketId = saleTicketId;
+    public SaleTicket(Ticket ticket, Sale sale) {
         this.ticket = ticket;
         this.sale = sale;
     }

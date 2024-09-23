@@ -28,9 +28,8 @@ public class EventTicketType {
     public EventTicketType() {
     }
 
-    public EventTicketType(Long eventTicketTypeId, Event event, TicketType ticketType, int ticketQuantity,
+    public EventTicketType(Event event, TicketType ticketType, int ticketQuantity,
             double price) {
-        this.eventTicketTypeId = eventTicketTypeId;
         this.event = event;
         this.ticketType = ticketType;
         this.ticketQuantity = ticketQuantity;

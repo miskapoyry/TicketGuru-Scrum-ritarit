@@ -34,9 +34,8 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(Long saleId, AppUser soldBy, List<SaleTicket> saleTickets, Timestamp saleTimestamp,
+    public Sale(AppUser soldBy, List<SaleTicket> saleTickets, Timestamp saleTimestamp,
             String paymentMethod, BigDecimal totalPrice) {
-        this.saleId = saleId;
         this.soldBy = soldBy;
         this.saleTickets = saleTickets;
         this.saleTimestamp = saleTimestamp;

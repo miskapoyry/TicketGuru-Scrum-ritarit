@@ -32,9 +32,8 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(Long userId, String username, String passwordHash, String role, List<Event> events,
+    public AppUser(String username, String passwordHash, String role, List<Event> events,
             List<Sale> sales) {
-        this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;

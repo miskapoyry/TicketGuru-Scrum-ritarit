@@ -40,9 +40,8 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(Long ticketId, String ticketNumber, Event event, TicketType ticketType, List<SaleTicket> saleTickets,
+    public Ticket(String ticketNumber, Event event, TicketType ticketType, List<SaleTicket> saleTickets,
             Timestamp saleTimestamp, boolean isUsed, Timestamp usedTimestamp) {
-        this.ticketId = ticketId;
         this.ticketNumber = ticketNumber;
         this.event = event;
         this.ticketType = ticketType;
