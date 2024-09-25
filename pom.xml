@@ -58,6 +58,11 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.33</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -72,13 +77,13 @@
 				<version>4.27.0</version>
 				<configuration>
 					<!-- Update the path to reflect the new folder structure -->
-					<changeLogFile>src/main/resources/liquibase/db.changelog-master.yaml</changeLogFile>
-					<diffChangeLogFile>src/main/resources/liquibase/${maven.build.timestamp}_changelog.yaml</diffChangeLogFile>
+					<changeLogFile>src/main/resources/db/changelog/db.initial_schema.xml</changeLogFile>
+					<diffChangeLogFile>src/main/resources/db/changelog/${maven.build.timestamp}_changelog.yaml</diffChangeLogFile>
 					<driver>com.mysql.cj.jdbc.Driver</driver>
-					<url>jdbc:mysql://localhost:3306/student_db?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</url>
+					<url>jdbc:mariadb://localhost:3306/ticketguru?createDatabaseIfNotExist=true&amp;allowPublicKeyRetrieval=true&amp;useSSL=false&amp;useUnicode=true&amp;characterEncoding=UTF-8&amp;serverTimezone=UTC</url>
 					<defaultSchemaName />
 					<username>root</username>
-					<password>test123</password>
+					<password>root</password>
 					<referenceUrl>hibernate:spring:dev.cat.liquibasedemo?dialect=org.hibernate.dialect.MySQLDialect
 						&amp;hibernate.physical_naming_strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 						&amp;hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
