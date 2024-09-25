@@ -25,4 +25,5 @@
     <include file="/db/changelog/db.sale.xml" />
     <include file="/db/changelog/db.ticket.xml" />
     <include file="/db/changelog/db.saleTicket.xml" />
+    <include file="/db/changelog/db.fakeData.xml" />
 </databaseChangeLog>
