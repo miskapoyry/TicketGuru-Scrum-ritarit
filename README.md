@@ -97,23 +97,87 @@ Hahmotelmat ovat löydettävissä ja muokattavissa [täältä](https://www.canva
 
 ## Tietokanta
 
-Järjestelmään säilöttävä ja siinä käsiteltävät tiedot ja niiden väliset suhteet
-kuvataan käsitekaaviolla. Käsitemalliin sisältyy myös taulujen välisten viiteyhteyksien ja avainten
-määritykset. Tietokanta kuvataan käyttäen jotain kuvausmenetelmää, joko ER-kaaviota ja UML-luokkakaaviota.
+Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallintaa tehokkaasti ja joustavasti. Seuraavaksi esitetään tietohakemisto, joka sisältää tärkeimmät taulut, niiden kentät ja kuvaus niiden käyttötarkoituksesta. Ohessa on myös ER-kaavio, joka havainnollistaa tietokannan rakennetta ja suhteita eri taulujen välillä. 
 
-Lisäksi kukin järjestelmän tietoelementti ja sen attribuutit kuvataan
-tietohakemistossa. Tietohakemisto tarkoittaa yksinkertaisesti vain jokaisen elementin (taulun) ja niiden
-attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän tyyliin:
+### Tietokantakaavio
 
-> ### _Tilit_
-> _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
+![tietokantakaavio_scrum-ritarit](https://github.com/user-attachments/assets/dfdbfd3d-20d4-42ec-8e11-52bf95ff2392)
+
+### Tietohakemisto
+
+> ### _user_
+> _user-taulu sisältää käyttäjätilin tiedot. Tili kuuluu aina vain yhdelle käyttäjälle._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> user_id | Long PK | Käyttäjän yksilöivä tunniste
+> username | varchar(50) |  Käyttäjän käyttäjätunnus
+> password | varchar(255) | Käyttäjän salasana
+> role | varchar(20) | Käyttäjän rooli (esim. lipunmyyjä, ylläpitäjä)
+
+> ### _event_
+> _event-taulu sisältää yksittäisen tapahtuman tiedot._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> id | int PK | Tilin id
-> nimimerkki | varchar(30) |  Tilin nimimerkki
-> avatar | int FK | Tilin avatar, viittaus [avatar](#Avatar)-tauluun
-> kayttaja | int FK | Viittaus käyttäjään [käyttäjä](#Kayttaja)-taulussa
+> event_id | Long PK | Tapahtuman yksilöivä tunniste
+> user_id | Long FK | Käyttäjä, joka on luonut tapahtuman (viittaus tauluun user)
+> event_name | varchar(100) |  Tapahtuman nimi
+> event_date | timestamp | Tapahtuman päivämäärä ja aika
+> location | varchar(100) | Tapahtuman sijainti
+
+> ### _ticket_type_
+> _ticket_type -taulu sisältää lipputyyppien tiedot._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ticket_type_id | Long PK | Lipputyypin yksilöivä tunniste
+> ticket_type_name | varchar (50) | Lipputyypin nimi (esim. "aikuinen" tai "lapsi")
+
+> ### _event_ticket_type_
+> _event_ticket_type-taulu yhdistää tapahtumat ja lipputyypit mahdollistaen erilaisten lippujen hallinnan tapahtumakohtaisesti. Taulu tallentaa tiedot tietyn lipputyypin saatavuudesta ja määrästä kullekin tapahtumalle sekä lipputyypin hinnan._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> event_id | Long PK | Tapahtuma, johon lippu liittyy (viittaus tauluun event)
+> ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
+> ticket_quantity | int |  Saatavilla oleva määrä tietylle lipputyypille
+> price | decimal (10, 2) |  Lipun hinta
+
+> ### _ticket_
+> _ticket-taulu sisältää yksittäisen lipun tiedot._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> ticket_id | Long PK | Lipun yksilöivä tunniste
+> ticket_number | varchar (50) | Lipun numero tai tunniste
+> ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
+> event_id | Long FK | Tapahtuma, johon lippu on ostettu (viittaus tauluun event)
+> user_id | Long FK | Käyttäjä, joka on myynyt lipun
+> sale_timestamp | TIMESTAMP | Lipun myyntiaika
+> is_used | BOOLEAN | lipun käyttötilanne
+> used_timestamp | TIMESTAMP | Ajankohta, jolloin lippu on käytetty (null, jos ei ole käytetty)
+
+> ### _sale_
+> _sale-taulu sisältää yksittäisen myyntitapahtuman tiedot._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> sale_id | Long PK | Myyntitapahtuman yksilöivä tunniste
+> sale_timestamp | TIMESTAMP | Myyntitapahtuman ajankohta
+> user_id | Long FK | Myynnin suorittanut käyttäjä (viittaus tauluun user)
+> payment_method | varchar (20) | Maksutapa (esim. "käteinen", "kortti")
+> total_price | DECIMAL (10, 2) | Myynnin kokonaissumma
+
+> ### _sale_ticket_
+> _sale_ticket -taulussa hallinnoidaan yksittäisen myyntitapahtuman lippuja. Tämä välitaulu mahdollistaa useamman kuin yhden lipun ostamisen kerralla._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> sale_ticket_id | Long PK | Lippujen myyntitapahtuman yksilöivä id. Mahdollistaa tietokannan joustavamman jatkokehityksen tulevaisuudessa.
+> ticket_id | Long FK | Myyntitapahtumassa myyty lippu (viittaus tauluun ticket)
+> sale_id | Long FK | Myyntitapahtuma (viittaus tauluun sale)
+
 
 ## Tekninen kuvaus
 
