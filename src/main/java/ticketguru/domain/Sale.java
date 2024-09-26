@@ -16,8 +16,8 @@ public class Sale {
     private Long saleId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sold_by", nullable = false)
-    private AppUser soldBy;
+    @JoinColumn(name = "user_id", nullable = false)
+    private AppUser appUser;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SaleTicket> saleTickets;
@@ -34,9 +34,9 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(AppUser soldBy, List<SaleTicket> saleTickets, Timestamp saleTimestamp,
-            String paymentMethod, BigDecimal totalPrice) {
-        this.soldBy = soldBy;
+    public Sale(AppUser appUser, List<SaleTicket> saleTickets, Timestamp saleTimestamp, String paymentMethod,
+            BigDecimal totalPrice) {
+        this.appUser = appUser;
         this.saleTickets = saleTickets;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
@@ -51,12 +51,12 @@ public class Sale {
         this.saleId = saleId;
     }
 
-    public AppUser getSoldBy() {
-        return soldBy;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setSoldBy(AppUser soldBy) {
-        this.soldBy = soldBy;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public List<SaleTicket> getSaleTickets() {
@@ -90,5 +90,4 @@ public class Sale {
     public void setTotalPrice(BigDecimal totalPrice) {
         this.totalPrice = totalPrice;
     }
-
 }
