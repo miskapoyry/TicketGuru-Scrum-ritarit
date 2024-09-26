@@ -1,7 +1,7 @@
 package ticketguru.domain;
 
 import java.util.*;
-import java.time.*;
+import java.sql.Timestamp;
 
 import jakarta.persistence.*;
 
@@ -22,7 +22,7 @@ public class Event {
     private String eventName;
 
     @Column(name="event_date", nullable = false)
-    private LocalDateTime eventDate;
+    private Timestamp eventDate;
 
     @Column(name="location", nullable = false)
     private String location;
@@ -39,7 +39,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(AppUser appUser, String eventName, LocalDateTime eventDate, String location, int totalTicket,
+    public Event(AppUser appUser, String eventName, Timestamp eventDate, String location, int totalTicket,
             int availableTickets, List<EventTicketType> eventTicketTypes) {
         this.appUser = appUser;
         this.eventName = eventName;
@@ -74,11 +74,11 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public LocalDateTime getEventDate() {
+    public Timestamp getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(LocalDateTime eventDate) {
+    public void setEventDate(Timestamp eventDate) {
         this.eventDate = eventDate;
     }
 
