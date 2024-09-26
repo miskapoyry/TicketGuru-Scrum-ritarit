@@ -1,7 +1,6 @@
 package ticketguru.domain;
 
 import java.sql.Timestamp;
-import java.util.List;
 
 import jakarta.persistence.*;
 
