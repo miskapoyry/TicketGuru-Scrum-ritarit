@@ -18,17 +18,17 @@ public class TicketType {
 
     @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventTicketType> eventTicketTypes;
-
-    @Column(name = "price", nullable = false)
-    private double price;
+    
+    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Ticket> tickets;
 
     public TicketType() {
     }
 
-    public TicketType(String ticketTypeName, List<EventTicketType> eventTicketTypes, double price) {
+    public TicketType(String ticketTypeName, List<EventTicketType> eventTicketTypes, List<Ticket> tickets) {
         this.ticketTypeName = ticketTypeName;
         this.eventTicketTypes = eventTicketTypes;
-        this.price = price;
+        this.tickets = tickets;
     }
 
     public Long getTicketTypeId() {
@@ -53,5 +53,13 @@ public class TicketType {
 
     public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
         this.eventTicketTypes = eventTicketTypes;
+    }
+
+    public List<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 }
