@@ -107,7 +107,7 @@ attribuuttien (kentät/sarakkeet) listausta ja lyhyttä kuvausta esim. tähän t
 
 ### Tietokantakaavio
 
-![tietokantakaavio_scrum-ritarit](https://github.com/user-attachments/assets/dfdbfd3d-20d4-42ec-8e11-52bf95ff2392)
+![tietokantakaavio_kuva](tietokantakaavio/TicketGuru_tietokantakaavio.jpg)
 
 > ### _Tilit_
 > _Tilit-taulu sisältää käyttäjätilit. Käyttäjällä voi olla monta tiliä. Tili kuuluu aina vain yhdelle käyttäjälle._
