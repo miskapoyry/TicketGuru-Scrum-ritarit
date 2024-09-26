@@ -28,7 +28,7 @@ public class Event {
     private String location;
 
     @Column(name="total_tickets", nullable = false)
-    private int totalTicket;
+    private int totalTickets;
 
     @Column(name="available_tickets", nullable = false)
     private int availableTickets;
@@ -39,13 +39,13 @@ public class Event {
     public Event() {
     }
 
-    public Event(AppUser appUser, String eventName, Timestamp eventDate, String location, int totalTicket,
+    public Event(AppUser appUser, String eventName, Timestamp eventDate, String location, int totalTickets,
             int availableTickets, List<EventTicketType> eventTicketTypes) {
         this.appUser = appUser;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.location = location;
-        this.totalTicket = totalTicket;
+        this.totalTickets = totalTickets;
         this.availableTickets = availableTickets;
         this.eventTicketTypes = eventTicketTypes;
     }
@@ -90,12 +90,12 @@ public class Event {
         this.location = location;
     }
 
-    public int getTotalTicket() {
-        return totalTicket;
+    public int getTotalTickets() {
+        return totalTickets;
     }
 
-    public void setTotalTicket(int totalTicket) {
-        this.totalTicket = totalTicket;
+    public void setTotalTickets(int totalTickets) {
+        this.totalTickets = totalTickets;
     }
 
     public int getAvailableTickets() {
