@@ -1,6 +1,7 @@
 package ticketguru.domain;
 
 import java.util.*;
+import java.time.*;
 
 import jakarta.persistence.*;
 
@@ -14,14 +15,14 @@ public class Event {
     private Long eventId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by", nullable = false)
-    private AppUser createdBy;
+    @JoinColumn(name = "user_id", nullable = false)
+    private AppUser appUser;
 
     @Column(name="event_name", nullable = false)
     private String eventName;
 
     @Column(name="event_date", nullable = false)
-    private String eventDate;
+    private LocalDateTime eventDate;
 
     @Column(name="location", nullable = false)
     private String location;
@@ -38,9 +39,9 @@ public class Event {
     public Event() {
     }
 
-    public Event(AppUser createdBy, String eventName, String eventDate, String location, int totalTicket,
+    public Event(AppUser appUser, String eventName, LocalDateTime eventDate, String location, int totalTicket,
             int availableTickets, List<EventTicketType> eventTicketTypes) {
-        this.createdBy = createdBy;
+        this.appUser = appUser;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.location = location;
@@ -57,12 +58,12 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public AppUser getCreatedBy() {
-        return createdBy;
+    public AppUser getAppUser() {
+        return appUser;
     }
 
-    public void setCreatedBy(AppUser createdBy) {
-        this.createdBy = createdBy;
+    public void setAppUser(AppUser appUser) {
+        this.appUser = appUser;
     }
 
     public String getEventName() {
@@ -73,11 +74,11 @@ public class Event {
         this.eventName = eventName;
     }
 
-    public String getEventDate() {
+    public LocalDateTime getEventDate() {
         return eventDate;
     }
 
-    public void setEventDate(String eventDate) {
+    public void setEventDate(LocalDateTime eventDate) {
         this.eventDate = eventDate;
     }
 
