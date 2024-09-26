@@ -25,8 +25,9 @@ public class Ticket {
     @JoinColumn(name="ticket_type_id", nullable = false)
     private TicketType ticketType;
 
-    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SaleTicket> saleTickets;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="sale_id", nullable = false)
+    private Sale sale;
 
     @Column(name = "sale_timestamp", nullable = false)
     private Timestamp saleTimestamp;
@@ -40,23 +41,15 @@ public class Ticket {
     public Ticket() {
     }
 
-    public Ticket(String ticketNumber, Event event, TicketType ticketType, List<SaleTicket> saleTickets,
-            Timestamp saleTimestamp, boolean isUsed, Timestamp usedTimestamp) {
+    public Ticket(String ticketNumber, Event event, TicketType ticketType, Sale sale, Timestamp saleTimestamp,
+            boolean isUsed, Timestamp usedTimestamp) {
         this.ticketNumber = ticketNumber;
         this.event = event;
         this.ticketType = ticketType;
-        this.saleTickets = saleTickets;
+        this.sale = sale;
         this.saleTimestamp = saleTimestamp;
         this.isUsed = isUsed;
         this.usedTimestamp = usedTimestamp;
-    }
-
-    public Long getTicketId() {
-        return ticketId;
-    }
-
-    public void setTicketId(Long ticketId) {
-        this.ticketId = ticketId;
     }
 
     public String getTicketNumber() {
@@ -83,12 +76,12 @@ public class Ticket {
         this.ticketType = ticketType;
     }
 
-    public List<SaleTicket> getSaleTickets() {
-        return saleTickets;
+    public Sale getSale() {
+        return sale;
     }
 
-    public void setSaleTickets(List<SaleTicket> saleTickets) {
-        this.saleTickets = saleTickets;
+    public void setSale(Sale sale) {
+        this.sale = sale;
     }
 
     public Timestamp getSaleTimestamp() {

@@ -2,7 +2,7 @@ package ticketguru.domain;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 import jakarta.persistence.*;
 
@@ -20,7 +20,7 @@ public class Sale {
     private AppUser appUser;
 
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SaleTicket> saleTickets;
+    private List<Ticket> tickets = new ArrayList<>();
 
     @Column(name = "sale_timestamp", nullable = false)
     private Timestamp saleTimestamp;
@@ -34,10 +34,10 @@ public class Sale {
     public Sale() {
     }
 
-    public Sale(AppUser appUser, List<SaleTicket> saleTickets, Timestamp saleTimestamp, String paymentMethod,
+    public Sale(AppUser appUser, List<Ticket> tickets, Timestamp saleTimestamp, String paymentMethod,
             BigDecimal totalPrice) {
         this.appUser = appUser;
-        this.saleTickets = saleTickets;
+        this.tickets = tickets;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
@@ -59,12 +59,12 @@ public class Sale {
         this.appUser = appUser;
     }
 
-    public List<SaleTicket> getSaleTickets() {
-        return saleTickets;
+    public List<Ticket> getTickets() {
+        return tickets;
     }
 
-    public void setSaleTickets(List<SaleTicket> saleTickets) {
-        this.saleTickets = saleTickets;
+    public void setTickets(List<Ticket> tickets) {
+        this.tickets = tickets;
     }
 
     public Timestamp getSaleTimestamp() {
