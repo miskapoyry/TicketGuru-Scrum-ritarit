@@ -177,15 +177,6 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > payment_method | varchar (20) | Maksutapa (esim. "käteinen", "kortti")
 > total_price | DECIMAL (10, 2) | Myynnin kokonaissumma
 
-> ### _sale_ticket_
-> _sale_ticket -taulussa hallinnoidaan yksittäisen myyntitapahtuman lippuja. Tämä välitaulu mahdollistaa useamman kuin yhden lipun ostamisen kerralla._
-
-> Kenttä | Tyyppi | Kuvaus
-> ------ | ------ | ------
-> sale_ticket_id | Long PK | Lippujen myyntitapahtuman yksilöivä id. Mahdollistaa tietokannan joustavamman jatkokehityksen tulevaisuudessa.
-> ticket_id | Long FK | Myyntitapahtumassa myyty lippu (viittaus tauluun ticket)
-> sale_id | Long FK | Myyntitapahtuma (viittaus tauluun sale)
-
 
 ## Tekninen kuvaus
 
