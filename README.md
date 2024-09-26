@@ -101,7 +101,7 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 ### Tietokantakaavio
 
-![tietokantakaavio_scrum-ritarit](https://github.com/user-attachments/assets/dfdbfd3d-20d4-42ec-8e11-52bf95ff2392)
+![tietokantakaavio_kuva](tietokantakaavio/TicketGuru_tietokantakaavio.jpg)
 
 ### Tietohakemisto
 
