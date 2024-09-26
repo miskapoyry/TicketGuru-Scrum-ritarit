@@ -20,8 +20,9 @@ public class AppUser {
     @Column(name= "passwordhash" ,nullable = false)
     private String passwordHash;
 
-    @Column(name = "userrole", nullable = false)
-    private String role;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
+    private Role role;
 
     @OneToMany(mappedBy = "createdBy", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events = new ArrayList<>();
@@ -32,8 +33,7 @@ public class AppUser {
     public AppUser() {
     }
 
-    public AppUser(String username, String passwordHash, String role, List<Event> events,
-            List<Sale> sales) {
+    public AppUser(String username, String passwordHash, Role role, List<Event> events, List<Sale> sales) {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
@@ -65,11 +65,11 @@ public class AppUser {
         this.passwordHash = passwordHash;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
