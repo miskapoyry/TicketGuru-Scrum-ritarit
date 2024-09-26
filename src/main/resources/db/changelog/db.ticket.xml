@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="7" author="Tuomas">
+        <createTable tableName="ticket">
+            <column name="ticket_id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="ticket_number" type="varchar(255)">
+                <constraints unique="true" nullable="false" />
+            </column>
+            <column name="event_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_ticket_event" references="event(event_id)" />
+            </column>
+            <column name="ticket_type_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_ticket_ticket_type" references="ticketType(ticket_type_id)" />
+            </column>
+            <column name="sale_timestamp" type="timestamp" />
+            <column name="is_used" type="boolean" />
+            <column name="used_timestamp" type="timestamp" />
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>
