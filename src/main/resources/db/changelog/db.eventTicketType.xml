@@ -14,12 +14,12 @@
                 <constraints nullable="false" foreignKeyName="fk_event_ticket_type_event" references="event(event_id)" />
             </column>
             <column name="ticket_type_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_event_ticket_type_ticket_type" references="ticketType(ticket_type_id)" />
+                <constraints nullable="false" foreignKeyName="fk_event_ticket_type_ticket_type" references="ticket_type(ticket_type_id)" />
             </column>
             <column name="ticket_quantity" type="int">
                 <constraints nullable="false" />
             </column>
-            <column name="price" type="decimal(10,2)">
+            <column name="price" type="decimal(10, 2)">
                 <constraints nullable="false" />
             </column>
         </createTable>

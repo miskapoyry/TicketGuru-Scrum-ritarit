@@ -10,8 +10,8 @@
             <column name="sale_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="sold_by" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_sale_sold_by" references="appUser(user_id)" />
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_sale_user_id" references="app_user(user_id)" />
             </column>
             <column name="sale_timestamp" type="timestamp">
                 <constraints nullable="false" />

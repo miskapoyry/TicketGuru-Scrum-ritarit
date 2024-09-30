@@ -5,12 +5,12 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="2" author="Tuomas">
-        <createTable tableName="ticket_type">
-            <column name="ticket_type_id" type="bigint" autoIncrement="true">
+    <changeSet id="5" author="Tuomas">
+        <createTable tableName="role">
+            <column name="role_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="ticket_type_name" type="varchar(255)">
+            <column name="role_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
         </createTable>

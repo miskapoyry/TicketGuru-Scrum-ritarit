@@ -10,13 +10,13 @@
             <column name="event_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="created_by" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_event_created_by" references="appUser(user_id)" />
+            <column name="user_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_event_user_id" references="app_user(user_id)" />
             </column>
             <column name="event_name" type="varchar(255)">
                 <constraints nullable="false" />
             </column>
-            <column name="event_date" type="varchar(255)">
+            <column name="event_date" type="timestamp">
                 <constraints nullable="false" />
             </column>
             <column name="location" type="varchar(255)">

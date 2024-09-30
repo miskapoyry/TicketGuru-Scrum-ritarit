@@ -19,6 +19,7 @@
     <property name="datetimeType" value="datetime(6)" dbms="mariadb"/>
 
     <include file="/db/changelog/db.appUser.xml" />
+    <include file="/db/changelog/db.role.xml" />
     <include file="/db/changelog/db.ticketType.xml" />
     <include file="/db/changelog/db.event.xml" />
     <include file="/db/changelog/db.eventTicketType.xml" />

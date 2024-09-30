@@ -17,10 +17,17 @@
                 <constraints nullable="false" foreignKeyName="fk_ticket_event" references="event(event_id)" />
             </column>
             <column name="ticket_type_id" type="bigint">
-                <constraints nullable="false" foreignKeyName="fk_ticket_ticket_type" references="ticketType(ticket_type_id)" />
+                <constraints nullable="false" foreignKeyName="fk_ticket_ticket_type" references="ticket_type(ticket_type_id)" />
             </column>
-            <column name="sale_timestamp" type="timestamp" />
-            <column name="is_used" type="boolean" />
+            <column name="sale_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_ticket_sale" references="sale(sale_id)" />
+            </column>
+            <column name="sale_timestamp" type="timestamp">
+                <constraints nullable="false" />
+            </column>
+            <column name="is_used" type="boolean">
+                <constraints nullable="false" />
+            </column>
             <column name="used_timestamp" type="timestamp" />
         </createTable>
     </changeSet>
