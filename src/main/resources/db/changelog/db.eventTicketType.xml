@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <changeSet id="4" author="Tuomas">
+        <createTable tableName="event_ticket_type">
+            <column name="event_ticket_type_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="event_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_event_ticket_type_event" references="event(event_id)" />
+            </column>
+            <column name="ticket_type_id" type="bigint">
+                <constraints nullable="false" foreignKeyName="fk_event_ticket_type_ticket_type" references="ticketType(ticket_type_id)" />
+            </column>
+            <column name="ticket_quantity" type="int">
+                <constraints nullable="false" />
+            </column>
+            <column name="price" type="decimal(10,2)">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+    </changeSet>
+</databaseChangeLog>
