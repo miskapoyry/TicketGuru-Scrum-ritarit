@@ -37,12 +37,27 @@ public class EventResource {
 
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        Optional<Event> existingEvent = eventRepository.findById(id);
-        if (existingEvent.isEmpty()) {
+        Optional<Event> existingEventOptional = eventRepository.findById(id);
+
+        if (existingEventOptional.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        event.setEventId(id);
-        Event updatedEvent = eventRepository.save(event);
+
+        Event existingEvent = existingEventOptional.get();
+
+        existingEvent.setEventName(event.getEventName());
+        existingEvent.setEventDate(event.getEventDate());
+        existingEvent.setLocation(event.getLocation());
+        existingEvent.setTotalTicket(event.getTotalTicket());
+        existingEvent.setAvailableTickets(event.getAvailableTickets());
+
+        if (event.getCreatedBy() != null) {
+            existingEvent.setCreatedBy(event.getCreatedBy());
+        } else {
+            existingEvent.setCreatedBy(existingEvent.getCreatedBy());
+        }
+
+        Event updatedEvent = eventRepository.save(existingEvent);
         return ResponseEntity.ok(updatedEvent);
     }
 
