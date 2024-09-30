@@ -7,7 +7,7 @@
 
     <changeSet id="1" author="Tuomas">
         <createTable tableName="appUser">
-            <column name="user_id" type="bigint">
+            <column name="user_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="username" type="varchar(255)">

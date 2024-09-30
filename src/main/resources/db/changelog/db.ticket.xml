@@ -7,7 +7,7 @@
 
     <changeSet id="7" author="Tuomas">
         <createTable tableName="ticket">
-            <column name="ticket_id" type="bigint">
+            <column name="ticket_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="ticket_number" type="varchar(255)">
@@ -24,5 +24,4 @@
             <column name="used_timestamp" type="timestamp" />
         </createTable>
     </changeSet>
-
 </databaseChangeLog>

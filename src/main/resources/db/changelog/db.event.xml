@@ -7,7 +7,7 @@
 
     <changeSet id="3" author="Tuomas">
         <createTable tableName="event">
-            <column name="event_id" type="bigint">
+            <column name="event_id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="created_by" type="bigint">
@@ -30,5 +30,4 @@
             </column>
         </createTable>
     </changeSet>
-
 </databaseChangeLog>
