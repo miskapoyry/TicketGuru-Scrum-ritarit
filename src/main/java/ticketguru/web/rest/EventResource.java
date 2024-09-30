@@ -30,7 +30,7 @@ public class EventResource {
         }
         AppUser user = appUserRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        event.setCreatedBy(user);
+        event.setAppUser(user);
         event = eventRepository.save(event);
         return ResponseEntity.ok(event);
     }
@@ -48,13 +48,12 @@ public class EventResource {
         existingEvent.setEventName(event.getEventName());
         existingEvent.setEventDate(event.getEventDate());
         existingEvent.setLocation(event.getLocation());
-        existingEvent.setTotalTicket(event.getTotalTicket());
         existingEvent.setAvailableTickets(event.getAvailableTickets());
 
-        if (event.getCreatedBy() != null) {
-            existingEvent.setCreatedBy(event.getCreatedBy());
+        if (event.getAppUser() != null) {
+            existingEvent.setAppUser(event.getAppUser());
         } else {
-            existingEvent.setCreatedBy(existingEvent.getCreatedBy());
+            existingEvent.setAppUser(existingEvent.getAppUser());
         }
 
         Event updatedEvent = eventRepository.save(existingEvent);
