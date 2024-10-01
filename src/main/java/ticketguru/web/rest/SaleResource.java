@@ -36,11 +36,11 @@ public class SaleResource {
     @Autowired
     private TicketRepository ticketRepository;
 
-    // Muuntaa Sale -> SaleDTO
+    // Muuntaa Salesta -> SaleDTOn
     private SaleDTO convertToDTO(Sale sale) {
-        // Kerätään kaikkien lippujen ticketId:t
+
         List<Long> ticketIds = sale.getTickets().stream()
-                .map(Ticket::getTicketId) // Oletetaan, että getTicketId() palauttaa lipun tunnisteen
+                .map(Ticket::getTicketId)
                 .collect(Collectors.toList());
 
         return new SaleDTO(
@@ -48,8 +48,8 @@ public class SaleResource {
                 sale.getPaymentMethod(),
                 sale.getTotalPrice(),
                 sale.getSaleTimestamp(),
-                sale.getAppUser().getUserId(), // Vain käyttäjän ID otetaan mukaan
-                ticketIds // Palautetaan lippujen ticketId:t listana
+                sale.getAppUser().getUserId(),
+                ticketIds
         );
     }
 
@@ -92,38 +92,31 @@ public class SaleResource {
     }
 
     @PutMapping("/{saleId}")
-public ResponseEntity<SaleDTO> updateSale(@PathVariable Long saleId, @RequestBody SaleDTO saleDTO) {
-    // Hae olemassa oleva myynti
-    Sale existingSale = saleRepository.findById(saleId)
-            .orElseThrow(() -> new RuntimeException("Sale not found with given ID"));
+    public ResponseEntity<SaleDTO> updateSale(@PathVariable Long saleId, @RequestBody SaleDTO saleDTO) {
+        Sale existingSale = saleRepository.findById(saleId)
+                .orElseThrow(() -> new RuntimeException("User not found with given ID"));
 
-    // Hae kaikki liput ID-listan perusteella
-    List<Ticket> tickets = ticketRepository.findAllById(saleDTO.getTicketIds());
+        List<Ticket> tickets = ticketRepository.findAllById(saleDTO.getTicketIds());
 
-    // Tarkista, että kaikki liput löytyvät
-    if (tickets.size() != saleDTO.getTicketIds().size()) {
-        throw new RuntimeException("Tickets not found with given ID");
+        if (tickets.size() != saleDTO.getTicketIds().size()) {
+            throw new RuntimeException("Tickets not found with given ID");
+        }
+
+        existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
+        existingSale.setTotalPrice(saleDTO.getTotalPrice());
+        existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
+
+        tickets.forEach(ticket -> ticket.setSale(existingSale));
+        existingSale.setTickets(tickets);
+
+        Sale updatedSale = saleRepository.save(existingSale);
+
+        SaleDTO updatedSaleDTO = convertToDTO(updatedSale);
+        return new ResponseEntity<>(updatedSaleDTO, HttpStatus.OK);
     }
 
-    // Päivitä myynnin tiedot
-    existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
-    existingSale.setTotalPrice(saleDTO.getTotalPrice());
-    existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
-
-    // Aseta liput tälle myynnille
-    tickets.forEach(ticket -> ticket.setSale(existingSale));
-    existingSale.setTickets(tickets);
-
-    // Tallenna päivitetty myynti ja liput
-    Sale updatedSale = saleRepository.save(existingSale);
-
-    // Muunna ja palauta päivitetty SaleDTO
-    SaleDTO updatedSaleDTO = convertToDTO(updatedSale);
-    return new ResponseEntity<>(updatedSaleDTO, HttpStatus.OK);
-}
-
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
+    public ResponseEntity<SaleDTO> deleteSale(@PathVariable Long id) {
         saleRepository.deleteById(id);
         return ResponseEntity.ok().build();
     }
