@@ -73,7 +73,10 @@ public class EventResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
-        eventRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        if (!eventRepository.existsById(id)) {
+            return ResponseEntity.notFound().build(); // Return 404 if event not found
+        }
+        eventRepository.deleteById(id); // Perform the delete operation
+        return ResponseEntity.noContent().build(); // Return 204 No Content
     }
 }
