@@ -106,4 +106,12 @@ public class Ticket {
     public void setUsedTimestamp(Timestamp usedTimestamp) {
         this.usedTimestamp = usedTimestamp;
     }
+
+    public Long getTicketId() {
+        return ticketId;
+    }
+
+    public void setTicketId(Long ticketId) {
+        this.ticketId = ticketId;
+    }
 }
