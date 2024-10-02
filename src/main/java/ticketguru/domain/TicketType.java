@@ -16,19 +16,17 @@ public class TicketType {
     @Column(name = "ticket_type_name", nullable = false)
     private String ticketTypeName;
 
-    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<EventTicketType> eventTicketTypes;
+    //@OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<EventTicketType> eventTicketTypes;
     
-    @OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Ticket> tickets;
+    //@OneToMany(mappedBy = "ticketType", cascade = CascadeType.ALL, orphanRemoval = true)
+    //private List<Ticket> tickets;
 
     public TicketType() {
     }
 
-    public TicketType(String ticketTypeName, List<EventTicketType> eventTicketTypes, List<Ticket> tickets) {
+    public TicketType(String ticketTypeName) {
         this.ticketTypeName = ticketTypeName;
-        this.eventTicketTypes = eventTicketTypes;
-        this.tickets = tickets;
     }
 
     public Long getTicketTypeId() {
@@ -47,19 +45,19 @@ public class TicketType {
         this.ticketTypeName = ticketTypeName;
     }
 
-    public List<EventTicketType> getEventTicketTypes() {
-        return eventTicketTypes;
-    }
+//    public List<EventTicketType> getEventTicketTypes() {
+//         return eventTicketTypes;
+//     }
 
-    public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
-        this.eventTicketTypes = eventTicketTypes;
-    }
+//     public void setEventTicketTypes(List<EventTicketType> eventTicketTypes) {
+//      this.eventTicketTypes = eventTicketTypes;
+//     }
 
-    public List<Ticket> getTickets() {
-        return tickets;
-    }
+    // public List<Ticket> getTickets() {
+    //     return tickets;
+    // }
 
-    public void setTickets(List<Ticket> tickets) {
-        this.tickets = tickets;
-    }
+    // public void setTickets(List<Ticket> tickets) {
+    //     this.tickets = tickets;
+    // }
 }
