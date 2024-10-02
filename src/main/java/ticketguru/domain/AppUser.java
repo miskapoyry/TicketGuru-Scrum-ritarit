@@ -37,8 +37,8 @@ public class AppUser {
         this.username = username;
         this.passwordHash = passwordHash;
         this.role = role;
-        this.events = events;
-        this.sales = sales;
+        this.events = events != null ? events : new ArrayList<>();
+        this.sales = sales != null ? sales : new ArrayList<>();
     }
 
     public Long getUserId() {
