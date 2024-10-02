@@ -52,8 +52,6 @@ public class AppUserResource {
         existingUser.setUsername(appUserDetails.getUsername());
         existingUser.setPasswordHash(appUserDetails.getPasswordHash());
         existingUser.setRole(appUserDetails.getRole());
-        existingUser.setEvents(appUserDetails.getEvents());
-        existingUser.setSales(appUserDetails.getSales());
 
         AppUser updatedUser = appUserRepository.save(existingUser);
         return ResponseEntity.ok(updatedUser);
