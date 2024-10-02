@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ticketguru.DTO.SaleDTO;
@@ -54,10 +55,16 @@ public class SaleResource {
     }
 
     @GetMapping
-    public List<SaleDTO> getAllSales() {
-        return saleRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<SaleDTO> getAllSales(@RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return saleRepository.findByAppUser_UserId(userId).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return saleRepository.findAll().stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/{saleId}")
