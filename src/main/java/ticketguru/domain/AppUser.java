@@ -3,6 +3,9 @@ package ticketguru.domain;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -21,6 +24,7 @@ public class AppUser {
     private String passwordHash;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
@@ -28,6 +32,7 @@ public class AppUser {
     private List<Event> events = new ArrayList<>();
 
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
     private List<Sale> sales = new ArrayList<>();
 
     public AppUser() {
