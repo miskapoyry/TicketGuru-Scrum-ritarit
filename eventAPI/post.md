@@ -1,7 +1,7 @@
 ### Create event
 **Method** : `POST`
 
-**URL** : `/api/event/api/event?userId={Id}`
+**URL** : `/api/event`
 
 **Request Body** : { "eventName": "string", "eventDate": "string (ISO 8601 format)", "location": "string", "
 availableTickets": "integer" }

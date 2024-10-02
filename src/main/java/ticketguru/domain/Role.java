@@ -2,6 +2,8 @@ package ticketguru.domain;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -13,10 +15,13 @@ public class Role {
     @Column(name = "role_id", nullable = false, updatable = false)
     private Long roleId;
 
+    
+
     @Column(name = "role_name", nullable = false)
     private String roleName;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference
     private List<AppUser> users;
 
     public Role() {

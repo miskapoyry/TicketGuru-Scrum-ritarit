@@ -2,6 +2,8 @@ package ticketguru.domain;
 
 import java.sql.Timestamp;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -17,6 +19,7 @@ public class Ticket {
     private String ticketNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference
     @JoinColumn(name="event_id", nullable = false)
     private Event event;
 
