@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
 
 import ticketguru.DTO.SaleDTO;
 import ticketguru.domain.Sale;
@@ -49,8 +50,7 @@ public class SaleResource {
                 sale.getTotalPrice(),
                 sale.getSaleTimestamp(),
                 sale.getAppUser().getUserId(),
-                ticketIds
-        );
+                ticketIds);
     }
 
     @GetMapping
@@ -63,7 +63,7 @@ public class SaleResource {
     @GetMapping("/{saleId}")
     public ResponseEntity<SaleDTO> getSale(@PathVariable Long saleId) {
         Sale sale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("Sale not found"));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sale not found"));
 
         SaleDTO saleDTO = convertToDTO(sale);
         return new ResponseEntity<>(saleDTO, HttpStatus.OK);
@@ -117,7 +117,11 @@ public class SaleResource {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<SaleDTO> deleteSale(@PathVariable Long id) {
-        saleRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        if (!saleRepository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        } else {
+            saleRepository.deleteById(id);
+            return ResponseEntity.noContent().build();
+        }
     }
 }
