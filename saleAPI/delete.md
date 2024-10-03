@@ -9,7 +9,7 @@
 
  **Success Response** :
 
-- Status Code: `200 OK`
+- Status Code: `204 No content`
 
 **Error Responses** :
 
