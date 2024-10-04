@@ -1,4 +1,4 @@
-## Delete event
+## Delete a ticket
 
 **Method** : `DELETE`
 

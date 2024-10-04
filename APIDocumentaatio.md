@@ -18,7 +18,7 @@ The Ticket Resource allows you to manage ticketd in the TicketGuru application. 
 retrieving, and deleting tickets.
 
 * [Show all tickets](ticketAPI/get.md) : `GET /api/tickets`
-* [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{id}`
-* [Create An event](ticketAPI/post.md) : `POST /api/tickets`
-* [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/{id}`
-* [Delete An Account](ticketAPI/delete.md) : `DELETE /api/tickets/{id}`
+* [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{ticketId}`
+* [Create a ticket](ticketAPI/post.md) : `POST /api/tickets`
+* [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}`
+* [Delete a ticket](ticketAPI/delete.md) : `DELETE /api/tickets/{ticketId}`

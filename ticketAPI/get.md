@@ -1,14 +1,26 @@
-## Get  all tickets
+## Show all tickets
 
 **Method** : `GET`
 
 **URL** : `/api/tickets`
 
+**Description** : Retrieves a list of all tickets. Each ticket includes information such as its unique identifier, event, sale details, and usage status.
+
 **Success Response** :
 
 - Status Code: `200 OK`
 
+**Error Responses** :
+
+- 404 Not Found: This response occurs when there are no tickets found in the system or the requested resource does not exist.
+
+- 500 Internal Server Error: This response occurs when there is a server-side error, such as a database connection failure.
+
+- 400 Bad Request: This response occurs if there is an issue with the request format or invalid parameters.
+
 **Response Body** : 
+
+An array of ticket objects, where each object contains the following fields:
 
 ```json
 [
