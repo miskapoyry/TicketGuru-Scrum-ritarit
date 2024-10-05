@@ -15,7 +15,7 @@ public class AppUserDTO {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
-        this.roleId = roleId; // Käytetään roolin ID:tä
+        this.roleId = roleId;
         this.eventIds = eventIds;
         this.saleIds = saleIds;
     }
