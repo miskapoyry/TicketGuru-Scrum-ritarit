@@ -13,8 +13,13 @@
 
 **Request Body** : 
 
-- - { "paymentMethod": "string", "saletimestamp": "string (ISO 8601 format)", "totalPrice": "bigdecimal", "
-"ticketIds": ["Long"], "appUser": { "id": "Long" } }
+- {
+  "paymentMethod": "string", 
+  "saletimestamp": "string (ISO 8601 format)", 
+  "totalPrice": "bigdecimal", 
+  "ticketIds": ["Long"], 
+  "userId": "Long" 
+}
 
 ```json
 [
@@ -55,8 +60,22 @@
 
 **Error Responses** :
 
-Condition: If the event does not exist
+__Condition: If the sale does not exist__
 
 Code: ```404 Not Found``` 
 
-Content: ```{}```
+Message: ```Sale not found with given ID```
+
+Content: ```{"timestamp": "2024-10-06T18:44:49.593+00:00",
+    "status": 500,
+    "error": "Internal Server Error",}```
+
+__Condition: If the userID does not exist__
+
+Code: ```404 Not Found``` 
+
+Message: ```Sale not found with given ID```
+
+Content: ```{"timestamp": "2024-10-06T18:44:49.593+00:00",
+    "status": 500,
+    "error": "Internal Server Error",}```

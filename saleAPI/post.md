@@ -3,16 +3,13 @@
 
 **URL** : `/api/sales`
 
-**Request Body** : - { "paymentMethod": "string", "saletimestamp": "string (ISO 8601 format)", "totalPrice": "bigdecimal", "
-"ticketIds": ["Long"], "appUser": { "id": "Long" } }
-
-**Query Parameters** :
-
-- Id : Long (userID of the user creating the sale)
-
-- The userId parameter is mandatory for creating an event and must correspond to an existing user.
-- TicketIds : Long
-- TicketIds are mandatory in order to know, which tickets are linked to certain sale.
+**Request Body** : - {
+  "paymentMethod": "string", 
+  "saletimestamp": "string (ISO 8601 format)", 
+  "totalPrice": "bigdecimal", 
+  "ticketIds": ["Long"], 
+  "userId": "Long" 
+}
 
 **Succes Response** :
 
@@ -20,8 +17,13 @@
 
 **Body** : 
 
-- { "paymentMethod": "string", "saletimestamp": "string (ISO 8601 format)", "totalPrice": "bigdecimal", "
-"ticketIds": ["Long"], "appUser": { "id": "Long" } }
+- {
+  "paymentMethod": "string", 
+  "saletimestamp": "string (ISO 8601 format)", 
+  "totalPrice": "bigdecimal", 
+  "ticketIds": ["Long"], 
+  "userId": "Long" 
+}
 
 ```json
 [

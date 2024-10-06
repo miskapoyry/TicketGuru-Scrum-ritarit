@@ -31,8 +31,10 @@
 
 **Error Responses** :
 
-Condition: If the event does not exist
+Condition: If the sale does not exist
 
 Code: ```404 Not Found``` 
 
-Content: ```{}```
+Content: ```{"timestamp": "2024-10-06T18:26:01.572+00:00",
+    "status": 404,
+    "error": "Not Found"}```
