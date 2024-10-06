@@ -22,3 +22,13 @@ retrieving, and deleting tickets.
 * [Create a ticket](ticketAPI/post.md) : `POST /api/tickets`
 * [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}`
 * [Delete a ticket](ticketAPI/delete.md) : `DELETE /api/tickets/{ticketId}`
+
+## AppUser Resource
+
+The AppUser Resource allows you to manage users in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting user accounts.
+
+* [Show All Users](appuserAPI/get.md) : `GET /api/users/`
+* [Show One User](appuserAPI/getbyID.md) : `Get /api/users/{id}`
+* [Create a User](appuserAPI/post.md) : `POST /api/users/`
+* [Update a User](appuserAPI/put.md) : `PUT /api/users/{id}`
+* [Delete a User](appuserAPI/delete.md) : `DELETE /api/users/{id}`

@@ -8,6 +8,10 @@
 
 - Status Code: `200 OK`
 
+**Query Parameters**
+
+- `eventName` : Filters events by name (case-insensitive, partial matches allowed)
+
 **Request Body** : 
 
 - { "eventName": "string", "eventDate": "string (ISO 8601 format)", "location": "string", "
