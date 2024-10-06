@@ -11,3 +11,24 @@ retrieving, and deleting events.
 * [Create An event](eventAPI/post.md) : `POST /api/event/api/event?userId={Id}`
 * [Update An Event](eventAPI/put.md) : `PUT /api/event/{id}`
 * [Delete An Account](eventAPI/delete.md) : `DELETE /api/event/{id}`
+
+## Ticket Resource
+
+The Ticket Resource allows you to manage ticketd in the TicketGuru application. It supports creating, updating,
+retrieving, and deleting tickets.
+
+* [Show all tickets](ticketAPI/get.md) : `GET /api/tickets`
+* [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{ticketId}`
+* [Create a ticket](ticketAPI/post.md) : `POST /api/tickets`
+* [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}`
+* [Delete a ticket](ticketAPI/delete.md) : `DELETE /api/tickets/{ticketId}`
+
+## AppUser Resource
+
+The AppUser Resource allows you to manage users in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting user accounts.
+
+* [Show All Users](appuserAPI/get.md) : `GET /api/users/`
+* [Show One User](appuserAPI/getbyID.md) : `Get /api/users/{id}`
+* [Create a User](appuserAPI/post.md) : `POST /api/users/`
+* [Update a User](appuserAPI/put.md) : `PUT /api/users/{id}`
+* [Delete a User](appuserAPI/delete.md) : `DELETE /api/users/{id}`
