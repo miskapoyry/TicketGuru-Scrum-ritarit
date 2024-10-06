@@ -3,6 +3,8 @@ package ticketguru.web.rest;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.management.RuntimeErrorException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -54,10 +57,16 @@ public class SaleResource {
     }
 
     @GetMapping
-    public List<SaleDTO> getAllSales() {
-        return saleRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+    public List<SaleDTO> getAllSales(@RequestParam(required = false) Long userId) {
+        if (userId != null) {
+            return saleRepository.findByAppUser_UserId(userId).stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        } else {
+            return saleRepository.findAll().stream()
+                    .map(this::convertToDTO)
+                    .collect(Collectors.toList());
+        }
     }
 
     @GetMapping("/{saleId}")
@@ -94,7 +103,7 @@ public class SaleResource {
     @PutMapping("/{saleId}")
     public ResponseEntity<SaleDTO> updateSale(@PathVariable Long saleId, @RequestBody SaleDTO saleDTO) {
         Sale existingSale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("User not found with given ID"));
+                .orElseThrow(() -> new RuntimeException("Sale not found with given ID"));
 
         List<Ticket> tickets = ticketRepository.findAllById(saleDTO.getTicketIds());
 

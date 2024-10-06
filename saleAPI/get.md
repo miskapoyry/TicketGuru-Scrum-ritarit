@@ -4,6 +4,10 @@
 
 **URL** : `/api/sales`
 
+**Query Parameters**
+
+- `userId` : Filters sales by creator's userId (has to be exact)
+
 **Succes Response** :
 
 - Status Code: `200 OK`
