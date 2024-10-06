@@ -37,8 +37,8 @@ The AppUser Resource allows you to manage users in the TicketGuru application. I
 
 The sale Resource allows you to manage sales in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting sales.
 
-* [Show All Users](saleAPI/get.md) : `GET /api/users/`
-* [Show One User](saleAPI/getbtID.md) : `Get /api/users/{id}`
-* [Create a User](saleAPI/post.md) : `POST /api/users/`
-* [Update a User](saleAPI/put.md) : `PUT /api/users/{id}`
-* [Delete a User](saleAPI/delete.md) : `DELETE /api/users/{id}`
+* [Show All Sales](saleAPI/get.md) : `GET /api/users/`
+* [Show One Sale](saleAPI/getbtID.md) : `Get /api/users/{id}`
+* [Create a Sale](saleAPI/post.md) : `POST /api/users/`
+* [Update a Sale](saleAPI/put.md) : `PUT /api/users/{id}`
+* [Delete a Sale](saleAPI/delete.md) : `DELETE /api/users/{id}`
