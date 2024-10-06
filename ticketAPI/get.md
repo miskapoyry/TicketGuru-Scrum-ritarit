@@ -4,7 +4,11 @@
 
 **URL** : `/api/tickets`
 
-**Description** : Retrieves a list of all tickets. Each ticket includes information such as its unique identifier, event, sale details, and usage status.
+**Description** : Retrieves a list of all tickets. Each ticket includes information such as its unique identifier, event, sale details, and usage status. You can filter the results by using optional query parameters eventId and saleId. Each ticket includes information such as its unique identifier, event, sale details, and usage status.
+
+**Query Parameters** : 
+- eventId (optional): The identifier of the event to filter tickets. If provided, only tickets associated with the specified event will be returned.
+- saleId (optional): The identifier of the sale to filter tickets. If provided, only tickets associated with the specified sale will be returned.
 
 **Success Response** :
 

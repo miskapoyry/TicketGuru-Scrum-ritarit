@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import ticketguru.DTO.TicketDTO;
@@ -59,13 +60,35 @@ public class TicketResource {
         );
     }
 
+ 
     @GetMapping
-    public List<TicketDTO> getAllTickets(){
+    public List<TicketDTO> getTickets(
+        @RequestParam(value = "eventId", required = false) Long eventId,
+        @RequestParam(value = "saleId", required = false) Long saleId){
+
+        if (eventId != null) {
+                Event event = eventRepository.findById(eventId)
+                                .orElseThrow(() -> new RuntimeException("Event not found"));
+                return ticketRepository.findByEvent(event).stream()
+                                       .map(this::convertToDTO)
+                                       .collect(Collectors.toList());
+        }
+
+        if (saleId != null) {
+                Sale sale = saleRepository.findById(saleId)
+                                .orElseThrow(() -> new RuntimeException("Sale not found"));
+                return ticketRepository.findBySale(sale).stream()
+                                       .map(this::convertToDTO)
+                                       .collect(Collectors.toList());
+        }
+
+
         return ticketRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
+   
     @GetMapping("/{ticketId}")
     public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
         Ticket ticket = ticketRepository.findById(ticketId)
@@ -73,6 +96,7 @@ public class TicketResource {
     
         return new ResponseEntity<>(convertToDTO(ticket), HttpStatus.OK);
     }
+   
 
     @PostMapping
      public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
