@@ -2,8 +2,6 @@ package ticketguru.domain;
 
 import java.util.*;
 import java.sql.Timestamp;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 @Entity
@@ -15,7 +13,6 @@ public class Event {
     @Column(name="event_id", nullable = false, updatable = false)
     private Long eventId;
 
-    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser appUser;
@@ -35,7 +32,6 @@ public class Event {
     @Column(name="available_tickets", nullable = false)
     private int availableTickets;
 
-    @JsonIgnore
     @OneToMany(mappedBy = "event", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<EventTicketType> eventTicketTypes;
 

@@ -4,18 +4,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ticketguru.domain.AppUser;
 import ticketguru.domain.Event;
+import ticketguru.DTO.EventDTO;
 import ticketguru.repository.AppUserRepository;
 import ticketguru.repository.EventRepository;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/event")
 public class EventResource {
 
     private final EventRepository eventRepository;
-
     private final AppUserRepository appUserRepository;
 
     public EventResource(EventRepository eventRepository, AppUserRepository appUserRepository) {
@@ -23,20 +24,50 @@ public class EventResource {
         this.appUserRepository = appUserRepository;
     }
 
-    @PostMapping("")
-    public ResponseEntity<Event> createEvent(@RequestBody Event event, @RequestParam Long userId) {
-        if (event.getEventId() != null) {
-            return ResponseEntity.badRequest().body(event);
+    private EventDTO mapToDTO(Event event) {
+        EventDTO eventDTO = new EventDTO();
+        eventDTO.setEventId(event.getEventId());
+        eventDTO.setEventName(event.getEventName());
+        eventDTO.setEventDate(event.getEventDate());
+        eventDTO.setLocation(event.getLocation());
+        eventDTO.setTotalTickets(event.getTotalTickets());
+        eventDTO.setAvailableTickets(event.getAvailableTickets());
+
+        if (event.getAppUser() != null) {
+            eventDTO.setAppUserId(event.getAppUser().getUserId());
         }
-        AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        return eventDTO;
+    }
+
+    private Event mapToEntity(EventDTO eventDTO, AppUser user) {
+        Event event = new Event();
+        event.setEventName(eventDTO.getEventName());
+        event.setEventDate(eventDTO.getEventDate());
+        event.setLocation(eventDTO.getLocation());
+        event.setTotalTickets(eventDTO.getTotalTickets());
+        event.setAvailableTickets(eventDTO.getAvailableTickets());
         event.setAppUser(user);
+        return event;
+    }
+
+    @PostMapping("")
+    public ResponseEntity<EventDTO> createEvent(@RequestBody EventDTO eventDTO) {
+        if (eventDTO.getEventId() != null) {
+            return ResponseEntity.badRequest().build();
+        }
+        AppUser user = appUserRepository.findById(eventDTO.getAppUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Event event = mapToEntity(eventDTO, user);
         event = eventRepository.save(event);
-        return ResponseEntity.ok(event);
+
+        EventDTO createdEventDTO = mapToDTO(event);
+        return ResponseEntity.ok(createdEventDTO);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @RequestBody EventDTO eventDTO) {
         Optional<Event> existingEventOptional = eventRepository.findById(id);
 
         if (existingEventOptional.isEmpty()) {
@@ -44,39 +75,41 @@ public class EventResource {
         }
 
         Event existingEvent = existingEventOptional.get();
-
-        existingEvent.setEventName(event.getEventName());
-        existingEvent.setEventDate(event.getEventDate());
-        existingEvent.setLocation(event.getLocation());
-        existingEvent.setAvailableTickets(event.getAvailableTickets());
-
-        if (event.getAppUser() != null) {
-            existingEvent.setAppUser(event.getAppUser());
-        } else {
-            existingEvent.setAppUser(existingEvent.getAppUser());
-        }
+        existingEvent.setEventName(eventDTO.getEventName());
+        existingEvent.setEventDate(eventDTO.getEventDate());
+        existingEvent.setLocation(eventDTO.getLocation());
+        existingEvent.setAvailableTickets(eventDTO.getAvailableTickets());
+        existingEvent.setTotalTickets(eventDTO.getTotalTickets());
 
         Event updatedEvent = eventRepository.save(existingEvent);
-        return ResponseEntity.ok(updatedEvent);
+        EventDTO updatedEventDTO = mapToDTO(updatedEvent);
+        return ResponseEntity.ok(updatedEventDTO);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEvent(@PathVariable Long id) {
+    public ResponseEntity<EventDTO> getEvent(@PathVariable Long id) {
         Optional<Event> event = eventRepository.findById(id);
-        return ResponseEntity.of(event);
+        if (event.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        EventDTO eventDTO = mapToDTO(event.get());
+        return ResponseEntity.ok(eventDTO);
     }
 
     @GetMapping("")
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventDTO> getAllEvents() {
+        return eventRepository.findAll().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
         if (!eventRepository.existsById(id)) {
-            return ResponseEntity.notFound().build(); // Return 404 if event not found
+            return ResponseEntity.notFound().build();
         }
-        eventRepository.deleteById(id); // Perform the delete operation
-        return ResponseEntity.noContent().build(); // Return 204 No Content
+        eventRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
