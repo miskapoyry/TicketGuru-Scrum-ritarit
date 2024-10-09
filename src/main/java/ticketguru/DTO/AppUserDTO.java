@@ -7,11 +7,13 @@ public class AppUserDTO {
     private Long userId;
     private String username;
     private String passwordHash;
-    private Long roleId; // Roolin ID
-    private List<Long> eventIds; // Tapahtumien ID:t
-    private List<Long> saleIds; // Myyntien ID:t
+    private Long roleId;
+    private List<Long> eventIds; // List of event IDs associated with this user
+    private List<Long> saleIds; // List of sale IDs associated with this user
 
-    public AppUserDTO(Long userId, String username, String passwordHash, Long roleId, List<Long> eventIds, List<Long> saleIds) {
+    // Constructor to initialize all fields
+    public AppUserDTO(Long userId, String username, String passwordHash, Long roleId, List<Long> eventIds,
+            List<Long> saleIds) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;
@@ -20,6 +22,7 @@ public class AppUserDTO {
         this.saleIds = saleIds;
     }
 
+    // Getters and setters
     public Long getUserId() {
         return userId;
     }
