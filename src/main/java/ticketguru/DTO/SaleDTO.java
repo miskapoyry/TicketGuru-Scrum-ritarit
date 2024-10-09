@@ -1,28 +1,32 @@
 package ticketguru.DTO;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.List;
 
 public class SaleDTO {
 
+    // Fields
     private Long saleId;
     private String paymentMethod;
-    private BigDecimal totalPrice;
+    private double totalPrice;
     private Timestamp saleTimestamp;
     private Long userId;
-    private List<Long> ticketIds;
-    
-    public SaleDTO(Long saleId, String paymentMethod, BigDecimal totalPrice, Timestamp saleTimestamp, Long userId,
-            List<Long> ticketIds) {
+    private List<TicketDTO> tickets;
+
+    // Constructor to initialize all fields
+    public SaleDTO(Long saleId, String paymentMethod, double totalPrice, Timestamp saleTimestamp, Long userId,
+            List<TicketDTO> tickets) {
         this.saleId = saleId;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
         this.saleTimestamp = saleTimestamp;
         this.userId = userId;
-        this.ticketIds = ticketIds;
+        this.tickets = tickets;
     }
 
+    // Getters and setters
     public Long getSaleId() {
         return saleId;
     }
@@ -39,12 +43,15 @@ public class SaleDTO {
         this.paymentMethod = paymentMethod;
     }
 
-    public BigDecimal getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
-        this.totalPrice = totalPrice;
+    // Set total price to 2 decimal places
+    public void setTotalPrice(double totalPrice) {
+        BigDecimal bd = BigDecimal.valueOf(totalPrice);
+        bd = bd.setScale(2, RoundingMode.HALF_UP);
+        this.totalPrice = bd.doubleValue();
     }
 
     public Timestamp getSaleTimestamp() {
@@ -63,11 +70,11 @@ public class SaleDTO {
         this.userId = userId;
     }
 
-    public List<Long> getTicketIds() {
-        return ticketIds;
+    public List<TicketDTO> getTickets() {
+        return tickets;
     }
 
-    public void setTicketIds(List<Long> ticketIds) {
-        this.ticketIds = ticketIds;
+    public void setTickets(List<TicketDTO> tickets) {
+        this.tickets = tickets;
     }
 }
