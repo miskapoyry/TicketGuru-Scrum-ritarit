@@ -1,33 +1,41 @@
 package ticketguru.domain;
 
+
 import jakarta.persistence.*;
 
 @Entity
 @Table(name = "event_ticket_type")
 public class EventTicketType {
 
+    // Unique identifier for the event ticket type
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="event_ticket_type_id", nullable = false, updatable = false)
     private Long eventTicketTypeId;
 
+    // Many to one relationship with Event
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "event_id", nullable = false)
     private Event event;
 
+    // Many to one relationship with TicketType
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ticket_type_id", nullable = false)
     private TicketType ticketType;
 
+    // Number of tickets available for the event ticket type
     @Column(name = "ticket_quantity", nullable = false)
     private int ticketQuantity;
 
+    // Price of the event ticket type
     @Column(name = "price", nullable = false)
     private double price;
 
+    // Default constructor
     public EventTicketType() {
     }
 
+    // Constructor to initialize all fields
     public EventTicketType(Event event, TicketType ticketType, int ticketQuantity,
             double price) {
         this.event = event;
@@ -36,6 +44,7 @@ public class EventTicketType {
         this.price = price;
     }
 
+    // Getters and setters
     public Long getEventTicketTypeId() {
         return eventTicketTypeId;
     }
