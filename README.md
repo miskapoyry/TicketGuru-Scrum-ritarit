@@ -105,7 +105,7 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 ### Tietohakemisto
 
-> ### _user_
+> ### _app_user_
 > _user-taulu sisältää käyttäjätilin tiedot. Tili kuuluu aina vain yhdelle käyttäjälle._
 
 > Kenttä | Tyyppi | Kuvaus
@@ -113,7 +113,7 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > user_id | Long PK | Käyttäjän yksilöivä tunniste
 > role_id | Long FK | Roolin tunniste (viittaus role-tauluun)
 > username | varchar(50) |  Käyttäjän käyttäjätunnus
-> password | varchar(255) | Käyttäjän salasana
+> passwordhash | varchar(255) | Käyttäjän salasana
 
 > ### _role_
 > _rooli-taulu sisältää roolien tiedot. Yhdellä käyttäjällä voi olla vain yksi rooli._
@@ -129,10 +129,12 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
 > event_id | Long PK | Tapahtuman yksilöivä tunniste
-> user_id | Long FK | Käyttäjä, joka on luonut tapahtuman (viittaus tauluun user)
+> user_id | Long FK | Käyttäjä, joka on luonut tapahtuman (viittaus tauluun app_user)
 > event_name | varchar(100) |  Tapahtuman nimi
 > event_date | timestamp | Tapahtuman päivämäärä ja aika
 > location | varchar(100) | Tapahtuman sijainti
+> total_tickets | int | Lippujen määrä tapahtumassa kaikkiaan
+> available_tickets | int | Saatavilla olevien lippujen määrä tapahtumassa
 
 > ### _ticket_type_
 > _ticket_type -taulu sisältää lipputyyppien tiedot._
@@ -149,7 +151,7 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > ------ | ------ | ------
 > event_ticket_type_id | Long PK | Tapahtuma, johon lippu liittyy (viittaus tauluun event)
 > ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
-> event_id | Long FK | Lipputyyppi (viittaus tauluun event)
+> event_id | Long FK | Tapahtuma (viittaus tauluun event)
 > ticket_quantity | int |  Saatavilla oleva määrä tietylle lipputyypille
 > price | decimal (10, 2) |  Lipun hinta
 
@@ -162,8 +164,9 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > ticket_number | varchar (50) | Lipun numero tai tunniste
 > ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
 > event_id | Long FK | Tapahtuma (viittaus tauluun event)
+> sale_id | Long FK | Myyntitapahtuman id (viittaus tauluun sale)
 > sale_timestamp | TIMESTAMP | Lipun myyntiaika
-> is_used | BOOLEAN | lipun käyttötilanne
+> is_used | BOOLEAN | Lipun käyttötilanne
 > used_timestamp | TIMESTAMP | Ajankohta, jolloin lippu on käytetty (null, jos ei ole käytetty)
 
 > ### _sale_
@@ -173,9 +176,9 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > ------ | ------ | ------
 > sale_id | Long PK | Myyntitapahtuman yksilöivä tunniste
 > sale_timestamp | TIMESTAMP | Myyntitapahtuman ajankohta
-> user_id | Long FK | Myynnin suorittanut käyttäjä (viittaus tauluun user)
+> user_id | Long FK | Myynnin suorittanut käyttäjä (viittaus tauluun app_user)
 > payment_method | varchar (20) | Maksutapa (esim. "käteinen", "kortti")
-> total_price | DECIMAL (10, 2) | Myynnin kokonaissumma
+> total_price | double | Myynnin kokonaissumma
 
 
 ## Tekninen kuvaus
