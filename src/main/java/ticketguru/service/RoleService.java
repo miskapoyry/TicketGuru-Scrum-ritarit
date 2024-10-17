@@ -2,6 +2,8 @@ package ticketguru.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import ticketguru.domain.AppUser;
 import ticketguru.domain.Role;
 import ticketguru.repository.RoleRepository;
 
@@ -29,8 +31,23 @@ public class RoleService {
         }
 
         Role existingRole = existingRoleOptional.get();
-        existingRole.setRoleName(role.getRoleName());
-        existingRole.setUsers(role.getUsers()); // Optional: update users if needed
+
+        existingRole.setRoleName(role.getRoleName()); // Roolinimen päivitys
+
+         
+        if (role.getUsers() != null) {
+            // Tyhjennetään nykyiset
+            existingRole.getUsers().clear();
+        
+            // Lisätään uudet käyttäjät ja asetetaan roolit
+            for (AppUser user : role.getUsers()) {
+                user.setRole(existingRole);  
+                existingRole.getUsers().add(user);
+            }
+        }
+            
+
+       // existingRole.setUsers(role.getUsers()); // Optional: update users if needed // tämä pois
 
         return roleRepository.save(existingRole);
     }
