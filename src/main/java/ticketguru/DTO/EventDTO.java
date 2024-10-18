@@ -1,30 +1,32 @@
 package ticketguru.DTO;
 
 import java.sql.Timestamp;
+import java.util.List;
 
 public class EventDTO {
-
     private Long eventId;
     private String eventName;
     private Timestamp eventDate;
     private String location;
     private int totalTickets;
     private int availableTickets;
-    private Long appUserId;
+    private List<Long> eventTicketTypeIds;
 
     public EventDTO() {
     }
 
-    public EventDTO(Long eventId, String eventName, Timestamp eventDate, String location, int totalTickets, int availableTickets, Long appUserId) {
+    public EventDTO(Long eventId, String eventName, Timestamp eventDate, String location, int totalTickets,
+            int availableTickets, List<Long> eventTicketTypeIds) {
         this.eventId = eventId;
         this.eventName = eventName;
         this.eventDate = eventDate;
         this.location = location;
         this.totalTickets = totalTickets;
         this.availableTickets = availableTickets;
-        this.appUserId = appUserId;
+        this.eventTicketTypeIds = eventTicketTypeIds;
     }
 
+    // Getters and setters
     public Long getEventId() {
         return eventId;
     }
@@ -73,11 +75,11 @@ public class EventDTO {
         this.availableTickets = availableTickets;
     }
 
-    public Long getAppUserId() {
-        return appUserId;
+    public List<Long> getEventTicketTypeIds() {
+        return eventTicketTypeIds;
     }
 
-    public void setAppUserId(Long appUserId) {
-        this.appUserId = appUserId;
+    public void setEventTicketTypeIds(List<Long> eventTicketTypeIds) {
+        this.eventTicketTypeIds = eventTicketTypeIds;
     }
 }

@@ -12,32 +12,40 @@ import jakarta.persistence.*;
 @Table(name = "app_user")
 public class AppUser {
 
+    // Unique identifier for the user
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="user_id", nullable = false, updatable = false)
+    @Column(name = "user_id", nullable = false, updatable = false)
     private Long userId;
 
-    @Column(name="username",unique = true)
+    // Username of the user
+    @Column(name = "username", unique = true)
     private String username;
 
-    @Column(name= "passwordhash" ,nullable = false)
+    // Password hash of the user, cannot be null
+    @Column(name = "passwordhash", nullable = false)
     private String passwordHash;
 
+    // Many to one relationship with Role
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    // One-to-many relationship with Event
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Event> events = new ArrayList<>();
 
+    // One-to-many relationship with Sale
     @OneToMany(mappedBy = "appUser", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<Sale> sales = new ArrayList<>();
 
+    // Default contructor
     public AppUser() {
     }
 
+    // Constructor to initialize all fields
     public AppUser(String username, String passwordHash, Role role, List<Event> events, List<Sale> sales) {
         this.username = username;
         this.passwordHash = passwordHash;
@@ -46,6 +54,7 @@ public class AppUser {
         this.sales = sales != null ? sales : new ArrayList<>();
     }
 
+    // Getters and setters
     public Long getUserId() {
         return userId;
     }

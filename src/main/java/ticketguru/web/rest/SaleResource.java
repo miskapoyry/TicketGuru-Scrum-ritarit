@@ -1,134 +1,114 @@
 package ticketguru.web.rest;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
-
+import org.springframework.web.bind.annotation.*;
 import ticketguru.DTO.SaleDTO;
-import ticketguru.domain.Sale;
-import ticketguru.domain.Ticket;
-import ticketguru.domain.AppUser;
+import ticketguru.DTO.SaleSummaryDTO;
+import ticketguru.service.SaleService;
 import ticketguru.repository.AppUserRepository;
-import ticketguru.repository.SaleRepository;
-import ticketguru.repository.TicketRepository;
+
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/sales")
 public class SaleResource {
 
     @Autowired
-    private SaleRepository saleRepository;
-
+    private SaleService saleService;
     @Autowired
     private AppUserRepository appUserRepository;
 
-    @Autowired
-    private TicketRepository ticketRepository;
+    @PostMapping
+    public ResponseEntity<SaleDTO> createSale(@RequestBody SaleDTO saleDTO) {
+        SaleDTO createdSale = saleService.createSale(saleDTO);
+        return ResponseEntity.ok(createdSale);
+    }
 
-    // Muuntaa Salesta -> SaleDTOn
-    private SaleDTO convertToDTO(Sale sale) {
-
-        List<Long> ticketIds = sale.getTickets().stream()
-                .map(Ticket::getTicketId)
-                .collect(Collectors.toList());
-
-        return new SaleDTO(
-                sale.getSaleId(),
-                sale.getPaymentMethod(),
-                sale.getTotalPrice(),
-                sale.getSaleTimestamp(),
-                sale.getAppUser().getUserId(),
-                ticketIds);
+    @PutMapping("/{id}")
+    public ResponseEntity<SaleDTO> updateSale(@PathVariable Long id, @RequestBody SaleDTO saleDTO) {
+        SaleDTO updatedSale = saleService.updateSale(id, saleDTO);
+        return ResponseEntity.ok(updatedSale);
     }
 
     @GetMapping
-    public List<SaleDTO> getAllSales(@RequestParam(required = false) Long userId) {
+    public ResponseEntity<?> getAllSales(@RequestParam(required = false) Long userId) {
+        if (userId != null && !appUserRepository.existsById(userId)) {
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "User not found with given ID");
+            return ResponseEntity.status(404).body(errorResponse);
+        }
+        List<SaleSummaryDTO> sales = saleService.getAllSales(userId);
+        return ResponseEntity.ok(sales);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<?> getSales(@RequestParam(required = false) String userId,
+            @RequestParam(required = false) String saleIds) {
         if (userId != null) {
-            return saleRepository.findByAppUser_UserId(userId).stream()
-                    .map(this::convertToDTO)
+            List<String> userIds = Arrays.asList(userId.split(","));
+            List<String> nonExistentUserIds = userIds.stream()
+                    .map(String::trim)
+                    .filter(id -> !id.isEmpty())
+                    .filter(id -> !appUserRepository.existsById(Long.parseLong(id)))
                     .collect(Collectors.toList());
+
+            if (!nonExistentUserIds.isEmpty()) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message",
+                        "User(s) not found with given ID(s): " + String.join(", ", nonExistentUserIds));
+                return ResponseEntity.status(404).body(errorResponse);
+            }
+
+            List<SaleDTO> sales = userIds.stream()
+                    .map(String::trim)
+                    .filter(id -> !id.isEmpty())
+                    .map(id -> saleService.getSalesByUserId(Long.parseLong(id)))
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList());
+
+            if (sales.isEmpty()) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "No sales found for user ID(s): " + userId);
+                return ResponseEntity.status(404).body(errorResponse);
+            }
+
+            return ResponseEntity.ok(sales);
+        } else if (saleIds != null) {
+            List<Long> saleIdList;
+            try {
+                saleIdList = Arrays.stream(saleIds.split(","))
+                        .map(String::trim)
+                        .filter(id -> !id.isEmpty())
+                        .map(Long::parseLong)
+                        .collect(Collectors.toList());
+            } catch (NumberFormatException e) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "Invalid sale ID format in: " + saleIds);
+                return ResponseEntity.status(400).body(errorResponse);
+            }
+
+            List<SaleDTO> sales = saleService.getSales(saleIdList);
+            if (sales.isEmpty()) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "No sales found for sale IDs: " + saleIds);
+                return ResponseEntity.status(404).body(errorResponse);
+            }
+            return ResponseEntity.ok(sales);
         } else {
-            return saleRepository.findAll().stream()
-                    .map(this::convertToDTO)
-                    .collect(Collectors.toList());
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Either userId or saleIds must be provided");
+            return ResponseEntity.status(400).body(errorResponse);
         }
-    }
-
-    @GetMapping("/{saleId}")
-    public ResponseEntity<SaleDTO> getSale(@PathVariable Long saleId) {
-        Sale sale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sale not found"));
-
-        SaleDTO saleDTO = convertToDTO(sale);
-        return new ResponseEntity<>(saleDTO, HttpStatus.OK);
-    }
-
-    @PostMapping
-    public ResponseEntity<SaleDTO> createSale(@RequestBody SaleDTO saleDTO) {
-
-        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with given ID"));
-
-        List<Ticket> tickets = ticketRepository.findAllById(saleDTO.getTicketIds());
-
-        if (tickets.size() != saleDTO.getTicketIds().size()) {
-            throw new RuntimeException("Tickets not found with given ID");
-        }
-
-        Sale sale = new Sale(appUser, tickets, saleDTO.getSaleTimestamp(),
-                saleDTO.getPaymentMethod(), saleDTO.getTotalPrice());
-
-        tickets.forEach(ticket -> ticket.setSale(sale));
-
-        Sale newSale = saleRepository.save(sale);
-
-        return new ResponseEntity<>(convertToDTO(newSale), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{saleId}")
-    public ResponseEntity<SaleDTO> updateSale(@PathVariable Long saleId, @RequestBody SaleDTO saleDTO) {
-        Sale existingSale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("Sale not found with given ID"));
-
-        List<Ticket> tickets = ticketRepository.findAllById(saleDTO.getTicketIds());
-
-        if (tickets.size() != saleDTO.getTicketIds().size()) {
-            throw new RuntimeException("Tickets not found with given ID");
-        }
-
-        existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
-        existingSale.setTotalPrice(saleDTO.getTotalPrice());
-        existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
-
-        tickets.forEach(ticket -> ticket.setSale(existingSale));
-        existingSale.setTickets(tickets);
-
-        Sale updatedSale = saleRepository.save(existingSale);
-
-        SaleDTO updatedSaleDTO = convertToDTO(updatedSale);
-        return new ResponseEntity<>(updatedSaleDTO, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<SaleDTO> deleteSale(@PathVariable Long id) {
-        if (!saleRepository.existsById(id)) {
-            return ResponseEntity.notFound().build();
-        } else {
-            saleRepository.deleteById(id);
-            return ResponseEntity.noContent().build();
-        }
+    public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
+        saleService.deleteSale(id);
+        return ResponseEntity.noContent().build();
     }
 }

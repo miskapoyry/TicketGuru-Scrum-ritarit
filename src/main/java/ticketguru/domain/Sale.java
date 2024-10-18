@@ -1,6 +1,5 @@
 package ticketguru.domain;
 
-import java.math.BigDecimal;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -12,40 +11,47 @@ import jakarta.persistence.*;
 @Table(name = "sale")
 public class Sale {
 
+    // Unique identifier for the sale
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "sale_id", nullable = false, updatable = false)
     private Long saleId;
 
+    // Many to one relationship with AppUser
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
     @JoinColumn(name = "user_id", nullable = false)
     private AppUser appUser;
 
+    // One to many relationship with Ticket
     @OneToMany(mappedBy = "sale", cascade = CascadeType.ALL)
     private List<Ticket> tickets = new ArrayList<>();
 
+    // Date and time of the sale
     @Column(name = "sale_timestamp", nullable = false)
     private Timestamp saleTimestamp;
 
+    // Payment method used for the sale
     @Column(name = "payment_method", nullable = false)
     private String paymentMethod;
 
-    @Column(name = "total_price", nullable = false, precision = 10, scale = 2)
-    private BigDecimal totalPrice;
+    // Total price of the sale
+    @Column(name = "total_price", nullable = false, scale = 2)
+    private double totalPrice;
 
+    // Default constructor
     public Sale() {
     }
 
-    public Sale(AppUser appUser, List<Ticket> tickets, Timestamp saleTimestamp, String paymentMethod,
-            BigDecimal totalPrice) {
+    // Constructor to initialize all fields
+    public Sale(AppUser appUser, Timestamp saleTimestamp, String paymentMethod, double totalPrice) {
         this.appUser = appUser;
-        this.tickets = tickets;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
         this.totalPrice = totalPrice;
     }
 
+    // Getters and setters
     public Long getSaleId() {
         return saleId;
     }
@@ -86,11 +92,11 @@ public class Sale {
         this.paymentMethod = paymentMethod;
     }
 
-    public BigDecimal getTotalPrice() {
+    public double getTotalPrice() {
         return totalPrice;
     }
 
-    public void setTotalPrice(BigDecimal totalPrice) {
+    public void setTotalPrice(double totalPrice) {
         this.totalPrice = totalPrice;
     }
 }

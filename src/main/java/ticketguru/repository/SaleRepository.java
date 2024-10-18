@@ -8,4 +8,5 @@ import ticketguru.domain.Sale;
 
 public interface SaleRepository extends JpaRepository<Sale, Long> {
     List<Sale> findByAppUser_UserId(Long userId);
+    List<Sale> findBySaleIdIn(List<Long> saleIds);
 }

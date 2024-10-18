@@ -1,82 +1,74 @@
 package ticketguru.web.rest;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ticketguru.domain.AppUser;
 import ticketguru.domain.Event;
-import ticketguru.repository.AppUserRepository;
-import ticketguru.repository.EventRepository;
+import ticketguru.service.EventService;
+import ticketguru.DTO.EventDTO;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/event")
+@RequestMapping("/api/events")
 public class EventResource {
 
-    private final EventRepository eventRepository;
+    @Autowired
+    private EventService eventService;
 
-    private final AppUserRepository appUserRepository;
-
-    public EventResource(EventRepository eventRepository, AppUserRepository appUserRepository) {
-        this.eventRepository = eventRepository;
-        this.appUserRepository = appUserRepository;
-    }
-
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Event> createEvent(@RequestBody Event event, @RequestParam Long userId) {
-        if (event.getEventId() != null) {
+        try {
+            Event createdEvent = eventService.createEvent(event, userId);
+            return ResponseEntity.ok(createdEvent);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(event);
         }
-        AppUser user = appUserRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("User not found"));
-        event.setAppUser(user);
-        event = eventRepository.save(event);
-        return ResponseEntity.ok(event);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
-        Optional<Event> existingEventOptional = eventRepository.findById(id);
-
-        if (existingEventOptional.isEmpty()) {
+        try {
+            Event updatedEvent = eventService.updateEvent(id, event);
+            return ResponseEntity.ok(updatedEvent);
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
-
-        Event existingEvent = existingEventOptional.get();
-
-        existingEvent.setEventName(event.getEventName());
-        existingEvent.setEventDate(event.getEventDate());
-        existingEvent.setLocation(event.getLocation());
-        existingEvent.setAvailableTickets(event.getAvailableTickets());
-
-        if (event.getAppUser() != null) {
-            existingEvent.setAppUser(event.getAppUser());
-        } else {
-            existingEvent.setAppUser(existingEvent.getAppUser());
-        }
-
-        Event updatedEvent = eventRepository.save(existingEvent);
-        return ResponseEntity.ok(updatedEvent);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Event> getEvent(@PathVariable Long id) {
-        Optional<Event> event = eventRepository.findById(id);
+    public ResponseEntity<EventDTO> findEventById(@PathVariable Long id) {
+        Optional<EventDTO> event = eventService.findEventById(id);
         return ResponseEntity.of(event);
     }
 
     @GetMapping("")
-    public List<Event> getAllEvents() {
-        return eventRepository.findAll();
+    public List<EventDTO> getAllEvents() {
+        return eventService.getAllEvents();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<EventDTO>> searchEvents(@RequestParam(required = false) String eventName,
+                                                       @RequestParam(required = false) String location) {
+        if (eventName == null && location == null) {
+            return ResponseEntity.badRequest().body(List.of());
+        }
+
+        List<EventDTO> events = eventService.searchEvents(eventName, location);
+        if (events.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(events);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteEvent(@PathVariable Long id) {
-        if (!eventRepository.existsById(id)) {
+    public ResponseEntity<Void> deleteEvent(@PathVariable Long id) {
+        try {
+            eventService.deleteEvent(id);
+            return ResponseEntity.noContent().build();
+        } catch (IllegalArgumentException e) {
             return ResponseEntity.notFound().build();
         }
-        eventRepository.deleteById(id);
-        return ResponseEntity.ok("Event with ID " + id + " has been successfully deleted.");
     }
 }
