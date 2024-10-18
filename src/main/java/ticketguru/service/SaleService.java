@@ -1,7 +1,11 @@
 package ticketguru.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
+
+import jakarta.transaction.Transactional;
 import ticketguru.DTO.SaleDTO;
 import ticketguru.DTO.SaleSummaryDTO;
 import ticketguru.DTO.TicketDTO;
@@ -41,21 +45,23 @@ public class SaleService {
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
 
+    @Transactional
     public SaleDTO createSale(SaleDTO saleDTO) {
-        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
-                .orElseThrow(() -> new RuntimeException("User not found with given ID"));
 
-        // Set the sale timestamp to the current local time
+        // Lisää salen luoma käyttäjä
+        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found with given ID"));
+
+        // Tee localdatesta timestamp
         Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
 
-        // Calculate the total price based on the EventTicketType prices
+        // Hae tietyn eventin lipputyypit ja niiden hinnat + pyöristä
         double totalPrice = saleDTO.getTickets().stream()
                 .mapToDouble(ticketDTO -> {
                     EventTicketType eventTicketType = eventTicketTypeRepository
                             .findByEvent_EventIdAndTicketType_TicketTypeId(
                                     ticketDTO.getEventId(), ticketDTO.getTicketTypeId())
-                            .orElseThrow(() -> new RuntimeException(
-                                    "EventTicketType not found with given EventId and TicketTypeId"));
+                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "EventTicketType not found with given EventId and TicketTypeId"));
                     return eventTicketType.getPrice() * ticketDTO.getQuantity();
                 })
                 .sum();
@@ -63,28 +69,31 @@ public class SaleService {
         BigDecimal roundedTotalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP);
         totalPrice = roundedTotalPrice.doubleValue();
 
+        // Luo uusi sale jossa on käyttäjä, aika, maksutyyppi sekä lippujen kokonaishinta
         Sale sale = new Sale(appUser, saleTimestamp, saleDTO.getPaymentMethod(), totalPrice);
 
+        // Tallenna luotu sale
         Sale newSale = saleRepository.save(sale);
 
-        // Create tickets from the provided ticket information
+        // Luo liput annetun kutsun perusteella
         List<Ticket> tickets = new ArrayList<>();
         for (TicketDTO ticketDTO : saleDTO.getTickets()) {
-            for (int i = 0; i < ticketDTO.getQuantity(); i++) {
+            for (int i = 0; i < ticketDTO.getQuantity(); i++) { // Luodaan quantityn mukainen määrä uusia lippuDTO
                 Ticket ticket = new Ticket();
                 ticket.setSale(newSale);
-                ticket.setEvent(new Event(ticketDTO.getEventId())); // Assuming Event has a constructor with eventId
-                ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Assuming TicketType has a
-                                                                                   // constructor with ticketTypeId
-                ticket.setSaleTimestamp(saleTimestamp); // Use the same sale timestamp for all tickets
-                ticket.setUsed(ticketDTO.isUsed());
-                ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp());
+                ticket.setEvent(new Event(ticketDTO.getEventId())); // Määritellään tapahtuma, johon lippu(t) luodaan
+                ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Asetetaan ID:n avulla lipputyyppi
+                ticket.setSaleTimestamp(saleTimestamp); // Käytä jokaiselle lipulle samaa luontiaikaa
+                ticket.setUsed(ticketDTO.isUsed()); // Määritä onko lippu käytetty vai ei
+                ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp()); // Käytetyn lipun aika
                 tickets.add(ticket);
             }
         }
 
+        // Tallenna liput
         ticketRepository.saveAll(tickets);
 
+        // Liitä luodut liput saleen ja tallenna sale
         newSale.setTickets(tickets);
         saleRepository.save(newSale);
 
