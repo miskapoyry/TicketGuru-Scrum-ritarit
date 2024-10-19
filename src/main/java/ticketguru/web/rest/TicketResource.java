@@ -10,7 +10,6 @@ import ticketguru.exception.ErrorResponse;
 import ticketguru.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/tickets")

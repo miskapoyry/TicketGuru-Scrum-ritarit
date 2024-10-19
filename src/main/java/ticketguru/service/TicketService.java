@@ -12,7 +12,6 @@ import ticketguru.repository.TicketRepository;
 import ticketguru.exception.ResourceNotFoundException; 
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +27,7 @@ public class TicketService {
         private SaleRepository saleRepository;
 
         public List<TicketDTO> getTickets(Long eventId, Long saleId) {
+                // jos EventId on annettu, etsi ko. tapahtumaan kuuluvat liput
                 if (eventId != null) {
                     Event event = eventRepository.findById(eventId)
                             .orElseThrow(() -> new ResourceNotFoundException("Event not found")); 
@@ -36,6 +36,7 @@ public class TicketService {
                             .collect(Collectors.toList());
                 }
 
+                // jos SaleId on annettu, etsi ko. tapahtumaan kuuluvat liput
                 if (saleId != null) {
                         Sale sale = saleRepository.findById(saleId)
                                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found")); 
@@ -44,7 +45,7 @@ public class TicketService {
                                 .collect(Collectors.toList());
                     }
             
-
+                // jos ei ole annettu mitään parametreja, etsi kaikki liput
                 return ticketRepository.findAll().stream()
                                 .map(this::convertToDTO)
                                 .collect(Collectors.toList());
@@ -79,8 +80,10 @@ public class TicketService {
         public TicketDTO markTicketAsUsed(Long ticketId, boolean isUsed) {
                 Ticket existingTicket = ticketRepository.findById(ticketId)
                         .orElseThrow(() -> new ResourceNotFoundException("Ticket not found")); 
+                // päivitä status
                 existingTicket.setUsed(isUsed);
-        
+                
+                // päivitä käyttöaika, jos lippu käytetään
                 if (isUsed) {
                     existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis()));
                 } else {
@@ -92,6 +95,7 @@ public class TicketService {
         }
 
         public void deleteTicket(Long ticketId) {
+                // tarkista, onko lippu olemassa ennen poistoa
                 if (!ticketRepository.existsById(ticketId)) {
                         throw new ResourceNotFoundException("Ticket not found"); 
                 }
