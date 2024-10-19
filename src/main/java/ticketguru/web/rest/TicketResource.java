@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ticketguru.DTO.TicketDTO;
 import ticketguru.service.TicketService;
+import ticketguru.exception.ErrorResponse;
+import ticketguru.exception.ResourceNotFoundException;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +27,13 @@ public class TicketResource {
         }
 
         @GetMapping("/{ticketId}")
-        public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
-                Optional<TicketDTO> ticket = ticketService.getTicket(ticketId);
-                return ticket.map(ResponseEntity::ok)
-                                .orElseGet(() -> ResponseEntity.notFound().build());
+        public ResponseEntity<?> getTicket(@PathVariable Long ticketId) {
+                try {
+                        TicketDTO ticket = ticketService.getTicket(ticketId);
+                        return ResponseEntity.ok(ticket);
+                } catch (ResourceNotFoundException e) {
+                        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+                }
         }
 
         // @PostMapping
@@ -42,24 +47,25 @@ public class TicketResource {
         // }
         
         @PutMapping("/{ticketId}/use")
-        public ResponseEntity<TicketDTO> markTicketAsUsed(
-                @PathVariable Long ticketId,
-                @RequestParam(value = "used", defaultValue = "true") boolean used) {  // Defaulttina kutsussa lippu käytetty
-            try {
-                TicketDTO updatedTicket = ticketService.markTicketAsUsed(ticketId, used);
-                return ResponseEntity.ok(updatedTicket);
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build();
-            }
+    public ResponseEntity<?> markTicketAsUsed(
+            @PathVariable Long ticketId,
+            @RequestParam(value = "used", defaultValue = "true") boolean used) {
+        try {
+            TicketDTO updatedTicket = ticketService.markTicketAsUsed(ticketId, used);
+            return ResponseEntity.ok(updatedTicket); // 200 OK
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
+        }
         }
 
+
         @DeleteMapping("/{ticketId}")
-        public ResponseEntity<Void> deleteTicket(@PathVariable Long ticketId) {
-            try {
-                ticketService.deleteTicket(ticketId);
-                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No content, jos onnistuu
-            } catch (RuntimeException e) {
-                return ResponseEntity.notFound().build(); // Jos lippua ei löydy
-            }
+        public ResponseEntity<?> deleteTicket(@PathVariable Long ticketId) {
+        try {
+            ticketService.deleteTicket(ticketId);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No Content
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse(e.getMessage()));
         }
+    }
 }
