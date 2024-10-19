@@ -16,21 +16,21 @@
 
 - 400 Bad Request: This occurs if the provided ticketId is invalid, such as a non-numeric value.
 
-- 500 Internal Server Error: This occurs if there is a server-side error while retrieving the ticket, such as a database issue.
-
 **Response Body** : 
 
 A ticket objects containing the following fields:
 
 ```json
 {
-  "ticketId": 2,
-  "ticketNumber": "TICKET-1002",
+  "ticketId": 1,
+  "ticketNumber": "TICKET-1001",
   "eventId": 1,
   "ticketTypeId": 1,
-  "saleId": 1,
+  "saleId": 2,
   "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
   "usedTimestamp": null,
+  "quantity": 1,
+  "price": 0.0,
   "used": false
 }
 
@@ -44,4 +44,6 @@ A ticket objects containing the following fields:
 - **`saleId`**: Identifier for the sale transaction related to this ticket.
 - **`saleTimestamp`**: Date and time when the ticket was purchased, in ISO 8601 format.
 - **`usedTimestamp`**: Date and time when the ticket was used (if applicable), in ISO 8601 format. This field will be `null` if the ticket has not been used.
+- **`quantity`**: Quantity, which will always be 1 for a single ticket retrieval.
+- **`price`**: The price of the ticket.
 - **`used`**: Boolean indicating whether the ticket has been used (`true`) or not (`false`).

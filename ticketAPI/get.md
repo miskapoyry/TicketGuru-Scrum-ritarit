@@ -4,7 +4,7 @@
 
 **URL** : `/api/tickets`
 
-**Description** : Retrieves a list of all tickets. Each ticket includes information such as its unique identifier, event, sale details, and usage status. You can filter the results by using optional query parameters eventId and saleId. Each ticket includes information such as its unique identifier, event, sale details, and usage status.
+**Description** : Retrieves a list of all tickets. Each ticket includes information such as its unique identifier, event, sale details, and usage status. You can filter the results by using optional query parameters eventId and saleId.
 
 **Query Parameters** : 
 - eventId (optional): The identifier of the event to filter tickets. If provided, only tickets associated with the specified event will be returned.
@@ -17,8 +17,6 @@
 **Error Responses** :
 
 - 404 Not Found: This response occurs when there are no tickets found in the system or the requested resource does not exist.
-
-- 500 Internal Server Error: This response occurs when there is a server-side error, such as a database connection failure.
 
 - 400 Bad Request: This response occurs if there is an issue with the request format or invalid parameters.
 
@@ -33,19 +31,23 @@ An array of ticket objects, where each object contains the following fields:
     "ticketNumber": "TICKET-1001",
     "eventId": 1,
     "ticketTypeId": 1,
-    "saleId": 1,
+    "saleId": 2,
     "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
     "usedTimestamp": null,
+    "quantity": 1,
+    "price": 0.0,
     "used": false
   },
   {
     "ticketId": 2,
-    "ticketNumber": "TICKET-1002",
-    "eventId": 1,
+    "ticketNumber": "TICKET-10012443232",
+    "eventId": 2,
     "ticketTypeId": 1,
-    "saleId": 1,
+    "saleId": 2,
     "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
     "usedTimestamp": null,
+    "quantity": 1,
+    "price": 0.0,
     "used": false
   },
   {
@@ -56,7 +58,9 @@ An array of ticket objects, where each object contains the following fields:
     "saleId": 2,
     "saleTimestamp": "2024-03-05T12:30:00.000+00:00",
     "usedTimestamp": "2024-05-10T12:00:00.000+00:00",
-    "used": true
+    "quantity": 1,
+    "price": 0.0,
+    "used": false
   }
 ]
 ```
@@ -69,3 +73,5 @@ An array of ticket objects, where each object contains the following fields:
 - **`saleTimestamp`**: Date and time when the ticket was purchased, in ISO 8601 format.
 - **`usedTimestamp`**: Date and time when the ticket was used (if applicable), in ISO 8601 format. This field will be `null` if the ticket has not been used.
 - **`used`**: Boolean indicating whether the ticket has been used (`true`) or not (`false`).
+- **`quantity`**: The number of tickets available.
+- **`price`**: The price of the ticket.
