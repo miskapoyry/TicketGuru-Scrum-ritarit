@@ -9,6 +9,7 @@ import ticketguru.domain.Ticket;
 import ticketguru.repository.EventRepository;
 import ticketguru.repository.SaleRepository;
 import ticketguru.repository.TicketRepository;
+import ticketguru.exception.ResourceNotFoundException; 
 import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
@@ -28,28 +29,31 @@ public class TicketService {
 
         public List<TicketDTO> getTickets(Long eventId, Long saleId) {
                 if (eventId != null) {
-                        Event event = eventRepository.findById(eventId)
-                                        .orElseThrow(() -> new RuntimeException("Event not found"));
-                        return ticketRepository.findByEvent(event).stream()
-                                        .map(this::convertToDTO)
-                                        .collect(Collectors.toList());
+                    Event event = eventRepository.findById(eventId)
+                            .orElseThrow(() -> new ResourceNotFoundException("Event not found")); 
+                    return ticketRepository.findByEvent(event).stream()
+                            .map(this::convertToDTO)
+                            .collect(Collectors.toList());
                 }
 
                 if (saleId != null) {
                         Sale sale = saleRepository.findById(saleId)
-                                        .orElseThrow(() -> new RuntimeException("Sale not found"));
+                                .orElseThrow(() -> new ResourceNotFoundException("Sale not found")); 
                         return ticketRepository.findBySale(sale).stream()
-                                        .map(this::convertToDTO)
-                                        .collect(Collectors.toList());
-                }
+                                .map(this::convertToDTO)
+                                .collect(Collectors.toList());
+                    }
+            
 
                 return ticketRepository.findAll().stream()
                                 .map(this::convertToDTO)
                                 .collect(Collectors.toList());
         }
 
-        public Optional<TicketDTO> getTicket(Long ticketId) {
-                return ticketRepository.findById(ticketId).map(this::convertToDTO);
+        public TicketDTO getTicket(Long ticketId) {
+                return ticketRepository.findById(ticketId)
+                        .map(this::convertToDTO)
+                        .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
         }
 
         // public TicketDTO createTicket(TicketDTO ticketDTO) {
@@ -74,30 +78,25 @@ public class TicketService {
 
         public TicketDTO markTicketAsUsed(Long ticketId, boolean isUsed) {
                 Ticket existingTicket = ticketRepository.findById(ticketId)
-                        .orElseThrow(() -> new RuntimeException("Ticket not found"));
-            
+                        .orElseThrow(() -> new ResourceNotFoundException("Ticket not found")); 
                 existingTicket.setUsed(isUsed);
-            
-                // Kun lippu on käytetty, asetetaan UsedTimeStamp sen mukaiseksi
+        
                 if (isUsed) {
-                    existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis())); // Käyttöhetki
+                    existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis()));
                 } else {
-                    existingTicket.setUsedTimestamp(null); // jos ei ole käytetty, nulliksi
+                    existingTicket.setUsedTimestamp(null);
                 }
-            
+        
                 Ticket updatedTicket = ticketRepository.save(existingTicket);
-            
                 return convertToDTO(updatedTicket);
-            }
-            
+        }
 
         public void deleteTicket(Long ticketId) {
                 if (!ticketRepository.existsById(ticketId)) {
-                    throw new RuntimeException("Ticket not found"); // jos lippua ei löydy
+                        throw new ResourceNotFoundException("Ticket not found"); 
                 }
                 ticketRepository.deleteById(ticketId);
-            }
-
+        }
         private TicketDTO convertToDTO(Ticket ticket) {
                 return new TicketDTO(
                                 ticket.getTicketId(),
