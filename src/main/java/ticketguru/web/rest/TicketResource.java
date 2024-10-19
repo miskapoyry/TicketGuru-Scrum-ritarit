@@ -31,29 +31,35 @@ public class TicketResource {
                                 .orElseGet(() -> ResponseEntity.notFound().build());
         }
 
-        @PostMapping
-        public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
-                try {
-                        TicketDTO createdTicket = ticketService.createTicket(ticketDTO);
-                        return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
-                } catch (RuntimeException e) {
-                        return ResponseEntity.badRequest().body(null);
-                }
-        }
-
-        @PutMapping("/{ticketId}")
-        public ResponseEntity<TicketDTO> updateTicket(@PathVariable Long ticketId, @RequestBody TicketDTO ticketDTO) {
-                try {
-                        TicketDTO updatedTicket = ticketService.updateTicket(ticketId, ticketDTO);
-                        return ResponseEntity.ok(updatedTicket);
-                } catch (RuntimeException e) {
-                        return ResponseEntity.notFound().build();
-                }
+        // @PostMapping
+        // public ResponseEntity<TicketDTO> createTicket(@RequestBody TicketDTO ticketDTO) {
+        //         try {
+        //                 TicketDTO createdTicket = ticketService.createTicket(ticketDTO);
+        //                 return new ResponseEntity<>(createdTicket, HttpStatus.CREATED);
+        //         } catch (RuntimeException e) {
+        //                 return ResponseEntity.badRequest().body(null);
+        //         }
+        // }
+        
+        @PutMapping("/{ticketId}/use")
+        public ResponseEntity<TicketDTO> markTicketAsUsed(
+                @PathVariable Long ticketId,
+                @RequestParam(value = "used", defaultValue = "true") boolean used) {  // Defaulttina kutsussa lippu käytetty
+            try {
+                TicketDTO updatedTicket = ticketService.markTicketAsUsed(ticketId, used);
+                return ResponseEntity.ok(updatedTicket);
+            } catch (RuntimeException e) {
+                return ResponseEntity.notFound().build();
+            }
         }
 
         @DeleteMapping("/{ticketId}")
         public ResponseEntity<Void> deleteTicket(@PathVariable Long ticketId) {
+            try {
                 ticketService.deleteTicket(ticketId);
-                return ResponseEntity.ok().build();
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT); // 204 No content, jos onnistuu
+            } catch (RuntimeException e) {
+                return ResponseEntity.notFound().build(); // Jos lippua ei löydy
+            }
         }
 }
