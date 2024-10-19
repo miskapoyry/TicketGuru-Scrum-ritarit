@@ -6,12 +6,10 @@ import ticketguru.DTO.TicketDTO;
 import ticketguru.domain.Event;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
-import ticketguru.domain.TicketType;
 import ticketguru.repository.EventRepository;
 import ticketguru.repository.SaleRepository;
 import ticketguru.repository.TicketRepository;
-import ticketguru.repository.TicketTypeRepository;
-
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,9 +22,6 @@ public class TicketService {
 
         @Autowired
         private EventRepository eventRepository;
-
-        @Autowired
-        private TicketTypeRepository ticketTypeRepository;
 
         @Autowired
         private SaleRepository saleRepository;
@@ -57,55 +52,51 @@ public class TicketService {
                 return ticketRepository.findById(ticketId).map(this::convertToDTO);
         }
 
-        public TicketDTO createTicket(TicketDTO ticketDTO) {
-                Event event = eventRepository.findById(ticketDTO.getEventId())
-                                .orElseThrow(() -> new RuntimeException("Event not found"));
+        // public TicketDTO createTicket(TicketDTO ticketDTO) {
+        //         Event event = eventRepository.findById(ticketDTO.getEventId())
+        //                         .orElseThrow(() -> new RuntimeException("Event not found"));
 
-                TicketType ticketType = ticketTypeRepository.findById(ticketDTO.getTicketTypeId())
-                                .orElseThrow(() -> new RuntimeException("Ticket type not found"));
+        //         TicketType ticketType = ticketTypeRepository.findById(ticketDTO.getTicketTypeId())
+        //                         .orElseThrow(() -> new RuntimeException("Ticket type not found"));
 
-                Sale sale = saleRepository.findById(ticketDTO.getSaleId())
-                                .orElseThrow(() -> new RuntimeException(
-                                                "Sale not found for ID: " + ticketDTO.getSaleId()));
+        //         Sale sale = saleRepository.findById(ticketDTO.getSaleId())
+        //                         .orElseThrow(() -> new RuntimeException(
+        //                                         "Sale not found for ID: " + ticketDTO.getSaleId()));
 
-                Ticket ticket = new Ticket(ticketDTO.getTicketNumber(), event, ticketType, sale,
-                                ticketDTO.getSaleTimestamp(), ticketDTO.isUsed(),
-                                ticketDTO.getUsedTimestamp());
+        //         Ticket ticket = new Ticket(ticketDTO.getTicketNumber(), event, ticketType, sale,
+        //                         ticketDTO.getSaleTimestamp(), ticketDTO.isUsed(),
+        //                         ticketDTO.getUsedTimestamp());
 
-                Ticket newTicket = ticketRepository.save(ticket);
+        //         Ticket newTicket = ticketRepository.save(ticket);
 
-                return convertToDTO(newTicket);
-        }
+        //         return convertToDTO(newTicket);
+        // }
 
-        public TicketDTO updateTicket(Long ticketId, TicketDTO ticketDTO) {
+        public TicketDTO markTicketAsUsed(Long ticketId, boolean isUsed) {
                 Ticket existingTicket = ticketRepository.findById(ticketId)
-                                .orElseThrow(() -> new RuntimeException("Ticket not found"));
-
-                Event event = eventRepository.findById(ticketDTO.getEventId())
-                                .orElseThrow(() -> new RuntimeException("Event not found"));
-
-                TicketType ticketType = ticketTypeRepository.findById(ticketDTO.getTicketTypeId())
-                                .orElseThrow(() -> new RuntimeException("Ticket type not found"));
-
-                Sale sale = saleRepository.findById(ticketDTO.getSaleId())
-                                .orElseThrow(() -> new RuntimeException("Sale not found"));
-
-                existingTicket.setTicketNumber(ticketDTO.getTicketNumber());
-                existingTicket.setEvent(event);
-                existingTicket.setTicketType(ticketType);
-                existingTicket.setSale(sale);
-                existingTicket.setSaleTimestamp(ticketDTO.getSaleTimestamp());
-                existingTicket.setUsed(ticketDTO.isUsed());
-                existingTicket.setUsedTimestamp(ticketDTO.getUsedTimestamp());
-
+                        .orElseThrow(() -> new RuntimeException("Ticket not found"));
+            
+                existingTicket.setUsed(isUsed);
+            
+                // Kun lippu on käytetty, asetetaan UsedTimeStamp sen mukaiseksi
+                if (isUsed) {
+                    existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis())); // Käyttöhetki
+                } else {
+                    existingTicket.setUsedTimestamp(null); // jos ei ole käytetty, nulliksi
+                }
+            
                 Ticket updatedTicket = ticketRepository.save(existingTicket);
-
+            
                 return convertToDTO(updatedTicket);
-        }
+            }
+            
 
         public void deleteTicket(Long ticketId) {
+                if (!ticketRepository.existsById(ticketId)) {
+                    throw new RuntimeException("Ticket not found"); // jos lippua ei löydy
+                }
                 ticketRepository.deleteById(ticketId);
-        }
+            }
 
         private TicketDTO convertToDTO(Ticket ticket) {
                 return new TicketDTO(
