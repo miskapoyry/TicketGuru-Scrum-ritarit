@@ -14,7 +14,7 @@ retrieving, and deleting events.
 
 ## Ticket Resource
 
-The Ticket Resource allows you to manage ticketd in the TicketGuru application. It supports updating,
+The Ticket Resource allows you to manage tickets in the TicketGuru application. It supports updating,
 retrieving, and deleting tickets.
 
 * [Show all tickets](ticketAPI/get.md) : `GET /api/tickets`
@@ -26,9 +26,9 @@ retrieving, and deleting tickets.
 
 The AppUser Resource allows you to manage users in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting user accounts.
 
-* [Show All Users](appuserAPI/get.md) : `GET /api/users/`
+* [Show All Users](appuserAPI/get.md) : `GET /api/users`
 * [Show One User](appuserAPI/getbyID.md) : `Get /api/users/{id}`
-* [Create a User](appuserAPI/post.md) : `POST /api/users/`
+* [Create a User](appuserAPI/post.md) : `POST /api/users`
 * [Update a User](appuserAPI/put.md) : `PUT /api/users/{id}`
 * [Delete a User](appuserAPI/delete.md) : `DELETE /api/users/{id}`
 
@@ -36,8 +36,19 @@ The AppUser Resource allows you to manage users in the TicketGuru application. I
 
 The sale Resource allows you to manage sales in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting sales.
 
-* [Show All Sales](saleAPI/get.md) : `GET /api/users/`
-* [Show One Sale](saleAPI/getbtID.md) : `Get /api/users/{id}`
-* [Create a Sale](saleAPI/post.md) : `POST /api/users/`
-* [Update a Sale](saleAPI/put.md) : `PUT /api/users/{id}`
-* [Delete a Sale](saleAPI/delete.md) : `DELETE /api/users/{id}`
+* [Show All Sales](saleAPI/get.md) : `GET /api/sales`
+* [Show One Sale](saleAPI/getbyID.md) : `Get /api/sales/{id}`
+* [Create a Sale](saleAPI/post.md) : `POST /api/sales`
+* [Update a Sale](saleAPI/put.md) : `PUT /api/sales/{id}`
+* [Delete a Sale](saleAPI/delete.md) : `DELETE /api/sales/{id}`
+
+
+## TicketType Resource
+
+The TicketType Resource allows you to manage Ticket types in the TicketGuru application. It supports operations such as creating, updating, retrieving and deleting ticket types.
+
+* [Show All Ticket types](ticketTypeAPI/get.md) : `GET /api/ticket-types`
+* [Show One Ticket type](ticketTypeAPI/getbyID.md) : `Get /api/ticket-types/{id}`
+* [Create a Ticket type](ticketTypeAPI/post.md) : `POST /api/ticket-types`
+* [Update a Ticket type](ticketTypeAPI/put.md) : `PUT /api/ticket-types/{id}`
+* [Delete a Ticket type](ticketTypeAPI/delete.md) : `DELETE /api/ticket-types/{id}`

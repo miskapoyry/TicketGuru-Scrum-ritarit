@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ticketguru.DTO.TicketTypeDTO;
-import ticketguru.exception.ErrorResponse;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.service.TicketTypeService;
 
@@ -16,7 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/ticket-types")
-public class TicketTypeController {
+public class TicketTypeResource {
 
     @Autowired
     private TicketTypeService ticketTypeService;

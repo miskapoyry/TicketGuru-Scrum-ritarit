@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ticketguru.DTO.TicketTypeDTO;
 import ticketguru.domain.TicketType;
+import ticketguru.exception.DuplicateResourceException;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.repository.TicketTypeRepository;
 
@@ -28,7 +29,10 @@ public class TicketTypeService {
         return ticketTypeRepository.findById(id).map(this::toDTO);
     }
 
-    public TicketTypeDTO createTicketType(TicketTypeDTO ticketTypeDTO) {
+     public TicketTypeDTO createTicketType(TicketTypeDTO ticketTypeDTO) {
+        if (ticketTypeRepository.existsByTicketTypeName(ticketTypeDTO.getTicketTypeName())) {
+            throw new DuplicateResourceException("Ticket type with the same name already exists");
+        }
         TicketType ticketType = new TicketType(ticketTypeDTO.getTicketTypeName());
         TicketType savedTicketType = ticketTypeRepository.save(ticketType);
         return toDTO(savedTicketType);
@@ -37,6 +41,12 @@ public class TicketTypeService {
     public Optional<TicketTypeDTO> updateTicketType(Long id, TicketTypeDTO ticketTypeDTO) {
         return ticketTypeRepository.findById(id)
                 .map(existingTicketType -> {
+                    // Check for duplicates before updating
+                    if (ticketTypeRepository.existsByTicketTypeName(ticketTypeDTO.getTicketTypeName()) &&
+                        !existingTicketType.getTicketTypeName().equals(ticketTypeDTO.getTicketTypeName())) {
+                        throw new DuplicateResourceException("Ticket type with the same name already exists");
+                    }
+
                     existingTicketType.setTicketTypeName(ticketTypeDTO.getTicketTypeName());
                     TicketType updatedTicketType = ticketTypeRepository.save(existingTicketType);
                     return toDTO(updatedTicketType);
