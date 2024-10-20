@@ -1,18 +1,23 @@
 package ticketguru.DTO;
 
 import java.sql.Timestamp;
+import jakarta.validation.constraints.*;
 
 public class TicketDTO {
 
     // Fields
     private Long ticketId;
     private String ticketNumber;
+    @NotNull(message = "Event ID is required")
     private Long eventId;
+    @NotNull(message = "Ticket type ID is required")
     private Long ticketTypeId;
     private Long saleId;
     private Timestamp saleTimestamp;
+    @NotNull(message = "isUsed field is required")
     private Boolean isUsed;
     private Timestamp usedTimestamp;
+    @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
     private double price;
 
