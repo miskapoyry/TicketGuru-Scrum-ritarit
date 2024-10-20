@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
     // 404 erroreille
     @ExceptionHandler(ResourceNotFoundException.class)
-    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+    public ResponseEntity<ErrorResponse> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) { //Virhe, jos resurssia ei löydy
         // Luo ErrorResponse, jossa on viesti, statuskoodi, aikaleima sekä path
         ErrorResponse errorResponse = new ErrorResponse(
             ex.getMessage(),
@@ -29,24 +29,38 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
-    // 400 erroreille (@Valid annotaatio)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<Map<String, Object>> handleValidationExceptions(MethodArgumentNotValidException ex, WebRequest request) {
-        Map<String, Object> response = new HashMap<>();
-        Map<String, String> messages = new HashMap<>();
-        
-        // Käydään kaikki virheet läpi ja lisätään ne mappiin
-        for (FieldError error : ex.getBindingResult().getFieldErrors()) {
-            messages.put(error.getField(), error.getDefaultMessage());
-        }
-        
-        // Lisää tiedot responseen
-        response.put("errors", messages);
-        response.put("status", HttpStatus.BAD_REQUEST.value());
-        response.put("path", request.getDescription(false));
-        response.put("timestamp", LocalDateTime.now());
-        
-        // Palautetaan vastaus, jossa on tiedot
-        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler(DuplicateResourceException.class)
+    public ResponseEntity<ErrorResponse> handleDuplicateResourceException(DuplicateResourceException ex, WebRequest request) { // Duplikaattivirhe
+        // Luo ErrorResponse, jossa on viesti, statuskoodi, aikaleima sekä path
+        ErrorResponse errorResponse = new ErrorResponse(
+            ex.getMessage(),
+            HttpStatus.BAD_REQUEST.value(),
+            LocalDateTime.now(),
+            request.getDescription(false)
+        );
+        // Palautetaan se
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorResponse> handleValidationExceptions(MethodArgumentNotValidException ex,
+            WebRequest request) {
+        // Otetaan kaikkien validaatiovirheiden messaget, jotka kerätään errorMessagesiin
+        String errorMessages = ex.getBindingResult().getFieldErrors().stream()
+                .map(FieldError::getDefaultMessage)
+                .reduce((message1, message2) -> message1 + "; " + message2)
+                .orElse("Validation failed");
+
+        // Luo ErrorResponse, jossa on kaikki virheet, statuskoodi, aikaleima sekä path
+        ErrorResponse errorResponse = new ErrorResponse(
+                errorMessages,
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false)
+        );
+
+        // Palautetaan vastaus
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
 }

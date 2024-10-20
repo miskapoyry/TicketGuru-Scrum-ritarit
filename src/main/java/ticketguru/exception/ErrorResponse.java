@@ -1,7 +1,7 @@
 package ticketguru.exception;
 
 import java.time.LocalDateTime;
-
+// Ihan vaan basic viesti erroreista, sisällön voi määritellä vapaasti
 public class ErrorResponse {
     private String message;
     private int status;

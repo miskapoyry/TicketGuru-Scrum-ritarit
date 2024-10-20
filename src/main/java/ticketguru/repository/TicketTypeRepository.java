@@ -6,5 +6,6 @@ import ticketguru.domain.TicketType;
 
 public interface TicketTypeRepository extends JpaRepository<TicketType, Long> {
 
+    boolean existsByTicketTypeName(String ticketTypeName);
     
 }
