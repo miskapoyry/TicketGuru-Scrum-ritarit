@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.List;
+
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
 public class SaleDTO {
@@ -19,6 +21,7 @@ public class SaleDTO {
     private Long userId;
     @NotNull(message = "Sale must be assigned with tickets")
     @Size(min = 1, message = "Sale must contain at least one ticket")
+    @Valid
     private List<TicketDTO> tickets;
 
     // Constructor to initialize all fields
