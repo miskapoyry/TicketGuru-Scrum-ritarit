@@ -1,9 +1,7 @@
 package ticketguru.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import jakarta.transaction.Transactional;
 import ticketguru.DTO.SaleDTO;
@@ -108,10 +106,14 @@ public class SaleService {
         return convertToDTO(sale);
     }
     
+    // SIIRRETÄÄN TIEDOT TICKETSERVICEEn
 
-    public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
+    /*public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
         Sale existingSale = saleRepository.findById(saleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID"));
+
+        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
 
         List<Ticket> tickets = ticketRepository.findAllById(
                 saleDTO.getTickets().stream().map(TicketDTO::getTicketId).collect(Collectors.toList()));
@@ -123,6 +125,8 @@ public class SaleService {
         existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
         existingSale.setTotalPrice(saleDTO.getTotalPrice());
         existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
+
+        existingSale.setAppUser(appUser);
 
         tickets.forEach(ticket -> {
             TicketDTO ticketDTO = saleDTO.getTickets().stream()
@@ -144,7 +148,43 @@ public class SaleService {
         Sale updatedSale = saleRepository.save(existingSale);
 
         return convertToDTO(updatedSale);
+    }*/
+
+    public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
+        Sale existingSale = saleRepository.findById(saleId)
+                .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID"));
+    
+        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
+
+        // Tee localdatesta timestamp
+        Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
+
+        // Hae tietyn eventin lipputyypit ja niiden hinnat + pyöristä
+        double totalPrice = saleDTO.getTickets().stream()
+                .mapToDouble(ticketDTO -> {
+                    EventTicketType eventTicketType = eventTicketTypeRepository
+                            .findByEvent_EventIdAndTicketType_TicketTypeId(
+                                    ticketDTO.getEventId(), ticketDTO.getTicketTypeId())
+                            .orElseThrow(() -> new ResourceNotFoundException("EventTicketType not found with given EventId and TicketTypeId"));
+                    return eventTicketType.getPrice() * ticketDTO.getQuantity();
+                })
+                .sum();
+
+        BigDecimal roundedTotalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP);
+        totalPrice = roundedTotalPrice.doubleValue();
+    
+        // Laita päivityt tiedot
+        existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
+        existingSale.setTotalPrice(totalPrice);
+        existingSale.setSaleTimestamp(saleTimestamp);
+        existingSale.setAppUser(appUser);
+    
+        Sale updatedSale = saleRepository.save(existingSale);
+    
+        return convertToDTO(updatedSale);
     }
+    
 
     public List<SaleDTO> getSales(List<Long> saleIds) {
         List<Sale> sales = saleRepository.findBySaleIdIn(saleIds);
