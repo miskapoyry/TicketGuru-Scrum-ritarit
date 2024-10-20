@@ -29,7 +29,40 @@
 
 **Error Responses** :
 
-- 500 Internal Server Error: If the username is already in use
+Condition: If the username already exists
+
+Code: ```400 Bad Request```
+
+```json
+{
+    "timestamp": "2024-10-20T12:16:09.552+00:00",
+    "status": 400,
+    "error": "Bad Request",
+    "message": "Username already exists",
+    "path": "/api/users"
+}
 ```
- "error": "Internal Server Error" , "message": "could not execute statement [(conn=516) Duplicate entry '' for key 'app_user.username'] [insert into app_user (passwordhash,role_id,username) values (?,?,?)]; SQL [insert into app_user (passwordhash,role_id,username) values (?,?,?)]; constraint [app_user.username]",
+
+Condition: Missing or invalid fields (e.g., password cannot be blank).
+
+Code: ```400 Bad Request```
+
+Response Example:
+
+```json
+{
+    "timestamp": "2024-10-20T12:19:27.268+00:00",
+    "status": 400,
+    "error": "Bad Request",
+    "message": "Validation failed for object='appUserDTO'. Error count: 1",
+    "errors": [
+        {
+            "field": "passwordHash",
+            "rejectedValue": null,
+            "message": "Password cannot be blank",
+            "code": "NotBlank"
+        }
+    ],
+    "path": "/api/users"
+}
 ```

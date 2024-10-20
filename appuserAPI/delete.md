@@ -13,4 +13,14 @@
 
 **Error Responses** :
 
-- 404 Not Found: If the user does not exist.
+Condition: If the user does not exist
+
+Code: ```404 Not Found``` 
+
+Response Example:
+
+```json
+{
+    "message": "User with ID {id} not found"
+}
+```

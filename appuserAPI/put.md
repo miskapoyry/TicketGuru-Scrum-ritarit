@@ -43,4 +43,10 @@ Condition: If the user does not exist
 
 Code: ```404 Not Found``` 
 
-Content: ```{}```
+Response Example:
+
+```json
+{
+    "message": "User with ID {id} not found"
+}
+```
