@@ -47,19 +47,22 @@ public class AppUserService {
     }
 
     public AppUserDTO createUser(AppUserDTO appUserDTO) {
+        if (appUserRepository.existsByUsername(appUserDTO.getUsername())) {
+            throw new IllegalArgumentException("Username already exists");
+        }
+    
         AppUser appUser = convertToEntity(appUserDTO);
         AppUser savedUser = appUserRepository.save(appUser);
         return convertToDTO(savedUser);
     }
 
     public Optional<AppUserDTO> updateUser(Long id, AppUserDTO appUserDetails) {
-        Optional<AppUser> userOptional = appUserRepository.findById(id);
 
-        if (!userOptional.isPresent()) {
+        if (!appUserRepository.existsById(id)) {
             return Optional.empty();
         }
 
-        AppUser existingUser = userOptional.get();
+        AppUser existingUser = appUserRepository.findById(id).get();
         existingUser.setUsername(appUserDetails.getUsername());
         existingUser.setPasswordHash(appUserDetails.getPasswordHash());
         Role role = roleRepository.findById(appUserDetails.getRoleId()).orElse(null);
