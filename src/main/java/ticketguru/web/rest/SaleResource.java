@@ -32,7 +32,7 @@ public class SaleResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<SaleDTO> updateSale(@PathVariable Long id, @RequestBody SaleDTO saleDTO) {
+    public ResponseEntity<SaleDTO> updateSale(@PathVariable Long id, @Valid @RequestBody SaleDTO saleDTO) {
         SaleDTO updatedSale = saleService.updateSale(id, saleDTO);
         return ResponseEntity.ok(updatedSale);
     }
