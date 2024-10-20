@@ -13,6 +13,7 @@ import ticketguru.DTO.TicketSummaryDTO;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
 import ticketguru.domain.TicketType;
+import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.domain.EventTicketType;
 import ticketguru.domain.Event;
 import ticketguru.domain.AppUser;
@@ -50,7 +51,7 @@ public class SaleService {
 
         // Lisää salen luoma käyttäjä
         AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "User not found with given ID"));
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
 
         // Tee localdatesta timestamp
         Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
@@ -61,7 +62,7 @@ public class SaleService {
                     EventTicketType eventTicketType = eventTicketTypeRepository
                             .findByEvent_EventIdAndTicketType_TicketTypeId(
                                     ticketDTO.getEventId(), ticketDTO.getTicketTypeId())
-                            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "EventTicketType not found with given EventId and TicketTypeId"));
+                            .orElseThrow(() -> new ResourceNotFoundException("EventTicketType not found with given EventId and TicketTypeId"));
                     return eventTicketType.getPrice() * ticketDTO.getQuantity();
                 })
                 .sum();
@@ -100,15 +101,23 @@ public class SaleService {
         return convertToDTO(newSale);
     }
 
+    public SaleDTO getSaleById(Long saleId) {
+        // Hae myynti ID:n perusteella ja heitä ResourceNotFoundException, jos myyntiä ei löydy
+        Sale sale = saleRepository.findById(saleId)
+            .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID: " + saleId));
+        return convertToDTO(sale);
+    }
+    
+
     public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
         Sale existingSale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new RuntimeException("Sale not found with given ID"));
+                .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID"));
 
         List<Ticket> tickets = ticketRepository.findAllById(
                 saleDTO.getTickets().stream().map(TicketDTO::getTicketId).collect(Collectors.toList()));
 
         if (tickets.size() != saleDTO.getTickets().size()) {
-            throw new RuntimeException("Tickets not found with given ID");
+            throw new ResourceNotFoundException("Tickets not found with given ID");
         }
 
         existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
@@ -119,7 +128,7 @@ public class SaleService {
             TicketDTO ticketDTO = saleDTO.getTickets().stream()
                     .filter(t -> t.getTicketId().equals(ticket.getTicketId()))
                     .findFirst()
-                    .orElseThrow(() -> new RuntimeException("Ticket not found with given ID"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with given ID"));
             ticket.setTicketNumber(ticketDTO.getTicketNumber());
             ticket.setEvent(new Event(ticketDTO.getEventId())); // Assuming Event has a constructor with eventId
             ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Assuming TicketType has a constructor
@@ -161,7 +170,7 @@ public class SaleService {
 
     public void deleteSale(Long id) {
         if (!saleRepository.existsById(id)) {
-            throw new RuntimeException("Sale not found with given ID");
+            throw new ResourceNotFoundException("Sale not found with given ID");
         }
         saleRepository.deleteById(id);
     }
@@ -180,7 +189,7 @@ public class SaleService {
                         1, // Assuming quantity is 1 for each ticket
                         eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(
                                 ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
-                                .orElseThrow(() -> new RuntimeException(
+                                .orElseThrow(() -> new ResourceNotFoundException(
                                         "EventTicketType not found with given EventId and TicketTypeId"))
                                 .getPrice()))
                 .collect(Collectors.toList());
@@ -201,7 +210,7 @@ public class SaleService {
                         1, // Assuming quantity is 1 for each ticket
                         eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(
                                 ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
-                                .orElseThrow(() -> new RuntimeException(
+                                .orElseThrow(() -> new ResourceNotFoundException(
                                         "EventTicketType not found with given EventId and TicketTypeId"))
                                 .getPrice(),
                         ticket.getEvent().getEventId()))
