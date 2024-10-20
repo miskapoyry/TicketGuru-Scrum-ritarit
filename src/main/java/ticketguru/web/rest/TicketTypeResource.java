@@ -23,53 +23,42 @@ public class TicketTypeResource {
     // GET all ticket types
     @GetMapping
     public List<TicketTypeDTO> getAllTicketTypes() {
-        return ticketTypeService.getAllTicketTypes();
+        return ticketTypeService.getAllTicketTypes(); // Haetaan Servicestä kaikki lipputyypit
     }
 
     // GET ticket type by ID
     @GetMapping("/{id}")
     public ResponseEntity<TicketTypeDTO> getTicketTypeById(@PathVariable Long id) {
-        Optional<TicketTypeDTO> ticketType = ticketTypeService.getTicketTypeById(id);
+        Optional<TicketTypeDTO> ticketType = ticketTypeService.getTicketTypeById(id); // Haetaan lipputyyppi ID:llä
         if (ticketType.isEmpty()) {
-            throw new ResourceNotFoundException("TicketType with ID " + id + " not found");
+            throw new ResourceNotFoundException("TicketType with ID " + id + " not found"); // Jos ei löydy, tämä virhe
         }
-        return ResponseEntity.ok(ticketType.get());
+        return ResponseEntity.ok(ticketType.get()); // Jos löytyy, 200 OK
     }
 
     // POST a new ticket type
     @PostMapping(consumes = { "application/json" })
     public ResponseEntity<?> createTicketType(@Valid @RequestBody TicketTypeDTO ticketTypeDTO) {
-        if (ticketTypeDTO.getTicketTypeName() == null || ticketTypeDTO.getTicketTypeName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Ticket type name is required");
-        }
-
-        TicketTypeDTO createdTicketType = ticketTypeService.createTicketType(ticketTypeDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdTicketType);
+        TicketTypeDTO createdTicketType = ticketTypeService.createTicketType(ticketTypeDTO); // Luodaan uusi lippu pyynnön mukaisesti
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdTicketType); // Palautetaan lippu, 201 Created
     }
 
     // PUT to update a ticket type
     @PutMapping("/{id}")
     public ResponseEntity<?> updateTicketType(@PathVariable Long id, @Valid @RequestBody TicketTypeDTO ticketTypeDTO) {
-        if (ticketTypeDTO.getTicketTypeName() == null || ticketTypeDTO.getTicketTypeName().isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body("Ticket type name is required");
+        Optional<TicketTypeDTO> updatedTicketType = ticketTypeService.updateTicketType(id, ticketTypeDTO); // Yritys päivittää lippu
+        if (updatedTicketType.isEmpty()) { 
+            throw new ResourceNotFoundException("TicketType with ID " + id + " not found");  // jos ei löydy, virhe
         }
-
-        Optional<TicketTypeDTO> updatedTicketType = ticketTypeService.updateTicketType(id, ticketTypeDTO);
-        if (updatedTicketType.isEmpty()) {
-            throw new ResourceNotFoundException("TicketType with ID " + id + " not found");
-        }
-
-        return ResponseEntity.ok(updatedTicketType.get());
+        return ResponseEntity.ok(updatedTicketType.get()); // jos löytyy, 200 OK
     }
 
 
     // DELETE a ticket type by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTicketType(@PathVariable Long id) {
-        ticketTypeService.deleteTicketType(id);
-        return ResponseEntity.noContent().build();
+        ticketTypeService.deleteTicketType(id); // Kutsutaan Servicessä olevaa metodia tekemään poisto
+        return ResponseEntity.noContent().build(); // 204 No Content, jos onnistuu
     }
 
     

@@ -1,5 +1,5 @@
 package ticketguru.exception;
-
+// Ihan vaan basic viesti erroreista, sisällön voi määritellä vapaasti
 public class ErrorResponse {
     private String message;
 

@@ -1,8 +1,11 @@
 package ticketguru.DTO;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class TicketTypeDTO {
 
     private Long ticketTypeId;
+    @NotBlank(message = "Ticket type name is required") // Lisätty validaatio ainoaan kenttään
     private String ticketTypeName;
 
     // Default constructor
