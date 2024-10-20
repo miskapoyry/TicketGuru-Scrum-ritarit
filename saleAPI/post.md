@@ -111,12 +111,10 @@ Code: ```400 Bad Request```
 Error example:
 ```json
 {
-    "path": "uri=/api/sales",
-    "errors": {
-        "userId": "UserID is required"
-    },
+    "message": "UserID is required",
     "status": 400,
-    "timestamp": "2024-10-20T21:38:07.6227721"
+    "timestamp": "2024-10-21T00:56:22.5136068",
+    "path": "uri=/api/sales"
 }
 ```
 
@@ -127,12 +125,10 @@ Code: ```400 Bad Request```
 Error example:
 ```json
 {
-    "path": "uri=/api/sales",
-    "errors": {
-        "paymentMethod": "Payment method is required"
-    },
+    "message": "Payment method is required",
     "status": 400,
-    "timestamp": "2024-10-20T21:39:01.6967527"
+    "timestamp": "2024-10-21T00:55:59.9115102",
+    "path": "uri=/api/sales"
 }
 ```
 
@@ -143,12 +139,10 @@ Code: ```400 Bad Request```
 Error example:
 ```json
 {
-    "path": "uri=/api/sales",
-    "errors": {
-        "tickets[0].isUsed": "isUsed field is required"
-    },
+    "message": "isUsed field is required",
     "status": 400,
-    "timestamp": "2024-10-21T00:09:19.0658781"
+    "timestamp": "2024-10-21T00:55:38.6655414",
+    "path": "uri=/api/sales"
 }
 ```
 
@@ -159,11 +153,9 @@ Code: ```400 Bad Request```
 Error example:
 ```json
 {
-    "path": "uri=/api/sales",
-    "errors": {
-        "tickets[0].quantity": "Quantity must be at least 1"
-    },
+    "message": "Quantity must be at least 1",
     "status": 400,
-    "timestamp": "2024-10-21T00:10:26.9770005"
+    "timestamp": "2024-10-21T00:55:18.9123098",
+    "path": "uri=/api/sales"
 }
 ```
