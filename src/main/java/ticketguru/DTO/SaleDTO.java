@@ -4,15 +4,21 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
 import java.util.List;
+import jakarta.validation.constraints.*;
 
 public class SaleDTO {
 
     // Fields
     private Long saleId;
+    @NotBlank(message = "Payment method is required")
     private String paymentMethod;
+    @Min(value = 0, message = "Price cannot be negative")
     private double totalPrice;
     private Timestamp saleTimestamp;
+    @NotNull(message = "UserID is required")
     private Long userId;
+    @NotNull(message = "Sale must be assigned with tickets")
+    @Size(min = 1, message = "Sale must contain at least one ticket")
     private List<TicketDTO> tickets;
 
     // Constructor to initialize all fields

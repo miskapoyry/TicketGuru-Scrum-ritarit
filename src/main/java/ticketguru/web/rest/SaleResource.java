@@ -3,6 +3,8 @@ package ticketguru.web.rest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.validation.Valid;
 import ticketguru.DTO.SaleDTO;
 import ticketguru.DTO.SaleSummaryDTO;
 import ticketguru.service.SaleService;
@@ -24,7 +26,7 @@ public class SaleResource {
     private AppUserRepository appUserRepository;
 
     @PostMapping
-    public ResponseEntity<SaleDTO> createSale(@RequestBody SaleDTO saleDTO) {
+    public ResponseEntity<SaleDTO> createSale(@Valid @RequestBody SaleDTO saleDTO) {
         SaleDTO createdSale = saleService.createSale(saleDTO);
         return ResponseEntity.ok(createdSale);
     }
@@ -44,6 +46,20 @@ public class SaleResource {
         }
         List<SaleSummaryDTO> sales = saleService.getAllSales(userId);
         return ResponseEntity.ok(sales);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getSaleById(@PathVariable Long id) {
+        // Tarkista, löytyykö sale ID:n perusteella
+        SaleDTO sale = saleService.getSaleById(id);
+        if (sale == null) {
+            // Jos myyntiä ei löydy, palautetaan virhevastauksena 404. Tehty samalla tavalla yllä olevan kanssa.
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Sale not found with given ID");
+            return ResponseEntity.status(404).body(errorResponse);
+        }
+        // Palauta myyntitiedot, jos löytyi
+        return ResponseEntity.ok(sale);
     }
 
     @GetMapping("/search")
@@ -106,6 +122,8 @@ public class SaleResource {
         }
     }
 
+
+    // Poista sale tiettyä IDtä käyttäen
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
         saleService.deleteSale(id);
