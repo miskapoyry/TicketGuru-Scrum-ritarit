@@ -51,7 +51,6 @@ Response Example:
 
 ```json
 {
-    "timestamp": "2024-10-20T12:19:27.268+00:00",
     "status": 400,
     "error": "Bad Request",
     "message": "Validation failed for object='appUserDTO'. Error count: 1",
