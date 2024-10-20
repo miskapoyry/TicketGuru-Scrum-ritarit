@@ -13,4 +13,16 @@
 
 **Error Responses** :
 
-- 404 Not Found: If the sale does not exist.
+Condition: If the saleID does not exist
+
+Code: ```404 Not Found``` 
+
+Error example:
+```json
+{
+    "message": "Sale not found with given ID",
+    "status": 404,
+    "timestamp": "2024-10-20T20:55:45.1877334",
+    "path": "uri=/api/sales/4"
+}
+```
