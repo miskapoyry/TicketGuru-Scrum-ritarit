@@ -2,12 +2,26 @@ package ticketguru.DTO;
 
 import java.util.List;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotNull;
+
 public class AppUserDTO {
 
     private Long userId;
+
+    @NotBlank(message = "Username cannot be blank")
     private String username;
+
+    @NotBlank(message = "Password cannot be blank")
+    @Size(min = 8, message = "Password must be at least 8 characters long")
     private String passwordHash;
+
+    @NotNull(message = "Role ID cannot be null")
+    @Min(value = 1, message = "Role ID must be a positive number")
     private Long roleId;
+
     private List<Long> eventIds; // List of event IDs associated with this user
     private List<Long> saleIds; // List of sale IDs associated with this user
 
