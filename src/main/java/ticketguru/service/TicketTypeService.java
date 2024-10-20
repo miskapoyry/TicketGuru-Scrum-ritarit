@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ticketguru.DTO.TicketTypeDTO;
 import ticketguru.domain.TicketType;
+import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.repository.TicketTypeRepository;
 
 import java.util.List;
@@ -42,11 +43,11 @@ public class TicketTypeService {
                 });
     }
 
-    public void deleteTicketType(Long id) {
-        if (!ticketTypeRepository.existsById(id)) {
-            throw new RuntimeException("Ticket type not found");
-        }
-        ticketTypeRepository.deleteById(id);
+   public void deleteTicketType(Long id) {
+    if (!ticketTypeRepository.existsById(id)) {
+        throw new ResourceNotFoundException("Ticket type with ID " + id + " not found");
+    }
+    ticketTypeRepository.deleteById(id);
     }
 
     // Convert TicketType to TicketTypeDTO
