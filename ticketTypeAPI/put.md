@@ -37,15 +37,27 @@ Response Example:
 
 ```json
 {
-    "message": "Ticket type with ID {id} not found"
+  "message": "TicketType with ID 223 not found",
+  "status": 404,
+  "timestamp": "2024-10-21T20:04:44.015936",
+  "path": "uri=/api/ticket-types/223"
 }
 ```
 
-Condition: If the ticket type name is missing or invalid
+Condition: If the ticket type name is missing 
 
 Code: ```400 Bad Request```
 
-Error Message: "Ticket type name is required"
+Response Example:
+
+```json
+{
+  "message": "Ticket type name is required",
+  "status": 400,
+  "timestamp": "2024-10-21T20:05:20.0896098",
+  "path": "uri=/api/ticket-types/223"
+}
+```
 
 Condition: If a ticket type with the same name already exists
 
@@ -55,6 +67,9 @@ Response Example:
 
 ```json
 {
-  "message": "Ticket type with the same name already exists"
+  "message": "Ticket type with the same name already exists",
+  "status": 400,
+  "timestamp": "2024-10-21T20:06:39.0051123",
+  "path": "uri=/api/ticket-types/4"
 }
 ```

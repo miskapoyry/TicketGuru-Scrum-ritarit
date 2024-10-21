@@ -21,5 +21,8 @@
 
 ```json
 {
-    "message": "TicketType with ID {id} not found"
+  "message": "Ticket type with ID 512 not found",
+  "status": 404,
+  "timestamp": "2024-10-21T20:03:34.1248261",
+  "path": "uri=/api/ticket-types/512"
 }

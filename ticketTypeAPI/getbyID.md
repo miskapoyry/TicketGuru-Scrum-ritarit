@@ -31,7 +31,10 @@ Response Example:
 
 ```json
 {
-  "message": "TicketType with ID {id} not found"
+  "message": "TicketType with ID 234 not found",
+  "status": 404,
+  "timestamp": "2024-10-21T20:00:17.1611255",
+  "path": "uri=/api/ticket-types/234"
 }
 
 ```
