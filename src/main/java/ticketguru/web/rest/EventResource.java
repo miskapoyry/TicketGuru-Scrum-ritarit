@@ -1,13 +1,17 @@
 package ticketguru.web.rest;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ticketguru.domain.Event;
 import ticketguru.service.EventService;
 import ticketguru.DTO.EventDTO;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -18,17 +22,17 @@ public class EventResource {
     private EventService eventService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event, @RequestParam Long userId) {
+    public ResponseEntity<Event> createEvent(@RequestBody Event event,@Valid @RequestParam Long userId) {
         try {
             Event createdEvent = eventService.createEvent(event, userId);
-            return ResponseEntity.ok(createdEvent);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(event);
         }
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id, @RequestBody Event event) {
+    public ResponseEntity<Event> updateEvent(@PathVariable Long id,@Valid @RequestBody Event event) {
         try {
             Event updatedEvent = eventService.updateEvent(id, event);
             return ResponseEntity.ok(updatedEvent);
@@ -44,12 +48,12 @@ public class EventResource {
     }
 
     @GetMapping("")
-    public List<EventDTO> getAllEvents() {
+    public List<?> getAllEvents() {
         return eventService.getAllEvents();
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<EventDTO>> searchEvents(@RequestParam(required = false) String eventName,
+    public ResponseEntity<?> searchEvents(@Valid @RequestParam(required = false) String eventName,
                                                        @RequestParam(required = false) String location) {
         if (eventName == null && location == null) {
             return ResponseEntity.badRequest().body(List.of());
@@ -57,7 +61,9 @@ public class EventResource {
 
         List<EventDTO> events = eventService.searchEvents(eventName, location);
         if (events.isEmpty()) {
-            return ResponseEntity.notFound().build();
+            Map<String, String> errorResponse = new HashMap<>();
+            errorResponse.put("message", "Event not found with given ID");
+            return ResponseEntity.status(404).body(errorResponse);
         }
         return ResponseEntity.ok(events);
     }
