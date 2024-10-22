@@ -4,15 +4,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import ticketguru.DTO.TicketDTO;
 import ticketguru.domain.Event;
+import ticketguru.domain.EventTicketType;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
 import ticketguru.repository.EventRepository;
+import ticketguru.repository.EventTicketTypeRepository;
 import ticketguru.repository.SaleRepository;
 import ticketguru.repository.TicketRepository;
 import ticketguru.exception.ResourceNotFoundException; 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class TicketService {
@@ -26,36 +28,58 @@ public class TicketService {
         @Autowired
         private SaleRepository saleRepository;
 
+        @Autowired
+        private EventTicketTypeRepository eventTicketTypeRepository;
+
+        public double getTicketPrice(Long eventId, Long ticketTypeId) { // Oma metodinsa hinnan hakemiselle EventTicketTypen perusteella
+        EventTicketType eventTicketType = eventTicketTypeRepository
+                .findByEvent_EventIdAndTicketType_TicketTypeId(eventId, ticketTypeId) 
+                .orElseThrow(() -> new ResourceNotFoundException("EventTicketType not found with given EventId and TicketTypeId"));
+        
+        return eventTicketType.getPrice(); 
+        }
+
         public List<TicketDTO> getTickets(Long eventId, Long saleId) {
-                // jos EventId on annettu, etsi ko. tapahtumaan kuuluvat liput
+                // Lista lippuja varten
+                List<Ticket> tickets;
+
+                // Haetaan lippuja EventId:llä tai SaleId:llä
                 if (eventId != null) {
-                    Event event = eventRepository.findById(eventId)
-                            .orElseThrow(() -> new ResourceNotFoundException("Event not found")); 
-                    return ticketRepository.findByEvent(event).stream()
-                            .map(this::convertToDTO)
-                            .collect(Collectors.toList());
+                        Event event = eventRepository.findById(eventId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+                        tickets = ticketRepository.findByEvent(event);
+                } else if (saleId != null) {
+                        Sale sale = saleRepository.findById(saleId)
+                                .orElseThrow(() -> new ResourceNotFoundException("Sale not found"));
+                        tickets = ticketRepository.findBySale(sale);
+                } else {
+                        // Tai haetaan kaikki liput
+                        tickets = ticketRepository.findAll();
                 }
 
-                // jos SaleId on annettu, etsi ko. tapahtumaan kuuluvat liput
-                if (saleId != null) {
-                        Sale sale = saleRepository.findById(saleId)
-                                .orElseThrow(() -> new ResourceNotFoundException("Sale not found")); 
-                        return ticketRepository.findBySale(sale).stream()
-                                .map(this::convertToDTO)
-                                .collect(Collectors.toList());
-                    }
-            
-                // jos ei ole annettu mitään parametreja, etsi kaikki liput
-                return ticketRepository.findAll().stream()
-                                .map(this::convertToDTO)
-                                .collect(Collectors.toList());
+                // Lista TicketDTOita varten
+                List<TicketDTO> ticketDTOs = new ArrayList<>();
+
+                // For-loopataan liput DTO-muotoon
+                for (Ticket ticket : tickets) {
+                        double price = getTicketPrice(ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId());
+                        TicketDTO ticketDTO = convertToDTO(ticket, price); 
+                        ticketDTOs.add(ticketDTO);
+                }
+
+                return ticketDTOs;
         }
 
         public TicketDTO getTicket(Long ticketId) {
-                return ticketRepository.findById(ticketId)
-                        .map(this::convertToDTO)
+                Ticket ticket = ticketRepository.findById(ticketId)
                         .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
-        }
+                
+                // Retrieve the price using the ticket's event and ticket type
+                double price = getTicketPrice(ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId());
+                
+                // convertToDTO:sta otetaan nyt sekä lippu että hinta
+                return convertToDTO(ticket, price);
+            }
 
         // public TicketDTO createTicket(TicketDTO ticketDTO) {
         //         Event event = eventRepository.findById(ticketDTO.getEventId())
@@ -84,14 +108,15 @@ public class TicketService {
                 existingTicket.setUsed(isUsed);
                 
                 // päivitä käyttöaika, jos lippu käytetään
-                if (isUsed) {
-                    existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis()));
-                } else {
-                    existingTicket.setUsedTimestamp(null);
+                if (isUsed) {  // jos käytetään...
+                    existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis())); // iske timestamppi käyttöajankohdalle
+                } else { // muussa tapauksessa (eli jos päivitetäänkin takaisin käyttämättömäksi)
+                    existingTicket.setUsedTimestamp(null); // timestamppi nulliksi
                 }
         
-                Ticket updatedTicket = ticketRepository.save(existingTicket);
-                return convertToDTO(updatedTicket);
+                Ticket updatedTicket = ticketRepository.save(existingTicket); 
+                double price = getTicketPrice(updatedTicket.getEvent().getEventId(), updatedTicket.getTicketType().getTicketTypeId());
+                return convertToDTO(updatedTicket, price);
         }
 
         public void deleteTicket(Long ticketId) {
@@ -101,7 +126,7 @@ public class TicketService {
                 }
                 ticketRepository.deleteById(ticketId);
         }
-        private TicketDTO convertToDTO(Ticket ticket) {
+        private TicketDTO convertToDTO(Ticket ticket, double price) {
                 return new TicketDTO(
                                 ticket.getTicketId(),
                                 ticket.getTicketNumber(),
@@ -111,6 +136,6 @@ public class TicketService {
                                 ticket.getSaleTimestamp(),
                                 ticket.isUsed(),
                                 ticket.getUsedTimestamp(),
-                                1, 0);
+                                1, price);
         }
 }
