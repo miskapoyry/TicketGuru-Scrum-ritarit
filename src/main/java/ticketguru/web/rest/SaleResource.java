@@ -1,6 +1,7 @@
 package ticketguru.web.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class SaleResource {
     @PostMapping
     public ResponseEntity<SaleDTO> createSale(@Valid @RequestBody SaleDTO saleDTO) {
         SaleDTO createdSale = saleService.createSale(saleDTO);
-        return ResponseEntity.ok(createdSale);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdSale);
     }
 
     @PutMapping("/{id}")

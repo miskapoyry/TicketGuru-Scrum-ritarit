@@ -1,6 +1,7 @@
 package ticketguru.web.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ticketguru.DTO.EventTicketTypeDTO;
@@ -24,7 +25,7 @@ public class EventTicketTypeResource {
             return ResponseEntity.badRequest().body(null);
         }
         List<EventTicketTypeDTO> createdEventTicketTypes = eventTicketTypeService.createEventTicketTypes(eventTicketTypeDTOs);
-        return ResponseEntity.ok(createdEventTicketTypes);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEventTicketTypes);
     }
 
     // Get all EventTicketTypes
