@@ -22,13 +22,9 @@ public class EventResource {
     private EventService eventService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event,@Valid @RequestParam Long userId) {
-        try {
-            Event createdEvent = eventService.createEvent(event, userId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(event);
-        }
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
+        EventDTO createdEvent = eventService.createEvent(eventDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
     @PutMapping("/{id}")

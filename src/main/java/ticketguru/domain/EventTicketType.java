@@ -2,6 +2,7 @@ package ticketguru.domain;
 
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "event_ticket_type")
@@ -24,7 +25,7 @@ public class EventTicketType {
     private TicketType ticketType;
 
     // Number of tickets available for the event ticket type
-    @Column(name = "ticket_quantity", nullable = false)
+    @Column(name = "ticket_quantity", nullable = true)
     private int ticketQuantity;
 
     // Price of the event ticket type
