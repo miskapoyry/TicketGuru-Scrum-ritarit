@@ -17,10 +17,13 @@ Condition: If the user does not exist
 
 Code: ```404 Not Found``` 
 
-Response Example:
+**Response Example:**
 
 ```json
 {
-    "message": "User with ID {id} not found"
+    "message": "User with ID {id} not found",
+    "status": 404,
+    "timestamp": "2024-10-24T16:07:34.1462345",
+    "path": "uri=/api/users/{id}"
 }
 ```

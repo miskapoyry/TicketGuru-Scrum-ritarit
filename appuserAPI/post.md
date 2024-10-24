@@ -35,11 +35,10 @@ Code: ```400 Bad Request```
 
 ```json
 {
-    "timestamp": "2024-10-20T12:16:09.552+00:00",
+    "message": "Username already exists: new_user123",
     "status": 400,
-    "error": "Bad Request",
-    "message": "Username already exists",
-    "path": "/api/users"
+    "timestamp": "2024-10-24T16:13:19.8377492",
+    "path": "uri=/api/users"
 }
 ```
 
@@ -47,21 +46,34 @@ Condition: Missing or invalid fields (e.g., password cannot be blank).
 
 Code: ```400 Bad Request```
 
-Response Example:
+**Response Examples:**
 
 ```json
 {
+    "message": "Username cannot be blank",
     "status": 400,
-    "error": "Bad Request",
-    "message": "Validation failed for object='appUserDTO'. Error count: 1",
-    "errors": [
-        {
-            "field": "passwordHash",
-            "rejectedValue": null,
-            "message": "Password cannot be blank",
-            "code": "NotBlank"
-        }
-    ],
-    "path": "/api/users"
+    "timestamp": "2024-10-24T16:14:19.9845202",
+    "path": "uri=/api/users"
 }
 ```
+**Content Example** : For the example above, when the username is not given.
+
+```json
+{
+    "message": "Password cannot be blank",
+    "status": 400,
+    "timestamp": "2024-10-24T16:15:02.7530365",
+    "path": "uri=/api/users"
+}
+```
+**Content Example** : For the example above, when the password is not given.
+
+```json
+{
+    "message": "Role ID cannot be null",
+    "status": 400,
+    "timestamp": "2024-10-24T16:16:14.2142421",
+    "path": "uri=/api/users"
+}
+```
+**Content Example** : For the example above, when the role is not given.

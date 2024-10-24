@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
 
 import ticketguru.DTO.AppUserDTO;
 import ticketguru.service.AppUserService;
-import ticketguru.exception.ErrorResponse;
-import ticketguru.repository.AppUserRepository;
+import ticketguru.exception.DuplicateResourceException;
+import ticketguru.exception.ResourceNotFoundException;
 
 import java.util.List;
-import java.util.Optional;
 import jakarta.validation.Valid;
 
 @RestController
@@ -22,9 +20,6 @@ public class AppUserResource {
     @Autowired
     private AppUserService appUserService;
 
-    @Autowired
-    private AppUserRepository appUserRepository;
-
     @GetMapping
     public List<AppUserDTO> getAllUsers() {
         return appUserService.getAllUsers();
@@ -32,47 +27,45 @@ public class AppUserResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<AppUserDTO> getUserById(@PathVariable Long id) {
-        Optional<AppUserDTO> user = appUserService.getUserById(id);
-        if (user.isEmpty()) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User with ID " + id + " not found");
-        }
-        return ResponseEntity.ok(user.get());
+        AppUserDTO user = appUserService.getUserById(id)
+            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
+            return ResponseEntity.ok(user);
     }
 
     @PostMapping
     public ResponseEntity<AppUserDTO> createUser(@Valid @RequestBody AppUserDTO appUserDTO) {
-        if (appUserRepository.existsByUsername(appUserDTO.getUsername())) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Username already exists");
+        // Checking if the username already exists
+        if (appUserService.getAllUsers().stream()
+                .anyMatch(user -> user.getUsername().equals(appUserDTO.getUsername()))) {
+            throw new DuplicateResourceException("Username already exists: " + appUserDTO.getUsername());
         }
 
         if (appUserDTO.getUserId() != null) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User ID must not be provided for new users");
+            throw new DuplicateResourceException("User ID must not be provided for new users");
         }
-
+        
         AppUserDTO createdUser = appUserService.createUser(appUserDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody AppUserDTO appUserDetails) {
-        Optional<AppUserDTO> updatedUser = appUserService.updateUser(id, appUserDetails);
-
-        if (updatedUser.isPresent()) {
-            return ResponseEntity.ok(updatedUser.get());
-        } else {
-            String errorMessage = "User with ID " + id + " not found";
-            ErrorResponse errorResponse = new ErrorResponse(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+        // Checking if the username already exists (excluding own username)
+        if (appUserService.getAllUsers().stream()
+                .anyMatch(user -> !user.getUserId().equals(id) && user.getUsername().equals(appUserDetails.getUsername()))) {
+            throw new DuplicateResourceException("Username already exists: " + appUserDetails.getUsername());
         }
+
+        AppUserDTO updatedUser = appUserService.updateUser(id, appUserDetails)
+            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
+        return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         boolean deleted = appUserService.deleteUser(id);
         if (!deleted) {
-            String errorMessage = "User with ID " + id + " not found";
-            ErrorResponse errorResponse = new ErrorResponse(errorMessage);
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
+            throw new ResourceNotFoundException("User with ID " + id + " not found");
         }
         return ResponseEntity.noContent().build();
     }

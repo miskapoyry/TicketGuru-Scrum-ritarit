@@ -43,10 +43,30 @@ Condition: If the user does not exist
 
 Code: ```404 Not Found``` 
 
-Response Example:
+**Response Example:**
 
 ```json
 {
-    "message": "User with ID {id} not found"
+    "message": "User with ID {id} not found",
+    "status": 404,
+    "timestamp": "2024-10-24T16:19:33.6518351",
+    "path": "uri=/api/users/{id}"
 }
 ```
+
+Condition: If the updated username already exists
+
+Code: ```400 Bad Request```
+
+**Response Example:**
+
+```json
+{
+    "message": "Username already exists: john_doe",
+    "status": 400,
+    "timestamp": "2024-10-24T16:21:09.4803117",
+    "path": "uri=/api/users/19"
+}
+```
+
+**Content Example** : User "john_doe" already exists in the database.
