@@ -20,7 +20,6 @@ retrieving, and deleting tickets.
 * [Show all tickets](ticketAPI/get.md) : `GET /api/tickets`
 * [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{ticketId}`
 * [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}/use?used`
-* [Delete a ticket](ticketAPI/delete.md) : `DELETE /api/tickets/{ticketId}`
 
 ## AppUser Resource
 
