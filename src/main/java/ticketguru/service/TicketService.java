@@ -81,26 +81,6 @@ public class TicketService {
                 return convertToDTO(ticket, price);
             }
 
-        // public TicketDTO createTicket(TicketDTO ticketDTO) {
-        //         Event event = eventRepository.findById(ticketDTO.getEventId())
-        //                         .orElseThrow(() -> new RuntimeException("Event not found"));
-
-        //         TicketType ticketType = ticketTypeRepository.findById(ticketDTO.getTicketTypeId())
-        //                         .orElseThrow(() -> new RuntimeException("Ticket type not found"));
-
-        //         Sale sale = saleRepository.findById(ticketDTO.getSaleId())
-        //                         .orElseThrow(() -> new RuntimeException(
-        //                                         "Sale not found for ID: " + ticketDTO.getSaleId()));
-
-        //         Ticket ticket = new Ticket(ticketDTO.getTicketNumber(), event, ticketType, sale,
-        //                         ticketDTO.getSaleTimestamp(), ticketDTO.isUsed(),
-        //                         ticketDTO.getUsedTimestamp());
-
-        //         Ticket newTicket = ticketRepository.save(ticket);
-
-        //         return convertToDTO(newTicket);
-        // }
-
         public TicketDTO markTicketAsUsed(Long ticketId, boolean isUsed) {
                 Ticket existingTicket = ticketRepository.findById(ticketId)
                         .orElseThrow(() -> new ResourceNotFoundException("Ticket not found")); 
@@ -119,13 +99,6 @@ public class TicketService {
                 return convertToDTO(updatedTicket, price);
         }
 
-        public void deleteTicket(Long ticketId) {
-                // tarkista, onko lippu olemassa ennen poistoa
-                if (!ticketRepository.existsById(ticketId)) {
-                        throw new ResourceNotFoundException("Ticket not found"); 
-                }
-                ticketRepository.deleteById(ticketId);
-        }
         private TicketDTO convertToDTO(Ticket ticket, double price) {
                 return new TicketDTO(
                                 ticket.getTicketId(),
