@@ -5,7 +5,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import ticketguru.domain.Event;
+import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.service.EventService;
 import ticketguru.DTO.EventDTO;
 
@@ -38,8 +40,11 @@ public class EventResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventDTO> findEventById(@PathVariable Long id) {
+    public ResponseEntity<?> findEventById(@PathVariable Long id) {
         Optional<EventDTO> event = eventService.findEventById(id);
+        if (event.isEmpty()) {
+            throw new ResourceNotFoundException("Event with ID " + id + " not found");
+        }
         return ResponseEntity.of(event);
     }
 
