@@ -148,7 +148,7 @@ public class EventService {
 
     public void deleteEvent(Long id) {
         if (!eventRepository.existsById(id)) {
-            throw new IllegalArgumentException("Event not found");
+            throw new ResourceNotFoundException("Event not found");
         }
         eventRepository.deleteById(id);
     }
