@@ -2,7 +2,6 @@ package ticketguru.domain;
 
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 
 @Entity
 @Table(name = "event_ticket_type")
