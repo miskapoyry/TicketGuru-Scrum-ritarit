@@ -2,37 +2,43 @@
 
 **Method** : `GET`
 
-**URL** : `/api/event/{id}`
+**URL** : `/api/events/{id}`
 
 **Path Parameters** : 
 - id: Long (ID of the event to retrieve)
 
-**Succes Response** :
+**Success Response** :
 
 - Status Code: `200 OK`
 
-**Request Body** : 
-
-- { "eventName": "string", "eventDate": "string (ISO 8601 format)", "location": "string", "
-availableTickets": "integer", "appUser": { "id": "Long" } }
-
 ```json
-[
-    {
-        "eventId": 1,
-        "eventName": "Updated Festival",
-        "eventDate": "2025-04-15T06:00:00.000+00:00",
-        "location": "San Francisco, CA",
-        "totalTickets": 500,
-        "availableTickets": 250   
+{
+    "eventId": 6,
+    "userId": 1,
+    "eventName": "Party",
+    "eventDate": "2024-11-25T18:00:00.000+00:00",
+    "location": "Himas",
+    "totalTickets": 1000,
+    "availableTickets": 1000,
+    "ticketTypes": {
+        "Student": 100.0,
+        "Child": 50.0
     }
-]
+}
 ```
 
 **Error Responses** :
 
-Condition: If the event does not exist
+Condition: If the eventId does not exist
 
 Code: ```404 Not Found``` 
 
-Content: ```{}```
+Error example:
+```json
+{
+    "message": "Event with ID 66 not found",
+    "status": 404,
+    "timestamp": "2024-10-28T16:40:00.1241341",
+    "path": "uri=/api/events/66"
+}
+```
