@@ -68,16 +68,17 @@ public class EventService {
     }
 
     public List<EventDTO> searchEvents(String eventName, String location) {
+        if ((eventName == null || eventName.isEmpty()) && (location == null || location.isEmpty())) {
+            throw new IllegalArgumentException("Either eventName or location must be provided");
+        }
+
         List<Event> events;
         if (eventName != null && location != null) {
-            events = eventRepository.findByEventNameContainsIgnoreCaseAndLocationContainsIgnoreCase(eventName,
-                    location);
+            events = eventRepository.findByEventNameContainsIgnoreCaseAndLocationContainsIgnoreCase(eventName, location);
         } else if (eventName != null) {
             events = eventRepository.findByEventNameContainsIgnoreCase(eventName);
-        } else if (location != null) {
-            events = eventRepository.findByLocationContainsIgnoreCase(location);
         } else {
-            events = eventRepository.findAll();
+            events = eventRepository.findByLocationContainsIgnoreCase(location);
         }
         return events.stream()
                 .map(this::convertToEventDTO)
