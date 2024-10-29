@@ -69,7 +69,7 @@ public class AppUserService {
 
         AppUser existingUser = appUserRepository.findById(id).get();
         existingUser.setUsername(appUserDetails.getUsername());
-        existingUser.setPasswordHash(appUserDetails.getPasswordHash());
+        existingUser.setPasswordHash(passwordEncoder.encode(appUserDetails.getPasswordHash()));
         Role role = roleRepository.findById(appUserDetails.getRoleId()).orElse(null);
         existingUser.setRole(role);
 
