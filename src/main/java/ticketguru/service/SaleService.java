@@ -5,9 +5,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ticketguru.DTO.SaleDTO;
-import ticketguru.DTO.SaleSummaryDTO;
 import ticketguru.DTO.TicketDTO;
-import ticketguru.DTO.TicketSummaryDTO;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
 import ticketguru.domain.TicketType;
@@ -184,7 +182,6 @@ public class SaleService {
     
         return convertToDTO(updatedSale);
     }
-    
 
     public List<SaleDTO> getSales(List<Long> saleIds) {
         List<Sale> sales = saleRepository.findBySaleIdIn(saleIds);
@@ -196,14 +193,14 @@ public class SaleService {
         return sales.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
-    public List<SaleSummaryDTO> getAllSales(Long userId) {
+    public List<SaleDTO> getAllSales(Long userId) {
         if (userId != null) {
             return saleRepository.findByAppUser_UserId(userId).stream()
-                    .map(this::convertToSummaryDTO)
+                    .map(this::convertToDTO)
                     .collect(Collectors.toList());
         } else {
             return saleRepository.findAll().stream()
-                    .map(this::convertToSummaryDTO)
+                    .map(this::convertToDTO)
                     .collect(Collectors.toList());
         }
     }
@@ -241,27 +238,5 @@ public class SaleService {
                 sale.getSaleTimestamp(),
                 sale.getAppUser().getUserId(),
                 ticketDTOs);
-    }
-
-    private SaleSummaryDTO convertToSummaryDTO(Sale sale) {
-        List<TicketSummaryDTO> ticketSummaryDTOs = sale.getTickets().stream()
-                .map(ticket -> new TicketSummaryDTO(
-                        ticket.getTicketId(),
-                        1, // Assuming quantity is 1 for each ticket
-                        eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(
-                                ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
-                                .orElseThrow(() -> new ResourceNotFoundException(
-                                        "EventTicketType not found with given EventId and TicketTypeId"))
-                                .getPrice(),
-                        ticket.getEvent().getEventId()))
-                .collect(Collectors.toList());
-
-        return new SaleSummaryDTO(
-                sale.getSaleId(),
-                sale.getPaymentMethod(),
-                sale.getTotalPrice(),
-                sale.getSaleTimestamp(),
-                sale.getAppUser().getUserId(),
-                ticketSummaryDTOs);
     }
 }

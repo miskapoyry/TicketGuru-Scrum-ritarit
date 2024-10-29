@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ticketguru.DTO.SaleDTO;
-import ticketguru.DTO.SaleSummaryDTO;
 import ticketguru.service.SaleService;
 import ticketguru.repository.AppUserRepository;
 
@@ -45,7 +44,7 @@ public class SaleResource {
             errorResponse.put("message", "User not found with given ID");
             return ResponseEntity.status(404).body(errorResponse);
         }
-        List<SaleSummaryDTO> sales = saleService.getAllSales(userId);
+        List<SaleDTO> sales = saleService.getAllSales(userId);
         return ResponseEntity.ok(sales);
     }
 
