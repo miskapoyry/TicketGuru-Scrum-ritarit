@@ -30,13 +30,9 @@ public class EventResource {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id,@Valid @RequestBody Event event) {
-        try {
-            Event updatedEvent = eventService.updateEvent(id, event);
-            return ResponseEntity.ok(updatedEvent);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @Valid @RequestBody EventDTO eventDTO) {
+        EventDTO updatedEvent = eventService.updateEvent(id, eventDTO);
+        return ResponseEntity.ok(updatedEvent);
     }
 
     @GetMapping("/{id}")

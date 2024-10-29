@@ -95,27 +95,72 @@ public class EventService {
         return convertToEventDTO(updatedEvent);
     }
 
-    public Event updateEvent(Long id, Event event) {
-        Optional<Event> existingEventOptional = eventRepository.findById(id);
+    public EventDTO updateEvent(Long id, EventDTO eventDTO) {
+        // Hae olemassa oleva tapahtuma ID:n perusteella
+        Event existingEvent = eventRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID"));
 
-        if (existingEventOptional.isEmpty()) {
-            throw new IllegalArgumentException("Event not found");
+        // Hae käyttäjä ID:n perusteella ja päivitä vain jos userId annetaan
+        if (eventDTO.getUserId() != null) {
+            AppUser user = appUserRepository.findById(eventDTO.getUserId())
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
+            existingEvent.setAppUser(user);
         }
 
-        Event existingEvent = existingEventOptional.get();
+        // Päivitä tapahtuman tiedot DTO:n perusteella
+        existingEvent.setEventName(eventDTO.getEventName());
+        existingEvent.setEventDate(eventDTO.getEventDate());
+        existingEvent.setLocation(eventDTO.getLocation());
+        existingEvent.setTotalTickets(eventDTO.getTotalTickets());
 
-        existingEvent.setEventName(event.getEventName());
-        existingEvent.setEventDate(event.getEventDate());
-        existingEvent.setLocation(event.getLocation());
-        existingEvent.setAvailableTickets(event.getAvailableTickets());
+        // Tarkistetaan onko available suurempi kuin total. Jos näin on, palautetaan 400 error
+        eventDTO.validateAvailableTickets();
+        existingEvent.setAvailableTickets(eventDTO.getAvailableTickets());
 
-        if (event.getAppUser() != null) {
-            existingEvent.setAppUser(event.getAppUser());
-        } else {
-            existingEvent.setAppUser(existingEvent.getAppUser());
+        // Päivitä lipputyypit tapahtumaan
+        List<EventTicketType> eventTicketTypes = new ArrayList<>();
+        for (Map.Entry<String, Double> entry : eventDTO.getTicketTypes().entrySet()) {
+            String ticketTypeName = entry.getKey();
+            Double price = entry.getValue();
+
+            // Lähetetään virhe, jos lipputyypin hinta on alle 0
+            if (price < 0) {
+                throw new InvalidInputException("Price for ticket type cannot be negative");
+            }
+
+            // Hae tai luo uusi TicketType
+            TicketType ticketType = ticketTypeRepository.findByTicketTypeName(ticketTypeName)
+                    .orElseGet(() -> {
+                        TicketType newTicketType = new TicketType();
+                        newTicketType.setTicketTypeName(ticketTypeName);
+                        return ticketTypeRepository.save(newTicketType);
+                    });
+
+            // Etsi olemassa oleva EventTicketType tai luo uusi ja aseta hinta
+            EventTicketType eventTicketType = eventTicketTypeRepository
+                    .findByEventAndTicketType(existingEvent, ticketType)
+                    .orElse(new EventTicketType());
+
+            eventTicketType.setEvent(existingEvent);
+            eventTicketType.setTicketType(ticketType);
+            eventTicketType.setPrice(price);
+
+            // Lisää EventTicketType-objekti listaan
+            eventTicketTypes.add(eventTicketType);
         }
 
-        return eventRepository.save(existingEvent);
+        // Tallenna kaikki päivitetyt EventTicketType-objektit
+        eventTicketTypeRepository.saveAll(eventTicketTypes);
+
+        // Päivitä tapahtuma tietokantaan
+        existingEvent.setEventTicketTypes(eventTicketTypes);
+        Event updatedEvent = eventRepository.save(existingEvent);
+
+        // Pakotetaan eventTicketTypes latautumaan:
+        updatedEvent.setEventTicketTypes(eventTicketTypes);
+
+        // Palauta päivitetty EventDTO käyttäen `convertToEventDTO`
+        return convertToEventDTO(updatedEvent);
     }
 
     public Optional<EventDTO> findEventById(Long id) {
