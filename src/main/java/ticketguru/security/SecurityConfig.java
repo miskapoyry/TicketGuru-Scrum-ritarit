@@ -32,6 +32,7 @@ public class SecurityConfig {
         http
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/api/events/**").hasRole("ADMIN")
+                        .requestMatchers("/api/eventTicketTypes/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .httpBasic(httpBasic -> {
