@@ -50,18 +50,20 @@ public class EventResource {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchEvents(@Valid @RequestParam(required = false) String eventName,
-                                                       @RequestParam(required = false) String location) {
-        if (eventName == null && location == null) {
-            return ResponseEntity.badRequest().body(List.of());
-        }
-
-        List<EventDTO> events = eventService.searchEvents(eventName, location);
-        if (events.isEmpty()) {
+                                          @RequestParam(required = false) String location) {
+        try {
+            List<EventDTO> events = eventService.searchEvents(eventName, location);
+            if (events.isEmpty()) {
+                Map<String, String> errorResponse = new HashMap<>();
+                errorResponse.put("message", "No events found with the given criteria");
+                return ResponseEntity.status(404).body(errorResponse);
+            }
+            return ResponseEntity.ok(events);
+        } catch (IllegalArgumentException e) {
             Map<String, String> errorResponse = new HashMap<>();
-            errorResponse.put("message", "Event not found with given ID");
-            return ResponseEntity.status(404).body(errorResponse);
+            errorResponse.put("message", e.getMessage());
+            return ResponseEntity.badRequest().body(errorResponse);
         }
-        return ResponseEntity.ok(events);
     }
 
     @DeleteMapping("/{id}")
