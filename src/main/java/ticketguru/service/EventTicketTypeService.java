@@ -36,7 +36,7 @@ public class EventTicketTypeService {
             EventTicketType eventTicketType = new EventTicketType();
             eventTicketType.setEvent(event);
             eventTicketType.setTicketType(ticketType);
-            //eventTicketType.setTicketQuantity(dto.getTicketQuantity());
+            eventTicketType.setTicketQuantity(dto.getTicketQuantity());
             eventTicketType.setPrice(dto.getPrice());
 
             return eventTicketType;
@@ -64,7 +64,7 @@ public class EventTicketTypeService {
             EventTicketType existingEventTicketType = optionalEventTicketType.get();
             existingEventTicketType.setEvent(updatedEventTicketType.getEvent());
             existingEventTicketType.setTicketType(updatedEventTicketType.getTicketType());
-            //existingEventTicketType.setTicketQuantity(updatedEventTicketType.getTicketQuantity());
+            existingEventTicketType.setTicketQuantity(updatedEventTicketType.getTicketQuantity());
             existingEventTicketType.setPrice(updatedEventTicketType.getPrice());
             EventTicketType savedEventTicketType = eventTicketTypeRepository.save(existingEventTicketType);
             return Optional.of(convertToDto(savedEventTicketType));
@@ -87,7 +87,7 @@ public class EventTicketTypeService {
                 eventTicketType.getEventTicketTypeId(),
                 eventTicketType.getEvent().getEventId(), // Mapping only event ID
                 eventTicketType.getTicketType().getTicketTypeId(), // Mapping only ticket type ID
-                //eventTicketType.getTicketQuantity(),
+                eventTicketType.getTicketQuantity(),
                 eventTicketType.getPrice(),
                 eventTicketType.getEvent().getEventName(), // Mapping event name
                 eventTicketType.getTicketType().getTicketTypeName()); // Mapping ticket type name

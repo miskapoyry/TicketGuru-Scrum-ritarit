@@ -24,8 +24,8 @@ public class EventTicketType {
     private TicketType ticketType;
 
     // Number of tickets available for the event ticket type
-    /*@Column(name = "ticket_quantity", nullable = true)
-    private int ticketQuantity;*/
+    @Column(name = "ticket_quantity", nullable = true)
+    private int ticketQuantity;
 
     // Price of the event ticket type
     @Column(name = "price", nullable = false)
@@ -40,7 +40,7 @@ public class EventTicketType {
             double price) {
         this.event = event;
         this.ticketType = ticketType;
-        //this.ticketQuantity = ticketQuantity;
+        this.ticketQuantity = ticketQuantity;
         this.price = price;
     }
 
@@ -69,13 +69,13 @@ public class EventTicketType {
         this.ticketType = ticketType;
     }
 
-    /*public int getTicketQuantity() {
+    public int getTicketQuantity() {
         return ticketQuantity;
     }
 
     public void setTicketQuantity(int ticketQuantity) {
         this.ticketQuantity = ticketQuantity;
-    }*/
+    }
 
     public double getPrice() {
         return price;

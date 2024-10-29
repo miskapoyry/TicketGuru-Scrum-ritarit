@@ -7,7 +7,7 @@ public class EventTicketTypeDTO {
     private Long eventTicketTypeId;
     private Long eventId; // Only event ID instead of the whole Event object
     private Long ticketTypeId; // Only ticket type ID instead of the whole TicketType object
-    //private int ticketQuantity;
+    private int ticketQuantity;
     private double price;
     private String eventName;
     private String ticketTypeName;
@@ -16,12 +16,12 @@ public class EventTicketTypeDTO {
     public EventTicketTypeDTO() {
     }
 
-    public EventTicketTypeDTO(Long eventTicketTypeId, Long eventId, Long ticketTypeId /*int ticketQuantity*/,
+    public EventTicketTypeDTO(Long eventTicketTypeId, Long eventId, Long ticketTypeId, int ticketQuantity,
             double price, String eventName, String ticketTypeName) {
         this.eventTicketTypeId = eventTicketTypeId;
         this.eventId = eventId;
         this.ticketTypeId = ticketTypeId;
-        //this.ticketQuantity = ticketQuantity;
+        this.ticketQuantity = ticketQuantity;
         this.price = price;
         this.eventName = eventName;
         this.ticketTypeName = ticketTypeName;
@@ -31,7 +31,7 @@ public class EventTicketTypeDTO {
         this.eventTicketTypeId = eventTicketType.getEventTicketTypeId();
         this.eventId = eventTicketType.getEvent().getEventId();
         this.ticketTypeId = eventTicketType.getTicketType().getTicketTypeId();
-        //this.ticketQuantity = eventTicketType.getTicketQuantity();
+        this.ticketQuantity = eventTicketType.getTicketQuantity();
         this.price = eventTicketType.getPrice();
         this.eventName = eventTicketType.getEvent().getEventName();
         this.ticketTypeName = eventTicketType.getTicketType().getTicketTypeName();
@@ -63,13 +63,13 @@ public class EventTicketTypeDTO {
         this.ticketTypeId = ticketTypeId;
     }
 
-    /*public int getTicketQuantity() {
+    public int getTicketQuantity() {
         return ticketQuantity;
     }
 
     public void setTicketQuantity(int ticketQuantity) {
         this.ticketQuantity = ticketQuantity;
-    }*/
+    }
 
     public double getPrice() {
         return price;
