@@ -87,21 +87,21 @@
             <column name="event_ticket_type_id" valueNumeric="1"/>
             <column name="event_id" valueNumeric="1"/>
             <column name="ticket_type_id" valueNumeric="1"/>
-            <column name="ticket_quantity" valueNumeric="200"/>
+            <!--<column name="ticket_quantity" valueNumeric="200"/>-->
             <column name="price" value="99.99"/>
         </insert>
         <insert tableName="event_ticket_type">
             <column name="event_ticket_type_id" valueNumeric="2"/>
             <column name="event_id" valueNumeric="2"/>
             <column name="ticket_type_id" valueNumeric="2"/>
-            <column name="ticket_quantity" valueNumeric="100"/>
+            <!--<column name="ticket_quantity" valueNumeric="100"/>-->
             <column name="price" value="149.99"/>
         </insert>
         <insert tableName="event_ticket_type">
             <column name="event_ticket_type_id" valueNumeric="3"/>
             <column name="event_id" valueNumeric="1"/>
             <column name="ticket_type_id" valueNumeric="2"/>
-            <column name="ticket_quantity" valueNumeric="50"/>
+            <!--<column name="ticket_quantity" valueNumeric="50"/>-->
             <column name="price" value="149.99"/>
         </insert>
     </changeSet>
