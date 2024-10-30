@@ -1,4 +1,4 @@
-## Show all tickets
+## Show all eventTicketType
 
 **Method** : `GET`
 

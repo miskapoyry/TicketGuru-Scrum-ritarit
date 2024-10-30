@@ -1,4 +1,4 @@
-### Update a Ticket Type
+### Update a eventTicketType
 
 **Method**: `PUT`
 

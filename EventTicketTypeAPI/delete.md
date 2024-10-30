@@ -1,4 +1,4 @@
-### Delete event
+### Delete eventTicketType
 
 **Method** : `DELETE`
 

@@ -1,4 +1,4 @@
-### Create a Ticket Type
+### Create a eventTicketType
 
 **Method**: `POST`
 
