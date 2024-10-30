@@ -24,7 +24,7 @@ public class EventTicketType {
     private TicketType ticketType;
 
     // Number of tickets available for the event ticket type
-    @Column(name = "ticket_quantity", nullable = false)
+    @Column(name = "ticket_quantity", nullable = true)
     private int ticketQuantity;
 
     // Price of the event ticket type

@@ -1,7 +1,7 @@
 package ticketguru.domain;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -43,7 +43,7 @@ public class Event {
     private int availableTickets;
 
     @OneToMany(mappedBy = "event", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private List<EventTicketType> eventTicketTypes;
+    private List<EventTicketType> eventTicketTypes = new ArrayList<>();
     // Default constructor
     public Event() {
     }

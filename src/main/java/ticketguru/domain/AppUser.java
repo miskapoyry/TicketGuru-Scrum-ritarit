@@ -27,7 +27,7 @@ public class AppUser {
     private String passwordHash;
 
     // Many to one relationship with Role
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonBackReference
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;

@@ -1,6 +1,7 @@
 package ticketguru.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ticketguru.DTO.AppUserDTO;
 import ticketguru.domain.AppUser;
@@ -20,6 +21,9 @@ public class AppUserService {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     private AppUser convertToEntity(AppUserDTO dto) {
         Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
@@ -52,6 +56,7 @@ public class AppUserService {
         }
     
         AppUser appUser = convertToEntity(appUserDTO);
+        appUser.setPasswordHash(passwordEncoder.encode(appUserDTO.getPasswordHash()));
         AppUser savedUser = appUserRepository.save(appUser);
         return convertToDTO(savedUser);
     }
@@ -64,7 +69,7 @@ public class AppUserService {
 
         AppUser existingUser = appUserRepository.findById(id).get();
         existingUser.setUsername(appUserDetails.getUsername());
-        existingUser.setPasswordHash(appUserDetails.getPasswordHash());
+        existingUser.setPasswordHash(passwordEncoder.encode(appUserDetails.getPasswordHash()));
         Role role = roleRepository.findById(appUserDetails.getRoleId()).orElse(null);
         existingUser.setRole(role);
 

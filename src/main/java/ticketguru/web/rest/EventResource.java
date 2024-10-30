@@ -5,7 +5,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ticketguru.domain.Event;
+
+import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.service.EventService;
 import ticketguru.DTO.EventDTO;
 
@@ -22,28 +23,23 @@ public class EventResource {
     private EventService eventService;
 
     @PostMapping
-    public ResponseEntity<Event> createEvent(@RequestBody Event event,@Valid @RequestParam Long userId) {
-        try {
-            Event createdEvent = eventService.createEvent(event, userId);
-            return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(event);
-        }
+    public ResponseEntity<EventDTO> createEvent(@Valid @RequestBody EventDTO eventDTO) {
+        EventDTO createdEvent = eventService.createEvent(eventDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(createdEvent);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Event> updateEvent(@PathVariable Long id,@Valid @RequestBody Event event) {
-        try {
-            Event updatedEvent = eventService.updateEvent(id, event);
-            return ResponseEntity.ok(updatedEvent);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<EventDTO> updateEvent(@PathVariable Long id, @Valid @RequestBody EventDTO eventDTO) {
+        EventDTO updatedEvent = eventService.updateEvent(id, eventDTO);
+        return ResponseEntity.ok(updatedEvent);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EventDTO> findEventById(@PathVariable Long id) {
+    public ResponseEntity<?> findEventById(@PathVariable Long id) {
         Optional<EventDTO> event = eventService.findEventById(id);
+        if (event.isEmpty()) {
+            throw new ResourceNotFoundException("Event with ID " + id + " not found");
+        }
         return ResponseEntity.of(event);
     }
 
