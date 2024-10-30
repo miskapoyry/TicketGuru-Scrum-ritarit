@@ -1,0 +1,24 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TicketguruApplication<ticketguru>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ticketguru.ticketguru.TicketguruApplication",
+            "projectName": "ticketguru",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-TicketguruApplication<ticketguru>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "ticketguru.TicketguruApplication",
+            "projectName": "ticketguru",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}

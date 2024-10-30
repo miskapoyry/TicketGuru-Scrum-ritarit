@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+        http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
+
+    <!-- Insert fake data for role -->
+    <changeSet id="14" author="Tuomas">
+        <insert tableName="role">
+            <column name="role_id" valueNumeric="1"/>
+            <column name="role_name" value="ADMIN"/>
+        </insert>
+        <insert tableName="role">
+            <column name="role_id" valueNumeric="2"/>
+            <column name="role_name" value="USER"/>
+        </insert>
+    </changeSet>
+
+    <changeSet id="3" author="Tuomas">
+        <insert tableName="app_user">
+            <column name="user_id" valueNumeric="1"/>
+            <column name="username" value="john_doe"/>
+            <column name="passwordhash" value="$2b$12$3k620nL1ZTafthaaniD5c.6KPVvCPMKCZndoFuBbfpexDFuwP7ynC"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="user_id" valueNumeric="2"/>
+            <column name="username" value="jane_smith"/>
+            <column name="passwordhash" value="$2b$12$1kb53iowBdJIRLP9HAZpQugOMFmL2QRae.Z9XWJkoauh6YUqIOnt6"/>
+            <column name="role_id" valueNumeric="2"/>
+        </insert>
+        <insert tableName="app_user">
+            <column name="user_id" valueNumeric="3"/>
+            <column name="username" value="alice_jones"/>
+            <column name="passwordhash" value="$2b$12$PenxFKF.SWgTuu2QICmCC.hMC727YIQx/xzOqfEdU5B1SgLAyieTS"/>
+            <column name="role_id" valueNumeric="1"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert fake data for event -->
+    <changeSet id="4" author="Tuomas">
+        <insert tableName="event">
+            <column name="event_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="1"/>
+            <column name="event_name" value="Tech Conference 2024"/>
+            <column name="event_date" value="2024-04-15 09:00:00"/>
+            <column name="location" value="San Francisco, CA"/>
+            <column name="total_tickets" valueNumeric="500"/>
+            <column name="available_tickets" valueNumeric="250"/>
+        </insert>
+        <insert tableName="event">
+            <column name="event_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="2"/>
+            <column name="event_name" value="Art Exhibition"/>
+            <column name="event_date" value="2024-05-10 10:00:00"/>
+            <column name="location" value="New York, NY"/>
+            <column name="total_tickets" valueNumeric="300"/>
+            <column name="available_tickets" valueNumeric="150"/>
+        </insert>
+        <insert tableName="event">
+            <column name="event_id" valueNumeric="3"/>
+            <column name="user_id" valueNumeric="3"/>
+            <column name="event_name" value="Music Festival"/>
+            <column name="event_date" value="2024-06-20 14:00:00"/>
+            <column name="location" value="Los Angeles, CA"/>
+            <column name="total_tickets" valueNumeric="1000"/>
+            <column name="available_tickets" valueNumeric="500"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert fake data for ticketType -->
+    <changeSet id="7" author="Tuomas">
+        <insert tableName="ticket_type">
+            <column name="ticket_type_id" valueNumeric="1"/>
+            <column name="ticket_type_name" value="Regular"/>
+        </insert>
+        <insert tableName="ticket_type">
+            <column name="ticket_type_id" valueNumeric="2"/>
+            <column name="ticket_type_name" value="VIP"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert fake data for event_ticket_type -->
+    <changeSet id="5" author="Tuomas">
+        <insert tableName="event_ticket_type">
+            <column name="event_ticket_type_id" valueNumeric="1"/>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="ticket_type_id" valueNumeric="1"/>
+            <column name="ticket_quantity" valueNumeric="200"/>
+            <column name="price" value="99.99"/>
+        </insert>
+        <insert tableName="event_ticket_type">
+            <column name="event_ticket_type_id" valueNumeric="2"/>
+            <column name="event_id" valueNumeric="2"/>
+            <column name="ticket_type_id" valueNumeric="2"/>
+            <column name="ticket_quantity" valueNumeric="100"/>
+            <column name="price" value="149.99"/>
+        </insert>
+        <insert tableName="event_ticket_type">
+            <column name="event_ticket_type_id" valueNumeric="3"/>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="ticket_type_id" valueNumeric="2"/>
+            <column name="ticket_quantity" valueNumeric="50"/>
+            <column name="price" value="149.99"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert fake data for sale -->
+    <changeSet id="11" author="Tuomas">
+        <insert tableName="sale">
+            <column name="sale_id" valueNumeric="1"/>
+            <column name="user_id" valueNumeric="1"/>
+            <column name="sale_timestamp" value="2024-03-01 10:00:00"/>
+            <column name="payment_method" value="Credit Card"/>
+            <column name="total_price" value="199.98"/>
+        </insert>
+        <insert tableName="sale">
+            <column name="sale_id" valueNumeric="2"/>
+            <column name="user_id" valueNumeric="2"/>
+            <column name="sale_timestamp" value="2024-03-05 14:30:00"/>
+            <column name="payment_method" value="PayPal"/>
+            <column name="total_price" value="49.99"/>
+        </insert>
+    </changeSet>
+
+    <!-- Insert fake data for ticket -->
+    <changeSet id="9" author="Tuomas">
+        <insert tableName="ticket">
+            <column name="ticket_id" valueNumeric="1"/>
+            <column name="ticket_number" value="TICKET-1001"/>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="ticket_type_id" valueNumeric="1"/>
+            <column name="sale_id" valueNumeric="1"/>
+            <column name="sale_timestamp" value="2024-03-01 10:00:00"/>
+            <column name="is_used" value="0"/>
+            <column name="used_timestamp" value="null"/>
+        </insert>
+        <insert tableName="ticket">
+            <column name="ticket_id" valueNumeric="2"/>
+            <column name="ticket_number" value="TICKET-1002"/>
+            <column name="event_id" valueNumeric="1"/>
+            <column name="ticket_type_id" valueNumeric="1"/>
+            <column name="sale_id" valueNumeric="1"/>
+            <column name="sale_timestamp" value="2024-03-01 10:00:00"/>
+            <column name="is_used" value="0"/>
+            <column name="used_timestamp" value="null"/>
+        </insert>
+        <insert tableName="ticket">
+            <column name="ticket_id" valueNumeric="3"/>
+            <column name="ticket_number" value="TICKET-1003"/>
+            <column name="event_id" valueNumeric="2"/>
+            <column name="ticket_type_id" valueNumeric="2"/>
+            <column name="sale_id" valueNumeric="2"/>
+            <column name="sale_timestamp" value="2024-03-05 14:30:00"/>
+            <column name="is_used" value="0"/>
+            <column name="used_timestamp" value="2024-05-10 15:00:00"/>
+        </insert>
+    </changeSet>
+</databaseChangeLog>
