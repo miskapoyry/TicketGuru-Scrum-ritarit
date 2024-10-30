@@ -51,3 +51,13 @@ The TicketType Resource allows you to manage Ticket types in the TicketGuru appl
 * [Create a Ticket type](ticketTypeAPI/post.md) : `POST /api/ticket-types`
 * [Update a Ticket type](ticketTypeAPI/put.md) : `PUT /api/ticket-types/{id}`
 * [Delete a Ticket type](ticketTypeAPI/delete.md) : `DELETE /api/ticket-types/{id}`
+
+## eventTicketType Resource
+
+The eventTicketType Resource allows you to manage eventTicketTypes in the TicketGuru application. It supports operations such as creating, updating, retrieving and deleting eventTicketTypes.
+
+* [Show All eventTicketTypes](EventTicketTypeAPI/get.md) : `/api/eventTicketTypes`
+* [Show one eventTicketTypes](EventTicketTypeAPI/getbyid.md) : `/api/eventTicketTypes/{id}`
+* [Create a eventTicketTypes](EventTicketTypeAPI/post.md) : `/api/eventTicketTypes`
+* [Update a eventTicketTypes](EventTicketTypeAPI/put.md) : `/api/eventTicketTypes/{id}`
+* [Delete a eventTicketTypes](EventTicketTypeAPI/delete.md) : `/api/eventTicketTypes/{id}`
