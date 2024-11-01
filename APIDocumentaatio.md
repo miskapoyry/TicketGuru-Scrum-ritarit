@@ -69,8 +69,8 @@ This table provides an overview of the authorization requirements for each endpo
 
 | Resource               | Endpoint                            | HTTP Method | Access Level/Role |
 |------------------------|-------------------------------------|-------------|--------------------|
-| **Event**              | `/api/event/`                      | `GET`       |    ADMIN           |
-|                        | `/api/event/{id}`                  | `GET`       |    ADMIN           |
+| **Event**              | `/api/event/`                      | `GET`       |    ADMIN, USER     |
+|                        | `/api/event/{id}`                  | `GET`       |    ADMIN, USER     |
 |                        | `/api/event?userId={Id}`           | `POST`      |    ADMIN           |
 |                        | `/api/event/{id}`                  | `PUT`       |    ADMIN           |
 |                        | `/api/event/{id}`                  | `DELETE`    |    ADMIN           |

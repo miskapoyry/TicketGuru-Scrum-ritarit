@@ -3,6 +3,7 @@ package ticketguru.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,18 +31,43 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/events/**").hasRole("ADMIN")
-                        .requestMatchers("/api/eventTicketTypes/**").hasRole("ADMIN")
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(httpBasic -> {
-                    httpBasic.realmName("TicketGuru");
-                })
-                .csrf(AbstractHttpConfigurer::disable);
+        .authorizeHttpRequests((requests) -> requests
 
-        return http.build();
-    }
+         // Event: vain admin voi säätää eventtejä, mutta katsoa saavat useritkin
+         .requestMatchers(HttpMethod.GET, "/api/event/**").hasAnyRole("ADMIN", "USER")
+         .requestMatchers(HttpMethod.POST, "/api/event/**").hasRole("ADMIN")
+         .requestMatchers(HttpMethod.PUT, "/api/event/**").hasRole("ADMIN")
+         .requestMatchers(HttpMethod.DELETE, "/api/event/**").hasRole("ADMIN")
+ 
+         // Ticket: myös tavallisten käyttäjien pitää päästä katsomaan ja tarkistamaan lippuja
+         .requestMatchers("/api/tickets/**").hasAnyRole("ADMIN", "USER")
+ 
+         // AppUser: vain admin pääsee käyttäjiin käsiksi
+         .requestMatchers("/api/users/**").hasRole("ADMIN")
+ 
+         // Sale: muut kuin poisto OK myös usereille
+         .requestMatchers(HttpMethod.GET, "/api/sales/**").hasAnyRole("ADMIN", "USER")
+         .requestMatchers(HttpMethod.POST, "/api/sales").hasAnyRole("ADMIN", "USER")
+         .requestMatchers(HttpMethod.PUT, "/api/sales/**").hasAnyRole("ADMIN", "USER")
+         .requestMatchers(HttpMethod.DELETE, "/api/sales/**").hasRole("ADMIN")
+ 
+         // TicketType: vain admineille
+         .requestMatchers("/api/ticket-types/**").hasRole("ADMIN")
+ 
+         // EventTicketType: GET OK myös usereille, että voi tutkia mahdollisia lipputyyppejä tapahtumassa
+         .requestMatchers(HttpMethod.GET, "/api/eventTicketTypes/**").hasAnyRole("ADMIN", "USER")
+         .requestMatchers(HttpMethod.POST, "/api/eventTicketTypes").hasRole("ADMIN")
+         .requestMatchers(HttpMethod.PUT, "/api/eventTicketTypes/**").hasRole("ADMIN")
+         .requestMatchers(HttpMethod.DELETE, "/api/eventTicketTypes/**").hasRole("ADMIN")
+
+        .anyRequest().authenticated()
+        )
+        .httpBasic(httpBasic -> {
+            httpBasic.realmName("TicketGuru");
+        })
+        .csrf(AbstractHttpConfigurer::disable);
+                return http.build();
+        }
 
     @Bean
     public AuthenticationManager authManager(HttpSecurity http) throws Exception {
