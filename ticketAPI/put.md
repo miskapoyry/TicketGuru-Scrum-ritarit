@@ -15,11 +15,11 @@ If the used parameter is specified as false, the ticket will be marked as not us
 
 **Error Responses** :
 
-Condition: If the ticket does not exist
+**Condition: If the ticket does not exist**
 
 Code: ```404 Not Found``` 
 
-Response Example:
+Error Example:
 
 ```json
 {

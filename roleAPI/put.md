@@ -14,17 +14,33 @@
     "roleName": "string"
 }
 
-**Success Response** :
+**Successfull Response** :
 
 - Status Code: `200 OK`
 
-Response:
+**Response Body** :
 
 {
     "roleId": "Long",
     "roleName": "string"
 }
 
-Virhevastaukset:
+```json
+{
+    // Täydennä tähän
+}
+```
 
-404 Not Found: If role not found.
+**Error Responses** :
+
+**Condition: If role does not exist**
+
+Code: `404 Not Found`
+
+Error Example:
+
+```json
+{
+    // Täydennä tähän
+}
+```

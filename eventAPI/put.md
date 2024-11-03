@@ -61,11 +61,12 @@
 
 **Error responses :**
 
-__Condition: If the eventId does not exist__
+**Condition: If the eventId does not exist**
 
 Code: ```404 Not Found``` 
 
 Error example:
+
 ```json
 {
     "message": "Event not found with given ID",
@@ -80,6 +81,7 @@ Error example:
 Code: ```404 Not Found``` 
 
 Error example:
+
 ```json
 {
     "message": "User not found with given ID",
@@ -94,6 +96,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "User ID cannot be null",
@@ -108,6 +111,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "Event date must be in the future",
@@ -122,6 +126,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "Location cannot be empty",
@@ -136,6 +141,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "Total tickets must be at least 1",
@@ -150,6 +156,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "Available tickets cannot be greater than total tickets",
@@ -164,6 +171,7 @@ Error example:
 Code: ```400 Bad Request``` 
 
 Error example:
+
 ```json
 {
     "message": "Event must contain at least one ticket type",

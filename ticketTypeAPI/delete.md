@@ -9,15 +9,15 @@
 
 **Successful Response**:
 
-- **Status Code**: `204 No Content`
+- Status Code: `204 No Content`
 
 **Error Responses**:
 
 **Condition**: If the ticket type does not exist
 
-- **Code**: `404 Not Found`
+Code: `404 Not Found`
 
-**Response Example**:
+Error Example:
 
 ```json
 {

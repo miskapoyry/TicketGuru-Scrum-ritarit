@@ -11,11 +11,6 @@
 
 - Status Code: `200 OK`
 
-**Response Body** : 
-
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
-
 ```json
 {
     "userId": 2,

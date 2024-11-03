@@ -17,7 +17,7 @@
 
 **Successful Response**:
 
-- **Status Code**: `201 Created`
+- Status Code: `201 Created`
 
 **Response Body**:
 
@@ -30,6 +30,20 @@
         "price": 50.0,
         "eventName": "Tech Conference 2024",
         "ticketTypeName": "VIP"
+    }
+```
+
+**Error Responses** :
+
+**Condition:**
+
+Code: ``
+
+Error Example:
+
+```json
+    {
+
     }
 ```
 

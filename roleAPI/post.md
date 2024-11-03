@@ -5,26 +5,38 @@
 
 **Request Body** :
 
-{
+- {
     "roleName": "string"
 }
 
-**Success Response** :
+**Successfull Response** :
 
-- Status Code: 200 OK
+- Status Code: `200 OK`
 
-Answer:
+**Response Body** :
 
 {
     "roleId": "Long",
     "roleName": "string"
 }
 
+```json
+{
+    // Täydennä tähän
+}
+```
+
 **Error Responses** :
 
-400 Bad Request: If the role already has an ID.
+**Condition: If the role already has an ID**
 
+Code: `400 Bad Request`
+
+Error Example:
+
+```json
 {
     "error": "Bad Request",
     "message": "Role ID should be null for new role."
 }
+```

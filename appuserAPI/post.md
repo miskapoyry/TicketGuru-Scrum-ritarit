@@ -5,17 +5,27 @@
 
 **Request Body** : 
 
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
+- { 
+    "username": "string", 
+    "passwordHash": "string", 
+    "roleId": "integer", 
+    "eventIds": ["integer"], 
+    "saleIds": ["integer"] 
+    }
 
 **Succes Response** :
 
-- Status Code: 200 OK
+- Status Code: `200 OK`
 
 **Response Body** : 
 
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
+- { 
+    "username": "string", 
+    "passwordHash": "string", 
+    "roleId": "integer", 
+    "eventIds": ["integer"], 
+    "saleIds": ["integer"] 
+    }
 
 ```json
 {

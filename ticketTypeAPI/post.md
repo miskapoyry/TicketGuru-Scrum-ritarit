@@ -10,7 +10,7 @@
 
 **Successful Response**:
 
-- **Status Code**: `201 Created`
+- Status Code: `201 Created`
 
 **Response Body**:
 
@@ -18,16 +18,15 @@
 {
     "ticketTypeName": "Regular"
 }
-
 ```
 
 **Error Responses** :
 
-Condition: If the ticket type name is missing or empty
+**Condition: If the ticket type name is missing or empty**
 
-Code: ```400 Bad Request```
+Code: `400 Bad Request`
 
-Response Example:
+Error Example:
 
 ```json
 {
@@ -38,11 +37,11 @@ Response Example:
 }
 ```
 
-Condition: If a ticket type with the same name already exists
+**Condition: If a ticket type with the same name already exists**
 
-Code: ```400 Bad Request```
+Code: `400 Bad Request`
 
-Response Example:
+Error Example:
 
 ```json
 {

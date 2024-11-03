@@ -12,7 +12,7 @@
 
 - `id`: Long (ID of the ticket type to update)
 
-**Success Response**:
+**Successfull Response**:
 
 - Status Code: `200 OK`
 
@@ -29,11 +29,11 @@
 
 **Error Responses** :
 
-Condition: If the ticket type does not exist
+**Condition: If the ticket type does not exist**
 
 Code: ```404 Not Found``` 
 
-Response Example:
+Error Example:
 
 ```json
 {
@@ -44,11 +44,11 @@ Response Example:
 }
 ```
 
-Condition: If the ticket type name is missing 
+**Condition: If the ticket type name is missing**
 
 Code: ```400 Bad Request```
 
-Response Example:
+Error Example:
 
 ```json
 {
@@ -59,11 +59,11 @@ Response Example:
 }
 ```
 
-Condition: If a ticket type with the same name already exists
+**Condition: If a ticket type with the same name already exists**
 
-Code: ```400 Bad Request```
+Code: `400 Bad Request`
 
-Response Example:
+Error Example:
 
 ```json
 {

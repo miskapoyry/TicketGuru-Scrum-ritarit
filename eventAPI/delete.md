@@ -13,11 +13,12 @@
 
 **Error Responses** :
 
-**Condition: If the eventId isn't valid**
+Condition: If the event does not exist
 
 Code: ```404 Not Found``` 
 
 Error example:
+
 ```json
 {
     "message": "Event not found",

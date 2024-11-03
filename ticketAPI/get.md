@@ -14,12 +14,6 @@
 
 - Status Code: `200 OK`
 
-**Error Responses** :
-
-- 404 Not Found: This response occurs when there are no tickets found in the system or the requested resource does not exist.
-
-- 400 Bad Request: This response occurs if there is an issue with the request format or invalid parameters.
-
 **Response Body** : 
 
 An array of ticket objects, where each object contains the following fields:
@@ -75,3 +69,29 @@ An array of ticket objects, where each object contains the following fields:
 - **`used`**: Boolean indicating whether the ticket has been used (`true`) or not (`false`).
 - **`quantity`**: The number of tickets available.
 - **`price`**: The price of the ticket.
+
+**Error Responses** :
+
+**Condition: This response occurs when there are no tickets found in the system or the requested resource does not exist**
+
+Code: `404 Not Found`
+
+Error Example:
+
+```json
+{
+  // Täydennä tähän
+}
+```
+
+**Condition: This response occurs if there is an issue with the request format or invalid parameters.**
+
+Code: `400 Bad Request`
+
+Error Example:
+
+```json
+{
+  // Täydennä tähän
+}
+```

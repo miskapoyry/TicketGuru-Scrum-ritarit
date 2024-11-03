@@ -12,10 +12,7 @@
 
 - `username` : Filters users by name (case-insensitive, partial matches allowed)
 
-**Response Body** : 
-
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
+**Response body** :
 
 ```json
 [

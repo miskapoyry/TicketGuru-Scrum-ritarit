@@ -19,41 +19,45 @@
 **Response Body**:
 
 ```json
-
+{
+    // Täydennä tähän
+}
 ```
 
 **Error Responses** :
 
-Condition: 
+**Condition:**
 
-Code: ```404 Not Found``` 
+Code: `404 Not Found` 
 
-Response Example:
-
-```json
-{
-
-}
-```
-
-Condition:  
-
-Code: ```400 Bad Request```
-
-Response Example:
+Error Example:
 
 ```json
 {
-
+    // Täydennä tähän
 }
 ```
 
-Condition: 
+**Condition:**
 
-Code: ```400 Bad Request```
+Code: `400 Bad Request`
 
-Response Example:
+Error Example:
 
 ```json
+{
+    // Täydennä tähän
+}
+```
 
+**Condition:**
+
+Code: `400 Bad Request`
+
+Error Example:
+
+```json
+    {
+        // Täydennä tähän
+    }
 ```

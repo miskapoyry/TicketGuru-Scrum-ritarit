@@ -5,8 +5,13 @@
 
 **Request Body** : 
 
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
+- { 
+    "username": "string", 
+    "passwordHash": "string", 
+    "roleId": "integer", 
+    "eventIds": ["integer"], 
+    "saleIds": ["integer"] 
+    }
 
 **Path Parameters** :
 
@@ -18,8 +23,13 @@
 
 **Response Body** : 
 
-- { "username": "string", "passwordHash": "string", "roleId": "integer", "eventIds": ["integer"], 
-"saleIds": ["integer"] }
+- { 
+    "username": "string", 
+    "passwordHash": "string", 
+    "roleId": "integer", 
+    "eventIds": ["integer"], 
+    "saleIds": ["integer"] 
+    }
 
 
 ```json
@@ -35,15 +45,15 @@
 ]
 ```
 
-**Content Example** : For the example above, when the username and passwordHash is updated.
+Content Example: For the example above, when the username and passwordHash is updated.
 
 **Error Responses** :
 
-Condition: If the user does not exist
+**Condition: If the user does not exist**
 
 Code: ```404 Not Found``` 
 
-**Response Example:**
+Error Example:
 
 ```json
 {
@@ -54,11 +64,11 @@ Code: ```404 Not Found```
 }
 ```
 
-Condition: If the updated username already exists
+**Condition: If the updated username already exists**
 
 Code: ```400 Bad Request```
 
-**Response Example:**
+Error Example:
 
 ```json
 {
@@ -69,4 +79,4 @@ Code: ```400 Bad Request```
 }
 ```
 
-**Content Example** : User "john_doe" already exists in the database.
+Content Example: User "john_doe" already exists in the database.
