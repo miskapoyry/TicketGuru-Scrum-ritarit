@@ -52,7 +52,10 @@ Error Example:
 
 ```json
 {
-  // Täydennä tähän
+  "message": "Ticket not found",
+  "status": 404,
+  "timestamp": "2024-11-03T14:25:16.3762063",
+  "path": "uri=/api/tickets/35"
 }
 ```
 
@@ -64,6 +67,9 @@ Error Example:
 
 ```json
 {
-  // Täydennä tähän
+  "message": "Invalid parameter type: dsd for ticketId",
+  "status": 400,
+  "timestamp": "2024-11-03T15:00:14.9678582",
+  "path": "uri=/api/tickets/dsd"
 }
 ```
