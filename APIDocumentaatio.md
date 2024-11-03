@@ -5,7 +5,6 @@
 The Event Resource allows you to manage events in the TicketGuru application. It supports creating, updating,
 retrieving, and deleting events.
 
-
 * [Show all events](eventAPI/get.md) : `GET /api/event/`
 * [Show one event](eventAPI/getbyID.md) : `Get /api/event/{id}`
 * [Create An event](eventAPI/post.md) : `POST /api/event/api/event?userId={Id}`
@@ -21,6 +20,16 @@ retrieving, and deleting tickets.
 * [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{ticketId}`
 * [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}/use?used`
 
+## Sale Resource
+
+The Sale Resource allows you to manage sales in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting sales.
+
+* [Show All Sales](saleAPI/get.md) : `GET /api/sales`
+* [Show One Sale](saleAPI/getbyID.md) : `Get /api/sales/{id}`
+* [Create a Sale](saleAPI/post.md) : `POST /api/sales`
+* [Update a Sale](saleAPI/put.md) : `PUT /api/sales/{id}`
+* [Delete a Sale](saleAPI/delete.md) : `DELETE /api/sales/{id}`
+
 ## AppUser Resource
 
 The AppUser Resource allows you to manage users in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting user accounts.
@@ -31,15 +40,15 @@ The AppUser Resource allows you to manage users in the TicketGuru application. I
 * [Update a User](appuserAPI/put.md) : `PUT /api/users/{id}`
 * [Delete a User](appuserAPI/delete.md) : `DELETE /api/users/{id}`
 
-## Sale Resource
+## Role Resource
 
-The sale Resource allows you to manage sales in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting sales.
+The Role Resource allows you to manage roles in the TicketGuru application. It supports operations such as creating, updating, retrieving, and deleting roles.
 
-* [Show All Sales](saleAPI/get.md) : `GET /api/sales`
-* [Show One Sale](saleAPI/getbyID.md) : `Get /api/sales/{id}`
-* [Create a Sale](saleAPI/post.md) : `POST /api/sales`
-* [Update a Sale](saleAPI/put.md) : `PUT /api/sales/{id}`
-* [Delete a Sale](saleAPI/delete.md) : `DELETE /api/sales/{id}`
+* [Show All Roles](roleAPI/getall.md) : `GET /api/role`
+* [Show One Role](roleAPI/getbyID.md) : `Get /api/role/{id}`
+* [Create a Role](roleAPI/post.md) : `POST /api/role`
+* [Update a Role](roleAPI/put.md) : `PUT /api/role/{id}`
+* [Delete a Role](roleAPI/delete.md) : `DELETE /api/role/{id}`
 
 
 ## TicketType Resource
