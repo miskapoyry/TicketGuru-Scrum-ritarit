@@ -9,6 +9,6 @@ public class testController {
 
     @GetMapping("/")
     public String index(){
-        return "Kehitysympäristösi toimii, sekä webhook toimii!";
+        return "Kehitysympäristösi toimii!";
     }
 }
