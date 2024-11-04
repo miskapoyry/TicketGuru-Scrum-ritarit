@@ -70,3 +70,40 @@ The eventTicketType Resource allows you to manage eventTicketTypes in the Ticket
 * [Create a eventTicketTypes](EventTicketTypeAPI/post.md) : `/api/eventTicketTypes`
 * [Update a eventTicketTypes](EventTicketTypeAPI/put.md) : `/api/eventTicketTypes/{id}`
 * [Delete a eventTicketTypes](EventTicketTypeAPI/delete.md) : `/api/eventTicketTypes/{id}`
+
+
+## Endpoint Access Control
+
+This table provides an overview of the authorization requirements for each endpoint in the TicketGuru API.
+
+| Resource               | Endpoint                            | HTTP Method | Access Level/Role |
+|------------------------|-------------------------------------|-------------|--------------------|
+| **Event**              | `/api/event/`                      | `GET`       |    ADMIN, USER     |
+|                        | `/api/event/{id}`                  | `GET`       |    ADMIN, USER     |
+|                        | `/api/event?userId={Id}`           | `POST`      |    ADMIN           |
+|                        | `/api/event/{id}`                  | `PUT`       |    ADMIN           |
+|                        | `/api/event/{id}`                  | `DELETE`    |    ADMIN           |
+| **Ticket**             | `/api/tickets`                     | `GET`       |    ADMIN, USER     |
+|                        | `/api/tickets/{ticketId}`          | `GET`       |    ADMIN, USER     |
+|                        | `/api/tickets/{ticketId}/use?used` | `PUT`       |    ADMIN, USER     |
+| **AppUser**            | `/api/users`                       | `GET`       |    ADMIN           |
+|                        | `/api/users/{id}`                  | `GET`       |    ADMIN           |
+|                        | `/api/users`                       | `POST`      |    ADMIN           |
+|                        | `/api/users/{id}`                  | `PUT`       |    ADMIN           |
+|                        | `/api/users/{id}`                  | `DELETE`    |    ADMIN           |
+| **Sale**               | `/api/sales`                       | `GET`       |    ADMIN, USER     |
+|                        | `/api/sales/{id}`                  | `GET`       |    ADMIN, USER     |
+|                        | `/api/sales`                       | `POST`      |    ADMIN, USER     |
+|                        | `/api/sales/{id}`                  | `PUT`       |    ADMIN, USER     |
+|                        | `/api/sales/{id}`                  | `DELETE`    |    ADMIN           |
+| **TicketType**         | `/api/ticket-types`                | `GET`       |    ADMIN           |
+|                        | `/api/ticket-types/{id}`           | `GET`       |    ADMIN           |
+|                        | `/api/ticket-types`                | `POST`      |    ADMIN           |
+|                        | `/api/ticket-types/{id}`           | `PUT`       |    ADMIN           |
+|                        | `/api/ticket-types/{id}`           | `DELETE`    |    ADMIN           |
+| **EventTicketType**    | `/api/eventTicketTypes`            | `GET`       |    ADMIN, USER     |
+|                        | `/api/eventTicketTypes/{id}`       | `GET`       |    ADMIN, USER     |
+|                        | `/api/eventTicketTypes`            | `POST`      |    ADMIN           |
+|                        | `/api/eventTicketTypes/{id}`       | `PUT`       |    ADMIN           |
+|                        | `/api/eventTicketTypes/{id}`       | `DELETE`    |    ADMIN           |
+
