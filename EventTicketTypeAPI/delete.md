@@ -21,6 +21,7 @@ Code: `404 Not Found`
 Error Example:
 ```json
 {
-    // Täydennä tähän
+    "message":"EventTicketType not found with ID: 20",
+    "status":404
 }
 ```

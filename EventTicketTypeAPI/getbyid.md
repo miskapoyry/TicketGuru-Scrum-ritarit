@@ -48,8 +48,8 @@ Error Example:
 
 ```json
     {
-        // Täydennä tähän
-    }
+        "message":"EventTicketType not found with ID: 20"
+     }
 ```
 
 **Condition: This response occurs if there is an issue with the request format or invalid parameters.**
@@ -60,6 +60,9 @@ Error Example:
 
 ```json
     {
-        // Täydennä tähän
+        "message":"Invalid parameter type: aa for id",
+        "status":400,
+        "timestamp":"2024-11-05T19:40:01.4125211",
+        "path":"uri=/api/eventTicketTypes/aa"
     }
 ```
