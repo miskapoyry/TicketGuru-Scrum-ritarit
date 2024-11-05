@@ -1,13 +1,24 @@
 package ticketguru.DTO;
 
+import jakarta.validation.constraints.NotNull;
+
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Positive;
 import ticketguru.domain.EventTicketType;
 
 public class EventTicketTypeDTO {
 
     private Long eventTicketTypeId;
+    @NotNull(message = "Event ID cannot be null")
     private Long eventId; // Only event ID instead of the whole Event object
+
+    @NotNull(message = "Ticket Type ID cannot be null")
     private Long ticketTypeId; // Only ticket type ID instead of the whole TicketType object
+
+    @Min(value = 1, message = "Ticket quantity must be at least 1")
     private int ticketQuantity;
+
+    @Positive(message = "Price must be positive")
     private double price;
     private String eventName;
     private String ticketTypeName;
