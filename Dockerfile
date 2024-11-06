@@ -11,4 +11,4 @@ RUN find ./target -type f -name '*.jar' -exec cp {} /opt/app/app.jar \; -quit
 FROM eclipse-temurin:17-jre-alpine
 COPY --from=builder /opt/app/*.jar /opt/app/
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "/opt/app/app.jar", "--spring.profiles.active=prod"]
+ENTRYPOINT ["java", "-jar", "/opt/app/app.jar" ]
