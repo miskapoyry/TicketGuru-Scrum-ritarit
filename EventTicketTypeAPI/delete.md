@@ -14,4 +14,14 @@
 
 **Error Responses** :
 
-- 404 Not Found: If the eventTicketType does not exist.
+**Condition: If the eventTicketType does not exist**
+
+Code: `404 Not Found`
+
+Error Example:
+```json
+{
+    "message":"EventTicketType not found with ID: 20",
+    "status":404
+}
+```

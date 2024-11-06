@@ -6,7 +6,7 @@
 
 **Successful Response**:
 
-- **Status Code**: `200 OK`
+- Status Code: `200 OK`
 
 **Response Body**:
 

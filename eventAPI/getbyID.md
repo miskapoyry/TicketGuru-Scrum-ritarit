@@ -34,6 +34,7 @@ Condition: If the eventId does not exist
 Code: ```404 Not Found``` 
 
 Error example:
+
 ```json
 {
     "message": "Event with ID 66 not found",

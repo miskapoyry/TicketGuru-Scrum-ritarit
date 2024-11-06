@@ -12,12 +12,6 @@
 
 - Status Code: `200 OK`
 
-**Error Responses** :
-
-- 404 Not Found: This response occurs when there are no EventTicketTypes found in the system or the requested resource does not exist.
-
-- 400 Bad Request: This response occurs if there is an issue with the request format or invalid parameters.
-
 **Response Body** : 
 
 An array of EventTicketType objects, where each object contains the following fields:

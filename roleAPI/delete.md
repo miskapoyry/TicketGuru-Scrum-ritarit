@@ -8,10 +8,21 @@
 
 - id: Long (ID of the role to delete)
 
-**Succes Response** :
+**Succesfull Response** :
 
 - Status Code: `204 No Content`
 
 **Error Responses** :
 
-- 404 Not Found: If the role does not exist.
+**Condition: If the role does not exist.**
+
+Code: `404 Not Found`
+
+Error Example:
+
+```json
+{
+    "message": "Role not found with given ID"
+}
+```
+

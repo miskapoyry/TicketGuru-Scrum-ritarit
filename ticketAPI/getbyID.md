@@ -6,15 +6,9 @@
 
 **Description** : Retrieves a specific ticket based on the provided ticketId. The response includes detailed information about the ticket, including the event, ticket type, sale details, and whether the ticket has been used.
 
-**Success Response** :
+**Successfull Response** :
 
 - Status Code: `200 OK`
-
-**Error Responses** :
-
-- 404 Not Found: This occurs if no ticket is found with the given ticketId.
-
-- 400 Bad Request: This occurs if the provided ticketId is invalid, such as a non-numeric value.
 
 **Response Body** : 
 
@@ -47,3 +41,35 @@ A ticket objects containing the following fields:
 - **`quantity`**: Quantity, which will always be 1 for a single ticket retrieval.
 - **`price`**: The price of the ticket.
 - **`used`**: Boolean indicating whether the ticket has been used (`true`) or not (`false`).
+
+**Error Responses** :
+
+**Condition: This occurs if no ticket is found with the given ticketId**
+
+Code: `404 Not Found`
+
+Error Example:
+
+```json
+{
+  "message": "Ticket not found",
+  "status": 404,
+  "timestamp": "2024-11-03T14:25:16.3762063",
+  "path": "uri=/api/tickets/35"
+}
+```
+
+**Condition: This occurs if the provided ticketId is invalid, such as a non-numeric value.**
+
+Code: `400 Bad Request`
+
+Error Example:
+
+```json
+{
+  "message": "Invalid parameter type: dsd for ticketId",
+  "status": 400,
+  "timestamp": "2024-11-03T15:00:14.9678582",
+  "path": "uri=/api/tickets/dsd"
+}
+```

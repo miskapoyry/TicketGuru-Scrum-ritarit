@@ -8,6 +8,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -69,6 +70,21 @@ public class GlobalExceptionHandler {
         );
 
         // Palautetaan vastaus
+        return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
+
+    // Virhe tilanteille, joissa haetaan virheellisillä parametreilla, esim. Longia ei-numeraaleilla
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(MethodArgumentTypeMismatchException ex, WebRequest request) {
+        String errorMessage = "Invalid parameter type: " + ex.getValue() + " for " + ex.getName();
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                errorMessage,
+                HttpStatus.BAD_REQUEST.value(),
+                LocalDateTime.now(),
+                request.getDescription(false)
+        );
+
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 

@@ -3,16 +3,19 @@
 
 **URL** : `/api/role`
 
-**Success Response** :
+**Successfull Response** :
 
 - Status Code: `200 OK`
 
-Response:
+**Response Body** :
 
-[
+```json
     {
-        "roleId": "Long",
-        "roleName": "string"
+        "roleId": 1,
+        "roleName": "ADMIN"
     },
-    ...
-]
+    {
+        "roleId": 2,
+        "roleName": "USER"
+    }
+```

@@ -9,7 +9,7 @@
 
 **Successful Response**:
 
-- **Status Code**: `200 OK`
+- Status Code: `200 OK`
 
 **Response Body**:
 
@@ -23,11 +23,11 @@
 
 **Error Responses** :
 
-Condition: If the ticket type does not exist
+**Condition: If the ticket type does not exist**
 
 Code: ```404 Not Found``` 
 
-Response Example:
+Error Example:
 
 ```json
 {

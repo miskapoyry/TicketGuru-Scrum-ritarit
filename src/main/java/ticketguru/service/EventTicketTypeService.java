@@ -6,6 +6,8 @@ import ticketguru.DTO.EventTicketTypeDTO;
 import ticketguru.domain.Event;
 import ticketguru.domain.EventTicketType;
 import ticketguru.domain.TicketType;
+import ticketguru.exception.InvalidInputException;
+import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.repository.EventRepository;
 import ticketguru.repository.EventTicketTypeRepository;
 import ticketguru.repository.TicketTypeRepository;
@@ -28,10 +30,18 @@ public class EventTicketTypeService {
 
     public List<EventTicketTypeDTO> createEventTicketTypes(List<EventTicketTypeDTO> eventTicketTypeDTOs) {
         List<EventTicketType> eventTicketTypes = eventTicketTypeDTOs.stream().map(dto -> {
+            if (dto.getTicketQuantity() <= 0) {
+                throw new InvalidInputException("Ticket quantity must be greater than zero");
+            }
+            if (dto.getPrice() <= 0) {
+                throw new InvalidInputException("Price must be greater than zero");
+            }
+    
+
             Event event = eventRepository.findById(dto.getEventId())
-                    .orElseThrow(() -> new RuntimeException("Event not found with given ID"));
+                    .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID"));
             TicketType ticketType = ticketTypeRepository.findById(dto.getTicketTypeId())
-                    .orElseThrow(() -> new RuntimeException("TicketType not found with given ID"));
+                    .orElseThrow(() -> new ResourceNotFoundException("TicketType not found with given ID"));
 
             EventTicketType eventTicketType = new EventTicketType();
             eventTicketType.setEvent(event);
@@ -54,25 +64,35 @@ public class EventTicketTypeService {
     }
 
     public Optional<EventTicketTypeDTO> getEventTicketTypeById(Long id) {
-        Optional<EventTicketType> eventTicketType = eventTicketTypeRepository.findById(id);
-        return eventTicketType.map(this::convertToDto);
+        EventTicketType eventTicketType = eventTicketTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("EventTicketType with ID " + id + " not found"));
+        return Optional.of(convertToDto(eventTicketType));
     }
 
     public Optional<EventTicketTypeDTO> updateEventTicketType(Long id, EventTicketType updatedEventTicketType) {
-        Optional<EventTicketType> optionalEventTicketType = eventTicketTypeRepository.findById(id);
-        if (optionalEventTicketType.isPresent()) {
-            EventTicketType existingEventTicketType = optionalEventTicketType.get();
-            existingEventTicketType.setEvent(updatedEventTicketType.getEvent());
-            existingEventTicketType.setTicketType(updatedEventTicketType.getTicketType());
-            existingEventTicketType.setTicketQuantity(updatedEventTicketType.getTicketQuantity());
-            existingEventTicketType.setPrice(updatedEventTicketType.getPrice());
-            EventTicketType savedEventTicketType = eventTicketTypeRepository.save(existingEventTicketType);
-            return Optional.of(convertToDto(savedEventTicketType));
-        } else {
-            return Optional.empty();
+        if (updatedEventTicketType.getTicketQuantity() <= 0) {
+            throw new InvalidInputException("Ticket quantity must be greater than zero");
         }
-    }
+        if (updatedEventTicketType.getPrice() <= 0) {
+            throw new InvalidInputException("Price must be greater than zero");
+        }
 
+        EventTicketType existingEventTicketType = eventTicketTypeRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("EventTicketType with ID " + id + " not found"));
+
+        Event event = eventRepository.findById(updatedEventTicketType.getEvent().getEventId())
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID: " + updatedEventTicketType.getEvent().getEventId()));
+        TicketType ticketType = ticketTypeRepository.findById(updatedEventTicketType.getTicketType().getTicketTypeId())
+                .orElseThrow(() -> new ResourceNotFoundException("TicketType not found with given ID: " + updatedEventTicketType.getTicketType().getTicketTypeId()));
+
+        existingEventTicketType.setEvent(event);
+        existingEventTicketType.setTicketType(ticketType);
+        existingEventTicketType.setTicketQuantity(updatedEventTicketType.getTicketQuantity());
+        existingEventTicketType.setPrice(updatedEventTicketType.getPrice());
+
+        EventTicketType savedEventTicketType = eventTicketTypeRepository.save(existingEventTicketType);
+        return Optional.of(convertToDto(savedEventTicketType));
+    }
     public boolean deleteEventTicketType(Long id) {
         if (!eventTicketTypeRepository.existsById(id)) {
             return false;

@@ -8,17 +8,29 @@
 
 - id: Long (ID of the role to retrieve)
 
-**Success Response** :
+**Successfull Response** :
 
 - Status Code: `200 OK`
 
-Response:
+**Response Body**:
 
+```json
 {
-    "roleId": "Long",
-    "roleName": "string"
+    "roleId": 1,
+    "roleName": "ADMIN"
 }
+```
 
 **Error Responses** :
 
-404 Not Found: If role not found.
+**Condition: If role not found**
+
+Code: `404 Not Found`
+
+Error Example:
+
+```json
+    {
+        // Täydennä tähän
+    }
+```

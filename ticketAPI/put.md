@@ -15,11 +15,11 @@ If the used parameter is specified as false, the ticket will be marked as not us
 
 **Error Responses** :
 
-Condition: If the ticket does not exist
+**Condition: If the ticket does not exist**
 
 Code: ```404 Not Found``` 
 
-Response Example:
+Error Example:
 
 ```json
 {
@@ -29,4 +29,17 @@ Response Example:
   "path": "uri=/api/tickets/344/use"
 }
 ```
+**Condition: This occurs if the provided ticketId is invalid, such as a non-numeric value.**
 
+Code: `400 Bad Request`
+
+Error Example:
+
+```json
+{
+  "message": "Invalid parameter type: asdf for ticketId",
+  "status": 400,
+  "timestamp": "2024-11-03T15:07:16.3086218",
+  "path": "uri=/api/tickets/asdf/use"
+}
+```
