@@ -2,7 +2,6 @@ package ticketguru.security;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -80,7 +79,7 @@ public class SecurityConfig {
         CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration
-                    .setAllowedOrigins(Arrays.asList("https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi"));
+                    .setAllowedOrigins(Arrays.asList("https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:3000"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.setAllowedHeaders(Arrays.asList("*"));
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
