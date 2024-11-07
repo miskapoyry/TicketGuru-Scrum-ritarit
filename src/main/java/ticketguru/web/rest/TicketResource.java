@@ -21,17 +21,31 @@ public class TicketResource {
                 return ticketService.getTickets(eventId, saleId);
         }
 
-        @GetMapping("/{ticketId}")
+        @GetMapping("/id/{ticketId}")
         public ResponseEntity<TicketDTO> getTicket(@PathVariable Long ticketId) {
             TicketDTO ticket = ticketService.getTicket(ticketId);
             return ResponseEntity.ok(ticket);
         }
+
+        @GetMapping("/{ticketNumber}")
+        public ResponseEntity<TicketDTO> getTicket(@PathVariable String ticketNumber) {
+            TicketDTO ticket = ticketService.getTicket(ticketNumber);
+            return ResponseEntity.ok(ticket);
+        }
  
-        @PutMapping("/{ticketId}/use")
+        @PutMapping("/id/{ticketId}/use")
         public ResponseEntity<TicketDTO> markTicketAsUsed(
             @PathVariable Long ticketId,
             @RequestParam(value = "used", defaultValue = "true") boolean used) {
         TicketDTO updatedTicket = ticketService.markTicketAsUsed(ticketId, used);
+        return ResponseEntity.ok(updatedTicket); // 200 OK
+        }
+
+        @PutMapping("/{ticketNumber}/use")
+        public ResponseEntity<TicketDTO> markTicketAsUsed(
+            @PathVariable String ticketNumber,
+            @RequestParam(value = "used", defaultValue = "true") boolean used) {
+        TicketDTO updatedTicket = ticketService.markTicketAsUsed(ticketNumber, used);
         return ResponseEntity.ok(updatedTicket); // 200 OK
         }
 

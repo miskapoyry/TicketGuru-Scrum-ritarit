@@ -99,6 +99,37 @@ public class TicketService {
                 return convertToDTO(updatedTicket, price);
         }
 
+        public TicketDTO getTicket(String ticketNumber) {
+                Ticket ticket = ticketRepository.findByTicketNumber(ticketNumber)
+                                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+
+                // Retrieve the price using the ticket's event and ticket type
+                double price = getTicketPrice(ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId());
+
+                // convertToDTO:sta otetaan nyt sekä lippu että hinta
+                return convertToDTO(ticket, price);
+        }
+
+        public TicketDTO markTicketAsUsed(String ticketNumber, boolean isUsed) {
+                Ticket existingTicket = ticketRepository.findByTicketNumber(ticketNumber)
+                                .orElseThrow(() -> new ResourceNotFoundException("Ticket not found"));
+                // päivitä status
+                existingTicket.setUsed(isUsed);
+
+                // päivitä käyttöaika, jos lippu käytetään
+                if (isUsed) { // jos käytetään...
+                        existingTicket.setUsedTimestamp(new Timestamp(System.currentTimeMillis())); // iske timestamppi
+                                                                                                    // käyttöajankohdalle
+                } else { // muussa tapauksessa (eli jos päivitetäänkin takaisin käyttämättömäksi)
+                        existingTicket.setUsedTimestamp(null); // timestamppi nulliksi
+                }
+
+                Ticket updatedTicket = ticketRepository.save(existingTicket);
+                double price = getTicketPrice(updatedTicket.getEvent().getEventId(),
+                                updatedTicket.getTicketType().getTicketTypeId());
+                return convertToDTO(updatedTicket, price);
+        }
+
         private TicketDTO convertToDTO(Ticket ticket, double price) {
                 return new TicketDTO(
                                 ticket.getTicketId(),

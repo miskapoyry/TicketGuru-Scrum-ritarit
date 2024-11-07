@@ -1,6 +1,7 @@
 package ticketguru.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -17,5 +18,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findBySale(Sale sale);
 
     List<Ticket> findByEventAndSale(Event event, Sale sale);
+
+    Optional<Ticket> findByTicketNumber(String ticketNumber);
 
 }
