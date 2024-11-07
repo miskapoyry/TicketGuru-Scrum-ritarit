@@ -37,6 +37,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
+        .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((requests) -> requests
 
          // Event: vain admin voi säätää eventtejä, mutta katsoa saavat useritkin
@@ -79,7 +80,7 @@ public class SecurityConfig {
         CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration
-                    .setAllowedOrigins(Arrays.asList("https://ticket-guru-scrum-ritarit-ticketguru.2.rahtiapp.fi"));
+                    .setAllowedOrigins(Arrays.asList("https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.setAllowedHeaders(Arrays.asList("*"));
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
