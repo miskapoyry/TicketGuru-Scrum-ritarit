@@ -81,7 +81,8 @@ public class SecurityConfig {
             configuration
                     .setAllowedOrigins(Arrays.asList("https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:3000"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-            configuration.setAllowedHeaders(Arrays.asList("*"));
+            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "*"));
+            configuration.setAllowCredentials(true);
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", configuration);
             return source;
