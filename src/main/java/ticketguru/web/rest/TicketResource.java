@@ -7,7 +7,6 @@ import ticketguru.DTO.TicketDTO;
 import ticketguru.service.TicketService;
 import java.util.List;
 
-@CrossOrigin(origins = {"https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:3000"}, maxAge = 3600)
 @RestController
 @RequestMapping("/api/tickets")
 public class TicketResource {
