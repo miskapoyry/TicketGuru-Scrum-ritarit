@@ -17,7 +17,7 @@ The Ticket Resource allows you to manage tickets in the TicketGuru application. 
 retrieving, and deleting tickets.
 
 * [Show all tickets](ticketAPI/get.md) : `GET /api/tickets`
-* [Show one ticket](ticketAPI/getbyID.md) : `Get /api/tickets/{ticketId}`
+* [Show one ticket](ticketAPI/getbyTicketNumber.md) : `Get /api/tickets/{ticketNumber}`
 * [Update a ticket](ticketAPI/put.md) : `PUT /api/tickets/ticketId}/use?used`
 
 ## Sale Resource

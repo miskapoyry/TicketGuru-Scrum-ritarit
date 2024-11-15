@@ -58,7 +58,8 @@ public class SaleService {
                     EventTicketType eventTicketType = eventTicketTypeRepository
                             .findByEvent_EventIdAndTicketType_TicketTypeId(
                                     ticketDTO.getEventId(), ticketDTO.getTicketTypeId())
-                            .orElseThrow(() -> new ResourceNotFoundException("EventTicketType not found with given EventId and TicketTypeId"));
+                            .orElseThrow(() -> new ResourceNotFoundException(
+                                    "EventTicketType not found with given EventId and TicketTypeId"));
                     return eventTicketType.getPrice() * ticketDTO.getQuantity();
                 })
                 .sum();
@@ -66,7 +67,8 @@ public class SaleService {
         BigDecimal roundedTotalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP);
         totalPrice = roundedTotalPrice.doubleValue();
 
-        // Luo uusi sale jossa on käyttäjä, aika, maksutyyppi sekä lippujen kokonaishinta
+        // Luo uusi sale jossa on käyttäjä, aika, maksutyyppi sekä lippujen
+        // kokonaishinta
         Sale sale = new Sale(appUser, saleTimestamp, saleDTO.getPaymentMethod(), totalPrice);
 
         // Tallenna luotu sale
@@ -98,60 +100,69 @@ public class SaleService {
     }
 
     public SaleDTO getSaleById(Long saleId) {
-        // Hae myynti ID:n perusteella ja heitä ResourceNotFoundException, jos myyntiä ei löydy
+        // Hae myynti ID:n perusteella ja heitä ResourceNotFoundException, jos myyntiä
+        // ei löydy
         Sale sale = saleRepository.findById(saleId)
-            .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID: " + saleId));
+                .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID: " + saleId));
         return convertToDTO(sale);
     }
-    
+
     // SIIRRETÄÄN TIEDOT TICKETSERVICEEn
 
-    /*public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
-        Sale existingSale = saleRepository.findById(saleId)
-                .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID"));
-
-        AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
-
-        List<Ticket> tickets = ticketRepository.findAllById(
-                saleDTO.getTickets().stream().map(TicketDTO::getTicketId).collect(Collectors.toList()));
-
-        if (tickets.size() != saleDTO.getTickets().size()) {
-            throw new ResourceNotFoundException("Tickets not found with given ID");
-        }
-
-        existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
-        existingSale.setTotalPrice(saleDTO.getTotalPrice());
-        existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
-
-        existingSale.setAppUser(appUser);
-
-        tickets.forEach(ticket -> {
-            TicketDTO ticketDTO = saleDTO.getTickets().stream()
-                    .filter(t -> t.getTicketId().equals(ticket.getTicketId()))
-                    .findFirst()
-                    .orElseThrow(() -> new ResourceNotFoundException("Ticket not found with given ID"));
-            ticket.setTicketNumber(ticketDTO.getTicketNumber());
-            ticket.setEvent(new Event(ticketDTO.getEventId())); // Assuming Event has a constructor with eventId
-            ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Assuming TicketType has a constructor
-                                                                               // with ticketTypeId
-            ticket.setSaleTimestamp(ticketDTO.getSaleTimestamp());
-            ticket.setUsed(ticketDTO.isUsed());
-            ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp());
-            ticket.setSale(existingSale);
-        });
-
-        existingSale.setTickets(tickets);
-
-        Sale updatedSale = saleRepository.save(existingSale);
-
-        return convertToDTO(updatedSale);
-    }*/
+    /*
+     * public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
+     * Sale existingSale = saleRepository.findById(saleId)
+     * .orElseThrow(() -> new
+     * ResourceNotFoundException("Sale not found with given ID"));
+     * 
+     * AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
+     * .orElseThrow(() -> new
+     * ResourceNotFoundException("User not found with given ID"));
+     * 
+     * List<Ticket> tickets = ticketRepository.findAllById(
+     * saleDTO.getTickets().stream().map(TicketDTO::getTicketId).collect(Collectors.
+     * toList()));
+     * 
+     * if (tickets.size() != saleDTO.getTickets().size()) {
+     * throw new ResourceNotFoundException("Tickets not found with given ID");
+     * }
+     * 
+     * existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
+     * existingSale.setTotalPrice(saleDTO.getTotalPrice());
+     * existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
+     * 
+     * existingSale.setAppUser(appUser);
+     * 
+     * tickets.forEach(ticket -> {
+     * TicketDTO ticketDTO = saleDTO.getTickets().stream()
+     * .filter(t -> t.getTicketId().equals(ticket.getTicketId()))
+     * .findFirst()
+     * .orElseThrow(() -> new
+     * ResourceNotFoundException("Ticket not found with given ID"));
+     * ticket.setTicketNumber(ticketDTO.getTicketNumber());
+     * ticket.setEvent(new Event(ticketDTO.getEventId())); // Assuming Event has a
+     * constructor with eventId
+     * ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); //
+     * Assuming TicketType has a constructor
+     * // with ticketTypeId
+     * ticket.setSaleTimestamp(ticketDTO.getSaleTimestamp());
+     * ticket.setUsed(ticketDTO.isUsed());
+     * ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp());
+     * ticket.setSale(existingSale);
+     * });
+     * 
+     * existingSale.setTickets(tickets);
+     * 
+     * Sale updatedSale = saleRepository.save(existingSale);
+     * 
+     * return convertToDTO(updatedSale);
+     * }
+     */
 
     public SaleDTO updateSale(Long saleId, SaleDTO saleDTO) {
         Sale existingSale = saleRepository.findById(saleId)
                 .orElseThrow(() -> new ResourceNotFoundException("Sale not found with given ID"));
-    
+
         AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
 
@@ -164,22 +175,23 @@ public class SaleService {
                     EventTicketType eventTicketType = eventTicketTypeRepository
                             .findByEvent_EventIdAndTicketType_TicketTypeId(
                                     ticketDTO.getEventId(), ticketDTO.getTicketTypeId())
-                            .orElseThrow(() -> new ResourceNotFoundException("EventTicketType not found with given EventId and TicketTypeId"));
+                            .orElseThrow(() -> new ResourceNotFoundException(
+                                    "EventTicketType not found with given EventId and TicketTypeId"));
                     return eventTicketType.getPrice() * ticketDTO.getQuantity();
                 })
                 .sum();
 
         BigDecimal roundedTotalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP);
         totalPrice = roundedTotalPrice.doubleValue();
-    
+
         // Laita päivityt tiedot
         existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
         existingSale.setTotalPrice(totalPrice);
         existingSale.setSaleTimestamp(saleTimestamp);
         existingSale.setAppUser(appUser);
-    
+
         Sale updatedSale = saleRepository.save(existingSale);
-    
+
         return convertToDTO(updatedSale);
     }
 
@@ -218,6 +230,7 @@ public class SaleService {
                         ticket.getTicketId(),
                         ticket.getTicketNumber(),
                         ticket.getEvent().getEventId(),
+                        ticket.getEvent().getEventName(),
                         ticket.getTicketType().getTicketTypeId(),
                         ticket.getSale().getSaleId(),
                         ticket.getSaleTimestamp(),

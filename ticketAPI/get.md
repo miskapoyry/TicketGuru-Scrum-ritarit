@@ -24,36 +24,39 @@ An array of ticket objects, where each object contains the following fields:
     "ticketId": 1,
     "ticketNumber": "TICKET-1001",
     "eventId": 1,
+    "eventName": "Tech Conference 2024",
     "ticketTypeId": 1,
-    "saleId": 2,
+    "saleId": 1,
     "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
     "usedTimestamp": null,
     "quantity": 1,
-    "price": 0.0,
+    "price": 99.99,
     "used": false
-  },
+  }
   {
     "ticketId": 2,
-    "ticketNumber": "TICKET-10012443232",
-    "eventId": 2,
+    "ticketNumber": "TICKET-1002",
+    "eventId": 1,
+    "eventName": "Tech Conference 2024",
     "ticketTypeId": 1,
-    "saleId": 2,
+    "saleId": 1,
     "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
     "usedTimestamp": null,
     "quantity": 1,
-    "price": 0.0,
+    "price": 99.99,
     "used": false
   },
   {
     "ticketId": 3,
     "ticketNumber": "TICKET-1003",
     "eventId": 2,
+    "eventName": "Art Exhibition",
     "ticketTypeId": 2,
     "saleId": 2,
     "saleTimestamp": "2024-03-05T12:30:00.000+00:00",
-    "usedTimestamp": "2024-05-10T12:00:00.000+00:00",
+    "usedTimestamp": null,
     "quantity": 1,
-    "price": 0.0,
+    "price": 149.99,
     "used": false
   }
 ]
@@ -62,6 +65,7 @@ An array of ticket objects, where each object contains the following fields:
 - **`ticketId`**: Unique identifier for the ticket.
 - **`ticketNumber`**: The alphanumeric identifier assigned to the ticket.
 - **`eventId`**: Identifier for the associated event.
+- **`eventName`**: Name of the associated event.
 - **`ticketTypeId`**: Identifier for the type of ticket (e.g., general admission, VIP).
 - **`saleId`**: Identifier for the sale transaction related to this ticket.
 - **`saleTimestamp`**: Date and time when the ticket was purchased, in ISO 8601 format.
