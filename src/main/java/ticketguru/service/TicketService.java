@@ -142,6 +142,7 @@ public class TicketService {
                                 ticket.getEvent().getEventId(),
                                 ticket.getEvent().getEventName(),
                                 ticket.getTicketType().getTicketTypeId(),
+                                ticket.getTicketType().getTicketTypeName(),
                                 ticket.getSale().getSaleId(),
                                 ticket.getSaleTimestamp(),
                                 ticket.isUsed(),
