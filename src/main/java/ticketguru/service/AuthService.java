@@ -18,7 +18,7 @@ public class AuthService {
     private PasswordEncoder passwordEncoder;
 
     public boolean authenticatePassword(LoginDTO loginDTO){
-        AppUser user = appUserRepository.findByOptionalUsername(loginDTO.getUsername()).orElse(null);
+        AppUser user = appUserRepository.findByUsername(loginDTO.getUsername());
         if(user == null){
             return false;
         }
@@ -27,4 +27,11 @@ public class AuthService {
         }
     }
     
+    public String getUserRole(String username){
+        AppUser user = appUserRepository.findByUsername(username);
+        if(user != null){
+            return user.getRole().getRoleName();
+        }
+        return "No role";
+    }
 }
