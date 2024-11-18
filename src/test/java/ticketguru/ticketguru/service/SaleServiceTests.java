@@ -99,7 +99,7 @@ public class SaleServiceTests {
 
     @Test
     void createSale_WhenUserNotFound_ThrowsResourceNotFoundException() {
-        
+
         List<TicketDTO> ticketDTOs = new ArrayList<>();
         TicketDTO ticketDTO = new TicketDTO();
         ticketDTO.setEventId(1L);
