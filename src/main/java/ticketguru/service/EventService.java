@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ticketguru.DTO.EventDTO;
+import ticketguru.DTO.EventTicketTypeDTO;
 import ticketguru.domain.AppUser;
 import ticketguru.domain.Event;
 import ticketguru.repository.AppUserRepository;
@@ -54,29 +55,31 @@ public class EventService {
     
         // Lisää lipputyypit tapahtumaan
         List<EventTicketType> eventTicketTypes = new ArrayList<>();
-        for (Map.Entry<String, Double> entry : eventDTO.getTicketTypes().entrySet()) {
-            String ticketTypeName = entry.getKey();
-            Double price = entry.getValue();
+        for (EventTicketTypeDTO ticketTypeDTO : eventDTO.getEventTicketTypes()) {
+            Long ticketTypeId = ticketTypeDTO.getTicketTypeId();
+            Double price = ticketTypeDTO.getPrice();
 
-            // Lähetetään virhe, jos lipputyypin hinta on alle pienempi kuin 0
+            // Lähetetään virhe, jos lipputyypin hinta on alle 0
             if (price < 0) {
                 throw new InvalidInputException("Price for ticket type cannot be negative");
             }
 
-            // Hae tai luo uusi TicketType
-            TicketType ticketType = ticketTypeRepository.findByTicketTypeName(ticketTypeName)
+            // Hae TicketType ID:n perusteella
+            TicketType ticketType = ticketTypeRepository.findById(ticketTypeId)
                     .orElseGet(() -> {
+                        // Luo uusi TicketType, jos sitä ei löydy
                         TicketType newTicketType = new TicketType();
-                        newTicketType.setTicketTypeName(ticketTypeName);
+                        newTicketType.setTicketTypeId(ticketTypeId);
+                        newTicketType.setTicketTypeName(ticketTypeDTO.getTicketTypeName());
                         return ticketTypeRepository.save(newTicketType);
                     });
-    
+
             // Luo uusi EventTicketType ja aseta hinta
             EventTicketType eventTicketType = new EventTicketType();
             eventTicketType.setEvent(newEvent);
             eventTicketType.setTicketType(ticketType);
             eventTicketType.setPrice(price);
-    
+
             // Lisää EventTicketType-objekti listaan
             eventTicketTypes.add(eventTicketType);
         }
@@ -119,24 +122,26 @@ public class EventService {
 
         // Päivitä lipputyypit tapahtumaan
         List<EventTicketType> eventTicketTypes = new ArrayList<>();
-        for (Map.Entry<String, Double> entry : eventDTO.getTicketTypes().entrySet()) {
-            String ticketTypeName = entry.getKey();
-            Double price = entry.getValue();
+        for (EventTicketTypeDTO ticketTypeDTO : eventDTO.getEventTicketTypes()) {
+            Long ticketTypeId = ticketTypeDTO.getTicketTypeId();
+            Double price = ticketTypeDTO.getPrice();
 
             // Lähetetään virhe, jos lipputyypin hinta on alle 0
             if (price < 0) {
                 throw new InvalidInputException("Price for ticket type cannot be negative");
             }
 
-            // Hae tai luo uusi TicketType
-            TicketType ticketType = ticketTypeRepository.findByTicketTypeName(ticketTypeName)
+            // Hae TicketType ID:n perusteella
+            TicketType ticketType = ticketTypeRepository.findById(ticketTypeId)
                     .orElseGet(() -> {
+                        // Luo uusi TicketType, jos sitä ei löydy
                         TicketType newTicketType = new TicketType();
-                        newTicketType.setTicketTypeName(ticketTypeName);
+                        newTicketType.setTicketTypeId(ticketTypeId);
+                        newTicketType.setTicketTypeName(ticketTypeDTO.getTicketTypeName());
                         return ticketTypeRepository.save(newTicketType);
                     });
 
-            // Etsi olemassa oleva EventTicketType tai luo uusi ja aseta hinta
+            // Etsi olemassa oleva EventTicketType tai luo uusi
             EventTicketType eventTicketType = eventTicketTypeRepository
                     .findByEventAndTicketType(existingEvent, ticketType)
                     .orElse(new EventTicketType());
@@ -201,11 +206,9 @@ public class EventService {
 
     private EventDTO convertToEventDTO(Event event) {
 
-        Map<String, Double> ticketPrices = event.getEventTicketTypes().stream()
-            .collect(Collectors.toMap(
-                eventTicketType -> eventTicketType.getTicketType().getTicketTypeName(),
-                EventTicketType::getPrice
-            ));
+        List<EventTicketTypeDTO> eventTicketTypeDTOList = event.getEventTicketTypes().stream()
+                .map(EventTicketTypeDTO::new)
+                .toList();
     
         // Palauta EventDTO-olio
         return new EventDTO(
@@ -216,8 +219,7 @@ public class EventService {
                 event.getLocation(),
                 event.getTotalTickets(),
                 event.getAvailableTickets(),
-                ticketPrices
+                eventTicketTypeDTOList
         );
     }
-    
 }
