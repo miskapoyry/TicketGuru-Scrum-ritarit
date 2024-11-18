@@ -19,15 +19,16 @@ A ticket objects containing the following fields:
   "ticketId": 1,
   "ticketNumber": "TICKET-1001",
   "eventId": 1,
+  "eventName": "Tech Conference 2024",
   "ticketTypeId": 1,
-  "saleId": 2,
+  "ticketTypeName": "Regular",
+  "saleId": 1,
   "saleTimestamp": "2024-03-01T08:00:00.000+00:00",
   "usedTimestamp": null,
   "quantity": 1,
-  "price": 0.0,
+  "price": 99.99,
   "used": false
 }
-
 ```
 
 ### Field Descriptions
@@ -35,6 +36,7 @@ A ticket objects containing the following fields:
 - **`ticketNumber`**: The alphanumeric identifier assigned to the ticket.
 - **`eventId`**: Identifier for the associated event.
 - **`ticketTypeId`**: Identifier for the type of ticket (e.g., general admission, VIP).
+- **`ticketTypeName`**: Name of the type of the ticket (e.g., general admission, VIP).
 - **`saleId`**: Identifier for the sale transaction related to this ticket.
 - **`saleTimestamp`**: Date and time when the ticket was purchased, in ISO 8601 format.
 - **`usedTimestamp`**: Date and time when the ticket was used (if applicable), in ISO 8601 format. This field will be `null` if the ticket has not been used.
