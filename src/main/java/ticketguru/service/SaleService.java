@@ -9,6 +9,7 @@ import ticketguru.DTO.TicketDTO;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
 import ticketguru.domain.TicketType;
+import ticketguru.exception.InvalidInputException;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.domain.EventTicketType;
 import ticketguru.domain.Event;
@@ -42,16 +43,18 @@ public class SaleService {
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
 
+    @Autowired
+    private ticketguru.repository.EventRepository eventRepository;
+
     @Transactional
     public SaleDTO createSale(SaleDTO saleDTO) {
-
         // Lisää salen luoma käyttäjä
         AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
-
+    
         // Tee localdatesta timestamp
         Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
-
+    
         // Hae tietyn eventin lipputyypit ja niiden hinnat + pyöristä
         double totalPrice = saleDTO.getTickets().stream()
                 .mapToDouble(ticketDTO -> {
@@ -62,23 +65,33 @@ public class SaleService {
                     return eventTicketType.getPrice() * ticketDTO.getQuantity();
                 })
                 .sum();
-
+    
         BigDecimal roundedTotalPrice = BigDecimal.valueOf(totalPrice).setScale(2, RoundingMode.HALF_UP);
         totalPrice = roundedTotalPrice.doubleValue();
-
+    
         // Luo uusi sale jossa on käyttäjä, aika, maksutyyppi sekä lippujen kokonaishinta
         Sale sale = new Sale(appUser, saleTimestamp, saleDTO.getPaymentMethod(), totalPrice);
-
+    
         // Tallenna luotu sale
         Sale newSale = saleRepository.save(sale);
-
+    
         // Luo liput annetun kutsun perusteella
         List<Ticket> tickets = new ArrayList<>();
-        for (TicketDTO ticketDTO : saleDTO.getTickets()) {
+        for (TicketDTO ticketDTO : saleDTO.getTickets()) {  // Käy läpi jokainen lippuDTO 
+            Event event = eventRepository.findById(ticketDTO.getEventId()) // Hae tapahtuma ID:n perusteella ticketDTO:sta
+                    .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID")); // Heitä poikkeus, jos tapahtumaa ei löydy
+    
+            int newAvailableTickets = event.getAvailableTickets() - ticketDTO.getQuantity(); // Laske uusi saatavilla olevien lippujen määrä 
+            if (newAvailableTickets < 0) {
+                throw new InvalidInputException("Not enough available tickets for event: " + event.getEventName());
+            } // Heitä poikkeus, jos saatavilla olevien lippujen määrä on negatiivinen
+            event.setAvailableTickets(newAvailableTickets); //  Aseta uusi saatavilla olevien lippujen määrä
+            eventRepository.save(event); // Tallenna tapahtuma
+    
             for (int i = 0; i < ticketDTO.getQuantity(); i++) { // Luodaan quantityn mukainen määrä uusia lippuDTO
                 Ticket ticket = new Ticket();
                 ticket.setSale(newSale);
-                ticket.setEvent(new Event(ticketDTO.getEventId())); // Määritellään tapahtuma, johon lippu(t) luodaan
+                ticket.setEvent(event); // Määritellään tapahtuma, johon lippu(t) luodaan
                 ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Asetetaan ID:n avulla lipputyyppi
                 ticket.setSaleTimestamp(saleTimestamp); // Käytä jokaiselle lipulle samaa luontiaikaa
                 ticket.setUsed(ticketDTO.isUsed()); // Määritä onko lippu käytetty vai ei
@@ -86,14 +99,14 @@ public class SaleService {
                 tickets.add(ticket);
             }
         }
-
+    
         // Tallenna liput
         ticketRepository.saveAll(tickets);
-
+    
         // Liitä luodut liput saleen ja tallenna sale
         newSale.setTickets(tickets);
         saleRepository.save(newSale);
-
+    
         return convertToDTO(newSale);
     }
 
