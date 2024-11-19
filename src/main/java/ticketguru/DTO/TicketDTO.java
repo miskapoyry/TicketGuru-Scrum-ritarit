@@ -14,6 +14,7 @@ public class TicketDTO {
     @NotNull(message = "Ticket type ID is required")
     private Long ticketTypeId;
     private String ticketTypeName;
+
     private Long saleId;
     private Timestamp saleTimestamp;
     @NotNull(message = "isUsed field is required")

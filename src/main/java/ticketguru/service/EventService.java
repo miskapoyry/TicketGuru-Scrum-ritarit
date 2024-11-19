@@ -212,7 +212,7 @@ public class EventService {
         List<EventTicketTypeDTO> eventTicketTypeDTOList = event.getEventTicketTypes().stream()
                 .map(EventTicketTypeDTO::new)
                 .toList();
-
+    
         // Palauta EventDTO-olio
         return new EventDTO(
                 event.getEventId(),
@@ -222,6 +222,7 @@ public class EventService {
                 event.getLocation(),
                 event.getTotalTickets(),
                 event.getAvailableTickets(),
-                eventTicketTypeDTOList);
+                eventTicketTypeDTOList
+        );
     }
 }
