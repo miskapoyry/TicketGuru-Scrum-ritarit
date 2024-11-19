@@ -1,6 +1,5 @@
 package ticketguru.domain;
 
-
 import jakarta.persistence.*;
 
 @Entity
@@ -10,7 +9,7 @@ public class EventTicketType {
     // Unique identifier for the event ticket type
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="event_ticket_type_id", nullable = false, updatable = false)
+    @Column(name = "event_ticket_type_id", nullable = false, updatable = false)
     private Long eventTicketTypeId;
 
     // Many to one relationship with Event
