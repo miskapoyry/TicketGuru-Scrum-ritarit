@@ -27,7 +27,8 @@
 
 ```json
 {
-    // Täydennä tähän
+    "roleId": 1,
+    "roleName": "ADMIN"
 }
 ```
 
@@ -41,6 +42,6 @@ Error Example:
 
 ```json
 {
-    // Täydennä tähän
+    "message": "Role not found"
 }
 ```

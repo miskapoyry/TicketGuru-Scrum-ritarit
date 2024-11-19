@@ -1,6 +1,7 @@
 package ticketguru.DTO;
 
 import java.sql.Timestamp;
+import java.util.List;
 import java.util.Map;
 
 import jakarta.validation.Valid;
@@ -35,17 +36,18 @@ public class EventDTO {
     // Lipputyyppien nimet ja hinnat
     @Size(min = 1, message = "Event must contain at least one ticket type")
     @Valid
-    private Map<String, Double> ticketTypes;
+    private List<EventTicketTypeDTO> eventTicketTypes;
 
-    public EventDTO() {}
+    public EventDTO() {
+    }
 
     public EventDTO(Long eventId, @NotNull(message = "User ID cannot be null") Long userId,
-            @NotEmpty(message = "Event name cannot be empty") @Size(max = 100, message = "Event name can be at most 100 characters long") String eventName,
-            @NotNull(message = "Event date cannot be null") @Future(message = "Event date must be in the future") Timestamp eventDate,
-            @NotEmpty(message = "Location cannot be empty") @Size(max = 150, message = "Location can be at most 150 characters long") String location,
-            @Min(value = 1, message = "Total tickets must be at least 1") int totalTickets,
-            @Min(value = 0, message = "Available tickets cannot be negative") int availableTickets,
-            Map<String, Double> ticketTypes) {
+                    @NotEmpty(message = "Event name cannot be empty") @Size(max = 100, message = "Event name can be at most 100 characters long") String eventName,
+                    @NotNull(message = "Event date cannot be null") @Future(message = "Event date must be in the future") Timestamp eventDate,
+                    @NotEmpty(message = "Location cannot be empty") @Size(max = 150, message = "Location can be at most 150 characters long") String location,
+                    @Min(value = 1, message = "Total tickets must be at least 1") int totalTickets,
+                    @Min(value = 0, message = "Available tickets cannot be negative") int availableTickets,
+                    List<EventTicketTypeDTO> eventTicketTypes) {
         this.eventId = eventId;
         this.userId = userId;
         this.eventName = eventName;
@@ -53,9 +55,8 @@ public class EventDTO {
         this.location = location;
         this.totalTickets = totalTickets;
         this.availableTickets = availableTickets;
-        this.ticketTypes = ticketTypes;
+        this.eventTicketTypes = eventTicketTypes;
     }
-
 
     public String getEventName() {
         return eventName;
@@ -97,12 +98,12 @@ public class EventDTO {
         this.availableTickets = availableTickets;
     }
 
-    public Map<String, Double> getTicketTypes() {
-        return ticketTypes;
+    public List<EventTicketTypeDTO> getEventTicketTypes() {
+        return eventTicketTypes;
     }
 
-    public void setTicketTypes(Map<String, Double> ticketTypes) {
-        this.ticketTypes = ticketTypes;
+    public void setEventTicketTypes(List<EventTicketTypeDTO> eventTicketTypes) {
+        this.eventTicketTypes = eventTicketTypes;
     }
 
     public Long getEventId() {

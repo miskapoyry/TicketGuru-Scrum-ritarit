@@ -22,7 +22,8 @@
 
 ```json
 {
-    // Täydennä tähän
+    "roleId": 1,
+    "roleName": "ADMIN"
 }
 ```
 

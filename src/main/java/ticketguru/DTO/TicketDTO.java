@@ -10,8 +10,11 @@ public class TicketDTO {
     private String ticketNumber;
     @NotNull(message = "Event ID is required")
     private Long eventId;
+    private String eventName;
     @NotNull(message = "Ticket type ID is required")
     private Long ticketTypeId;
+    private String ticketTypeName;
+
     private Long saleId;
     private Timestamp saleTimestamp;
     @NotNull(message = "isUsed field is required")
@@ -26,12 +29,15 @@ public class TicketDTO {
     }
 
     // Constructor to initialize all fields
-    public TicketDTO(Long ticketId, String ticketNumber, Long eventId, Long ticketTypeId, Long saleId,
+    public TicketDTO(Long ticketId, String ticketNumber, Long eventId, String eventName, Long ticketTypeId,
+            String ticketTypeName, Long saleId,
             Timestamp saleTimestamp, Boolean isUsed, Timestamp usedTimestamp, int quantity, double price) {
         this.ticketId = ticketId;
         this.ticketNumber = ticketNumber;
         this.eventId = eventId;
+        this.eventName = eventName;
         this.ticketTypeId = ticketTypeId;
+        this.ticketTypeName = ticketTypeName;
         this.saleId = saleId;
         this.saleTimestamp = saleTimestamp;
         this.isUsed = isUsed;
@@ -65,12 +71,28 @@ public class TicketDTO {
         this.eventId = eventId;
     }
 
+    public String getEventName() {
+        return eventName;
+    }
+
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public Long getTicketTypeId() {
         return ticketTypeId;
     }
 
     public void setTicketTypeId(Long ticketTypeId) {
         this.ticketTypeId = ticketTypeId;
+    }
+
+    public String getTicketTypeName() {
+        return ticketTypeName;
+    }
+
+    public void setTicketTypeName(String ticketTypeName) {
+        this.ticketTypeName = ticketTypeName;
     }
 
     public Long getSaleId() {
