@@ -37,22 +37,23 @@ public class EventService {
     public EventDTO createEvent(EventDTO eventDTO) {
         // Hae käyttäjä ID:n perusteella
         AppUser user = appUserRepository.findById(eventDTO.getUserId())
-            .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
-    
+                .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
+
         // Luo uusi Event-objekti DTO:n perusteella
         Event event = new Event();
         event.setEventName(eventDTO.getEventName());
         event.setEventDate(eventDTO.getEventDate());
         event.setLocation(eventDTO.getLocation());
         event.setTotalTickets(eventDTO.getTotalTickets());
-        // Tarkistetaan onko available suurempi kuin total (EventDTO). Jos näin on niin palautetaan 400 error invalidinput
+        // Tarkistetaan onko available suurempi kuin total (EventDTO). Jos näin on niin
+        // palautetaan 400 error invalidinput
         eventDTO.validateAvailableTickets();
         event.setAvailableTickets(eventDTO.getAvailableTickets());
-        event.setAppUser(user);  // Aseta käyttäjä ennen tallennusta!
-    
+        event.setAppUser(user); // Aseta käyttäjä ennen tallennusta!
+
         // Tallenna tapahtuma tietokantaan
         Event newEvent = eventRepository.save(event);
-    
+
         // Lisää lipputyypit tapahtumaan
         List<EventTicketType> eventTicketTypes = new ArrayList<>();
         for (EventTicketTypeDTO ticketTypeDTO : eventDTO.getEventTicketTypes()) {
@@ -83,17 +84,17 @@ public class EventService {
             // Lisää EventTicketType-objekti listaan
             eventTicketTypes.add(eventTicketType);
         }
-    
+
         // Tallenna kaikki EventTicketType-objektit
         eventTicketTypeRepository.saveAll(eventTicketTypes);
-    
+
         // Hae päivitetty tapahtuma tietokannasta
         Event updatedEvent = eventRepository.findById(newEvent.getEventId())
-            .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
-    
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found"));
+
         // Pakotetaan eventTicketTypes latautumaan:
         updatedEvent.setEventTicketTypes(eventTicketTypes);
-    
+
         // Palauta EventDTO käyttäen `convertToEventDTO`
         return convertToEventDTO(updatedEvent);
     }
@@ -116,7 +117,8 @@ public class EventService {
         existingEvent.setLocation(eventDTO.getLocation());
         existingEvent.setTotalTickets(eventDTO.getTotalTickets());
 
-        // Tarkistetaan onko available suurempi kuin total. Jos näin on, palautetaan 400 error
+        // Tarkistetaan onko available suurempi kuin total. Jos näin on, palautetaan 400
+        // error
         eventDTO.validateAvailableTickets();
         existingEvent.setAvailableTickets(eventDTO.getAvailableTickets());
 
@@ -186,7 +188,8 @@ public class EventService {
 
         List<Event> events;
         if (eventName != null && location != null) {
-            events = eventRepository.findByEventNameContainsIgnoreCaseAndLocationContainsIgnoreCase(eventName, location);
+            events = eventRepository.findByEventNameContainsIgnoreCaseAndLocationContainsIgnoreCase(eventName,
+                    location);
         } else if (eventName != null) {
             events = eventRepository.findByEventNameContainsIgnoreCase(eventName);
         } else {

@@ -31,6 +31,6 @@ Error Example:
 
 ```json
     {
-        // Täydennä tähän
+        "message": "Role not found"
     }
 ```

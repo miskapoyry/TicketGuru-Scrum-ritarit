@@ -58,7 +58,6 @@ public class EventDTO {
         this.eventTicketTypes = eventTicketTypes;
     }
 
-
     public String getEventName() {
         return eventName;
     }

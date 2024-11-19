@@ -38,6 +38,7 @@ public class SecurityConfig {
         http
         .cors(cors -> cors.configurationSource(corsConfigurationSource()))
         .authorizeHttpRequests((requests) -> requests
+        .requestMatchers("/api/login").permitAll()
 
          // Event: vain admin voi säätää eventtejä, mutta katsoa saavat useritkin
          .requestMatchers(HttpMethod.GET, "/api/event/**").hasAnyRole("ADMIN", "USER")
@@ -79,9 +80,9 @@ public class SecurityConfig {
         CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration
-                    .setAllowedOrigins(Arrays.asList("https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:8080","http://127.0.0.1:5500/","https://ticket-client.hellmanstudios.fi", "http://localhost:5173"));
+                    .setAllowedOrigins(Arrays.asList("http://localhost:5173","https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi","https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:8080","https://ticket-client.hellmanstudios.fi"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-            configuration.setAllowedHeaders(Arrays.asList("Authorization", "Content-Type", "*"));
+            configuration.setAllowedHeaders(Arrays.asList("*"));
             configuration.setAllowCredentials(true);
             UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
             source.registerCorsConfiguration("/**", configuration);
