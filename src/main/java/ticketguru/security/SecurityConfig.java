@@ -80,7 +80,7 @@ public class SecurityConfig {
         CorsConfigurationSource corsConfigurationSource() {
             CorsConfiguration configuration = new CorsConfiguration();
             configuration
-                    .setAllowedOrigins(Arrays.asList("http://localhost:5173","https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:8080","https://ticket-client.hellmanstudios.fi"));
+                    .setAllowedOrigins(Arrays.asList("http://localhost:5173","https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi","https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi","http://localhost:8080","https://ticket-client.hellmanstudios.fi"));
             configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
             configuration.setAllowedHeaders(Arrays.asList("*"));
             configuration.setAllowCredentials(true);
