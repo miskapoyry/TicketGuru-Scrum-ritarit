@@ -8,6 +8,6 @@ import ticketguru.domain.PaymentMethod;
 @Repository
 public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long> {
 
-    boolean existsByName(String paymentMedhodName);
+    boolean existsByPaymentMethodName(String paymentMethodName);
 
 }

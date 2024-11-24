@@ -106,20 +106,32 @@
         </insert>
     </changeSet>
 
+    <!-- Insert fake data for paymentMethod -->
+    <changeSet id="15" author="Tuomas">
+        <insert tableName="payment_method">
+            <column name="payment_method_id" valueNumeric="1"/>
+            <column name="payment_method_name" value="Credit Card"/>
+        </insert>
+        <insert tableName="payment_method">
+            <column name="payment_method_id" valueNumeric="2"/>
+            <column name="payment_method_name" value="Cash"/>
+        </insert>
+    </changeSet>
+
     <!-- Insert fake data for sale -->
     <changeSet id="11" author="Tuomas">
         <insert tableName="sale">
             <column name="sale_id" valueNumeric="1"/>
             <column name="user_id" valueNumeric="1"/>
             <column name="sale_timestamp" value="2024-03-01 10:00:00"/>
-            <column name="payment_method" value="Credit Card"/>
+            <column name="payment_method_id" valueNumeric="1"/>
             <column name="total_price" value="199.98"/>
         </insert>
         <insert tableName="sale">
             <column name="sale_id" valueNumeric="2"/>
             <column name="user_id" valueNumeric="2"/>
             <column name="sale_timestamp" value="2024-03-05 14:30:00"/>
-            <column name="payment_method" value="PayPal"/>
+            <column name="payment_method_id" valueNumeric="2"/>
             <column name="total_price" value="49.99"/>
         </insert>
     </changeSet>

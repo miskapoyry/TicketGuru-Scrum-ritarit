@@ -38,7 +38,7 @@ public class PaymentMethodService {
     // Luodaan uusi
     public PaymentMethodDTO createPaymentMethod(@Valid PaymentMethodDTO paymentMethodDTO) {
         // Tarkistetaan, löytyykö nimellä maksutapa
-        if (paymentMethodRepository.existsByName(paymentMethodDTO.getName())) {
+        if (paymentMethodRepository.existsByPaymentMethodName(paymentMethodDTO.getName())) {
             throw new DuplicateResourceException("Payment method with the same name already exists");
         }
         // Luodaan uusi maksutapa
@@ -53,7 +53,7 @@ public class PaymentMethodService {
                 .orElseThrow(() -> new ResourceNotFoundException("Payment method with ID " + id + " not found"));
 
         // Tarkistus duplikaattien varalta
-        if (paymentMethodRepository.existsByName(paymentMethodDTO.getName()) &&
+        if (paymentMethodRepository.existsByPaymentMethodName(paymentMethodDTO.getName()) &&
                 !existingPaymentMethod.getPaymentMethodName().equals(paymentMethodDTO.getName())) {
             throw new DuplicateResourceException("Payment method with the same name already exists");
         }
