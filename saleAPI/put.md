@@ -14,7 +14,7 @@
 **Request Body** : 
 
 - {
-  "paymentMethod": "string",
+  "paymentMethodId": "Long",
   "userId": "Long", 
   "tickets": [
     {
@@ -29,7 +29,7 @@
 
 ```json
 {
-    "paymentMethod": "Cashy",
+    "paymentMethodId": 1,
     "userId": 4,
     "tickets": [
         {
@@ -41,44 +41,47 @@
     ]
 }
 ```
-```json
-{
-    "paymentMethod": "Cashy",
-    "userId": 1,
-    "tickets": [
-        {
-            "eventId": 1,
-            "ticketTypeId": 1,
-            "quantity": 1,
-            "used": false
-        }
-    ]
-}
-```
+
 
 **Example outcome** : 
 
 ```json
 {
-    "saleId": 2,
-    "paymentMethod": "Cashy",
-    "totalPrice": 99.99,
-    "saleTimestamp": "2024-10-20T22:41:48.973+00:00",
-    "userId": 1,
-    "tickets": [
-        {
-            "ticketId": 2,
-            "ticketNumber": "ad183d61-11c9-4e4e-8d61-810b545153b9",
-            "eventId": 1,
-            "ticketTypeId": 1,
-            "saleId": 2,
-            "saleTimestamp": "2024-10-20T17:59:01.000+00:00",
-            "usedTimestamp": null,
-            "quantity": 1,
-            "price": 99.99,
-            "used": false
-        }
-    ]
+  "saleId": 3,
+  "paymentMethodId": 1,
+  "totalPrice": 199.98,
+  "saleTimestamp": "2024-11-24T15:06:25.817+00:00",
+  "userId": 1,
+  "tickets": [
+    {
+      "ticketId": 4,
+      "ticketNumber": "63be3b15-3696-45b8-a6ef-120ea0d7d708",
+      "eventId": 1,
+      "eventName": "Tech Conference 2024",
+      "ticketTypeId": 1,
+      "ticketTypeName": "Regular",
+      "saleId": 3,
+      "saleTimestamp": "2024-11-24T15:03:03.000+00:00",
+      "usedTimestamp": null,
+      "quantity": 1,
+      "price": 99.99,
+      "used": false
+    },
+    {
+      "ticketId": 5,
+      "ticketNumber": "e4e5c60f-6305-4530-90c6-86ce136081a8",
+      "eventId": 1,
+      "eventName": "Tech Conference 2024",
+      "ticketTypeId": 1,
+      "ticketTypeName": "Regular",
+      "saleId": 3,
+      "saleTimestamp": "2024-11-24T15:03:03.000+00:00",
+      "usedTimestamp": null,
+      "quantity": 1,
+      "price": 99.99,
+      "used": false
+    }
+  ]
 }
 ```
 
@@ -126,7 +129,7 @@ Error example:
 }
 ```
 
-__Condition: If the paymentMethod is null__
+__Condition: If the paymentMethodId is null__
 
 Code: ```400 Bad Request``` 
 
