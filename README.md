@@ -240,7 +240,7 @@ Testeissä ei testata lainkaan auktorisointia, ja se onkin kytketty pois päält
 
 ### Erillinen testausdokumentaatio
 
-Löydät tarkemman dokumentaation testauksesta ja sen tuloksista täältä.
+Löydät tarkemman dokumentaation testauksesta ja sen tuloksista [täältä](TestausDokumentaatio.md).
 
 ## Asennustiedot
 
