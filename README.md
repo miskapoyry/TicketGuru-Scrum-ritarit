@@ -101,7 +101,7 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 ### Tietokantakaavio
 
-![tietokantakaavio_kuva](tietokantakaavio/TicketGuru_tietokantakaavio(korjattu).jpg)
+![tietokantakaavio_kuva](tietokantakaavio/TicketGuru_Scrumritarit_Tietokantakaavio.jpg)
 
 ### Tietohakemisto
 
@@ -177,9 +177,16 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 > sale_id | Long PK | Myyntitapahtuman yksilöivä tunniste
 > sale_timestamp | TIMESTAMP | Myyntitapahtuman ajankohta
 > user_id | Long FK | Myynnin suorittanut käyttäjä (viittaus tauluun app_user)
-> payment_method | varchar (20) | Maksutapa (esim. "käteinen", "kortti")
-> total_price | double | Myynnin kokonaissumma
+> payment_method_id | Long FK | Maksutapa (viittaus tauluun payment_method)
+> total_price | decimal (10, 2) | Myynnin kokonaissumma
 
+> ### _payment_method_
+> _payment_method -taulu sisältää maksutapatyyppien tiedot._
+
+> Kenttä | Tyyppi | Kuvaus
+> ------ | ------ | ------
+> payment_method_id | Long PK | Maksutavan yksilöivä tunniste
+> payment_method_name | varchar (20) | Maksutavan nimi (esim. "Credit card" tai "Cash")
 
 ## Tekninen kuvaus
 
