@@ -20,21 +20,15 @@
     <changeSet id="3" author="Tuomas">
         <insert tableName="app_user">
             <column name="user_id" valueNumeric="1"/>
-            <column name="username" value="john_doe"/>
-            <column name="passwordhash" value="$2b$12$3k620nL1ZTafthaaniD5c.6KPVvCPMKCZndoFuBbfpexDFuwP7ynC"/>
+            <column name="username" value="admin"/>
+            <column name="passwordhash" value="$2b$12$ERqbqRWmSQzFGQ41aeBgXu8RjPRHBS29tmQSAgG0ZBjFpSMfqVq6i"/>
             <column name="role_id" valueNumeric="1"/>
         </insert>
         <insert tableName="app_user">
             <column name="user_id" valueNumeric="2"/>
-            <column name="username" value="jane_smith"/>
-            <column name="passwordhash" value="$2b$12$1kb53iowBdJIRLP9HAZpQugOMFmL2QRae.Z9XWJkoauh6YUqIOnt6"/>
+            <column name="username" value="user"/>
+            <column name="passwordhash" value="$2b$12$SGWGSJJ7WO9Tm8RQ0knGse9TXhmFIDew4HcPC2TUrp28/gUNT4Yi2"/>
             <column name="role_id" valueNumeric="2"/>
-        </insert>
-        <insert tableName="app_user">
-            <column name="user_id" valueNumeric="3"/>
-            <column name="username" value="alice_jones"/>
-            <column name="passwordhash" value="$2b$12$PenxFKF.SWgTuu2QICmCC.hMC727YIQx/xzOqfEdU5B1SgLAyieTS"/>
-            <column name="role_id" valueNumeric="1"/>
         </insert>
     </changeSet>
 
@@ -57,15 +51,6 @@
             <column name="location" value="New York, NY"/>
             <column name="total_tickets" valueNumeric="300"/>
             <column name="available_tickets" valueNumeric="150"/>
-        </insert>
-        <insert tableName="event">
-            <column name="event_id" valueNumeric="3"/>
-            <column name="user_id" valueNumeric="3"/>
-            <column name="event_name" value="Music Festival"/>
-            <column name="event_date" value="2024-06-20 14:00:00"/>
-            <column name="location" value="Los Angeles, CA"/>
-            <column name="total_tickets" valueNumeric="1000"/>
-            <column name="available_tickets" valueNumeric="500"/>
         </insert>
     </changeSet>
 
