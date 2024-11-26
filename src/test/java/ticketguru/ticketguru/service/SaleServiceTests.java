@@ -9,9 +9,11 @@ import ticketguru.DTO.SaleDTO;
 import ticketguru.DTO.TicketDTO;
 import ticketguru.domain.AppUser;
 import ticketguru.domain.EventTicketType;
+import ticketguru.domain.PaymentMethod;
 import ticketguru.domain.Sale;
 import ticketguru.repository.AppUserRepository;
 import ticketguru.repository.EventTicketTypeRepository;
+import ticketguru.repository.PaymentMethodRepository;
 import ticketguru.repository.SaleRepository;
 import ticketguru.repository.TicketRepository;
 import ticketguru.exception.ResourceNotFoundException;
@@ -45,8 +47,12 @@ public class SaleServiceTests {
     @Mock
     private EventTicketTypeRepository eventTicketTypeRepository;
 
+    @Mock
+    private PaymentMethodRepository paymentMethodRepository;
+
     private AppUser appUser;
     private EventTicketType eventTicketType;
+    private PaymentMethod paymentMethod;
 
     @BeforeEach
     void setUp() {
@@ -58,6 +64,9 @@ public class SaleServiceTests {
 
         eventTicketType = new EventTicketType();
         eventTicketType.setPrice(20.0);
+
+        paymentMethod = new PaymentMethod();
+        paymentMethod.setPaymentMethodId(1L);
     }
 
     @Test
@@ -72,16 +81,17 @@ public class SaleServiceTests {
         ticketDTO.setUsed(false);
         ticketDTOs.add(ticketDTO);
 
-        SaleDTO saleDTO = new SaleDTO(1L, "CreditCard", 40.0,
+        SaleDTO saleDTO = new SaleDTO(1L, 1L, 40.0,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault())), 1L, ticketDTOs);
 
-        // Mockataan käyttäjä ja lipputyyppi
+        // Mockataan käyttäjä ja lipputyyppi sekä maksutapa
         when(appUserRepository.findById(1L)).thenReturn(Optional.of(appUser));
         when(eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(1L, 1L))
                 .thenReturn(Optional.of(eventTicketType));
+        when(paymentMethodRepository.findById(1L)).thenReturn(Optional.of(paymentMethod));
 
         // Luo uusi Sale-olio
-        Sale newSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), "CreditCard", 40.0);
+        Sale newSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), paymentMethod, 40.0);
         newSale.setSaleId(1L);
 
         // Mockataan, että Sale tallennetaan
@@ -92,7 +102,7 @@ public class SaleServiceTests {
 
         // Tarkistetaan, että myynti on luotu oikein
         assertNotNull(result);
-        assertEquals("CreditCard", result.getPaymentMethod());
+        assertEquals(1L, result.getPaymentMethodId());
         assertEquals(40.0, result.getTotalPrice());
         assertEquals(1L, result.getSaleId());
     }
@@ -107,7 +117,7 @@ public class SaleServiceTests {
         ticketDTO.setQuantity(2);
         ticketDTOs.add(ticketDTO);
 
-        SaleDTO saleDTO = new SaleDTO(1L, "CreditCard", 40.0,
+        SaleDTO saleDTO = new SaleDTO(1L, 1L, 40.0,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault())), 1L, ticketDTOs);
 
         // Mockataan käyttäjän puuttuminen
@@ -117,7 +127,7 @@ public class SaleServiceTests {
     }
 
     @Test
-    void updateSale_WhenSaleExists_UpdatesSale() {
+    void updateSale_WhenValidData_ReturnsUpdatedSale() {
 
         List<TicketDTO> ticketDTOs = new ArrayList<>();
         TicketDTO ticketDTO = new TicketDTO();
@@ -126,28 +136,30 @@ public class SaleServiceTests {
         ticketDTO.setQuantity(2);
         ticketDTOs.add(ticketDTO);
 
-        SaleDTO saleDTO = new SaleDTO(1L, "DebitCard", 40.0,
+        SaleDTO saleDTO = new SaleDTO(1L, 2L, 40.0,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault())), 1L, ticketDTOs);
 
-        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), "CreditCard", 40.0);
+        // Luo olemassa oleva Sale-olio, jota päivitetään
+        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), paymentMethod, 40.0);
         existingSale.setSaleId(1L);
 
-        // Mockataan, että myynti löytyy
+        // Mockataan käyttäjä, lipputyyppi, ja maksutapa
         when(saleRepository.findById(1L)).thenReturn(Optional.of(existingSale));
         when(appUserRepository.findById(1L)).thenReturn(Optional.of(appUser));
         when(eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(1L, 1L))
                 .thenReturn(Optional.of(eventTicketType));
+        when(paymentMethodRepository.findById(2L)).thenReturn(Optional.of(paymentMethod));
 
-        Sale updatedSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), "DebitCard", 40.0);
+        Sale updatedSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), paymentMethod, 40.0);
         updatedSale.setSaleId(1L);
         when(saleRepository.save(any(Sale.class))).thenReturn(updatedSale);
 
-        // Suoritetaan päivitys
         SaleDTO result = saleService.updateSale(1L, saleDTO);
 
-        // Tarkistetaan, että myynti on päivitetty
+        // Tarkistetaan, että myynti on päivitetty oikein
         assertNotNull(result);
-        assertEquals("DebitCard", result.getPaymentMethod());
+        assertEquals(1L, result.getSaleId());
+        assertEquals(1L, result.getPaymentMethodId());
         assertEquals(40.0, result.getTotalPrice());
     }
 
@@ -161,7 +173,7 @@ public class SaleServiceTests {
         ticketDTO.setQuantity(1);
         ticketDTOs.add(ticketDTO);
 
-        SaleDTO saleDTO = new SaleDTO(1L, "DebitCard", 20.0,
+        SaleDTO saleDTO = new SaleDTO(1L, 2L, 20.0,
                 Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault())), 1L, ticketDTOs);
 
         // Mockataan, että myyntiä ei löydy
@@ -174,7 +186,7 @@ public class SaleServiceTests {
     @Test
     void getSaleById_WhenSaleExists_ReturnsSale() {
 
-        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), "CreditCard", 50.0);
+        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), paymentMethod, 50.0);
         existingSale.setSaleId(1L);
 
         // Mockataan, että myynti löytyy
@@ -186,7 +198,7 @@ public class SaleServiceTests {
         // Tarkistetaan tulos
         assertNotNull(result);
         assertEquals(1L, result.getSaleId());
-        assertEquals("CreditCard", result.getPaymentMethod());
+        assertEquals(1L, result.getPaymentMethodId());
     }
 
     @Test
@@ -201,7 +213,7 @@ public class SaleServiceTests {
     @Test
     void deleteSale_WhenSaleExists_DeletesSale() {
 
-        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), "CreditCard", 50.0);
+        Sale existingSale = new Sale(appUser, new Timestamp(System.currentTimeMillis()), paymentMethod, 50.0);
         existingSale.setSaleId(1L);
 
         // Mockataan, että myynti löytyy

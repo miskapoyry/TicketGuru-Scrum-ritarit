@@ -23,6 +23,7 @@
     <include file="/db/changelog/db.ticketType.xml" />
     <include file="/db/changelog/db.event.xml" />
     <include file="/db/changelog/db.eventTicketType.xml" />
+    <include file="/db/changelog/db.paymentMethod.xml" />
     <include file="/db/changelog/db.sale.xml" />
     <include file="/db/changelog/db.ticket.xml" />
     <include file="/db/changelog/db.saleTicket.xml" />
