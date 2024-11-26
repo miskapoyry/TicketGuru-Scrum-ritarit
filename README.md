@@ -265,6 +265,24 @@ käyttäjätunnus, salasana, tietokannan luonti yms.).
 
 ## Käynnistys- ja käyttöohje
 
+Sovellus pyörii Rahti2-palvelimella osoitteessa: https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi/.
+
+Käyttöliittymä ohjaa automaattisesti kirjautumiseen.
+
+Tässä **user**-tasoisen käyttäjän tunnukset:
+
+>**Username:** *user*
+
+>**Password:** *user*
+
+Tässä **admin**-tasoisen käyttäjän tunnukset:
+
+>**Username:** *admin*
+
+>**Password:** *admin*
+
+**Huomaathan, että frontend on yhdistettynä rahdissa julkaistuun MariaDB:hen, joten muutokset tulevat siis sinne!**
+
 Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
 mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
 käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
