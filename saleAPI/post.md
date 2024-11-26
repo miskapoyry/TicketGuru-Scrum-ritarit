@@ -6,14 +6,14 @@
 **Request Body** :
 ```json
 {
-  "userId": "Long",
-  "paymentMethod": "string",
+  "userId": 1,
+  "paymentMethodId": 2,
   "tickets": [
     {
-      "eventId": "Long",
-      "ticketTypeId": "Long",
-      "quantity": "integer",
-      "used": "boolean"
+      "eventId": "1",
+      "ticketTypeId": "1",
+      "quantity": "2",
+      "used": "false"
     }
   ]
 }
@@ -27,7 +27,7 @@
 
 - {
   "saleId": "Long",
-  "paymentMethod": "string",
+  "paymentMethodId": "Long",
   "totalPrice": "bigdecimal",
   "saleTimestamp": "string (ISO 8601 format)",
   "userId": "Long",
@@ -51,25 +51,41 @@
 
 ```json
 {
-    "saleId": 5,
-    "paymentMethod": "Cash",
-    "totalPrice": 99.99,
-    "saleTimestamp": "2024-10-20T17:59:01.523+00:00",
-    "userId": 4,
-    "tickets": [
-        {
-            "ticketId": 6,
-            "ticketNumber": "ad183d61-11c9-4e4e-8d61-810b545153b9",
-            "eventId": 1,
-            "ticketTypeId": 1,
-            "saleId": 5,
-            "saleTimestamp": "2024-10-20T17:59:01.523+00:00",
-            "usedTimestamp": null,
-            "quantity": 1,
-            "price": 99.99,
-            "used": false
-        }
-    ]
+  "saleId": 3,
+  "paymentMethodId": 2,
+  "totalPrice": 199.98,
+  "saleTimestamp": "2024-11-24T15:03:03.282+00:00",
+  "userId": 1,
+  "tickets": [
+    {
+      "ticketId": 4,
+      "ticketNumber": "63be3b15-3696-45b8-a6ef-120ea0d7d708",
+      "eventId": 1,
+      "eventName": null,
+      "ticketTypeId": 1,
+      "ticketTypeName": null,
+      "saleId": 3,
+      "saleTimestamp": "2024-11-24T15:03:03.282+00:00",
+      "usedTimestamp": null,
+      "quantity": 1,
+      "price": 99.99,
+      "used": false
+    },
+    {
+      "ticketId": 5,
+      "ticketNumber": "e4e5c60f-6305-4530-90c6-86ce136081a8",
+      "eventId": 1,
+      "eventName": null,
+      "ticketTypeId": 1,
+      "ticketTypeName": null,
+      "saleId": 3,
+      "saleTimestamp": "2024-11-24T15:03:03.282+00:00",
+      "usedTimestamp": null,
+      "quantity": 1,
+      "price": 99.99,
+      "used": false
+    }
+  ]
 }
 
 ```
@@ -118,7 +134,7 @@ Error example:
 }
 ```
 
-Condition: If the paymentMethod is empty
+Condition: If the paymentMethodId is null
 
 Code: ```400 Bad Request``` 
 

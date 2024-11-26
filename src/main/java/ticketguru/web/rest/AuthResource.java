@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ticketguru.DTO.LoginDTO;
+import ticketguru.repository.AppUserRepository;
+import ticketguru.service.AppUserService;
 import ticketguru.service.AuthService;
 
 @RestController
@@ -23,6 +25,9 @@ public class AuthResource {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private AppUserRepository appUserRepository;
+
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO){
         
@@ -30,11 +35,12 @@ public class AuthResource {
         if(authenticated){
 
             String role = authService.getUserRole(loginDTO.getUsername());
+            Long userId = authService.getUserId(loginDTO.getUsername());
 
             Map<String, String> response = new HashMap<>();
             response.put("message", "Login successful");
             response.put("role", role);
-            
+            response.put("userId", userId.toString());
             return ResponseEntity.ok(response);
         }
         else{

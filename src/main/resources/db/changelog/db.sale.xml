@@ -16,12 +16,18 @@
             <column name="sale_timestamp" type="timestamp">
                 <constraints nullable="false" />
             </column>
-            <column name="payment_method" type="varchar(255)">
+            <column name="payment_method_id" type="BIGINT">
                 <constraints nullable="false" />
             </column>
             <column name="total_price" type="decimal(10,2)">
                 <constraints nullable="false" />
             </column>
         </createTable>
+        <addForeignKeyConstraint
+                baseTableName="sale"
+                baseColumnNames="payment_method_id"
+                referencedTableName="payment_method"
+                referencedColumnNames="payment_method_id"
+                constraintName="fk_sale_payment_method" />
     </changeSet>
 </databaseChangeLog>

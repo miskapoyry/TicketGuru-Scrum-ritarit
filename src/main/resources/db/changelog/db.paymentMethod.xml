@@ -5,13 +5,13 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.8.xsd">
 
-    <changeSet id="8" author="Tuomas">
-        <createTable tableName="role">
-            <column name="role_id" type="bigint" autoIncrement="true">
+    <changeSet id="9" author="Tuomas">
+        <createTable tableName="payment_method">
+            <column name="payment_method_id" type="bigint">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="role_name" type="varchar(255)">
-                <constraints nullable="false" />
+            <column name="payment_method_name" type="varchar(255)">
+                <constraints nullable="false" unique="true" />
             </column>
         </createTable>
     </changeSet>

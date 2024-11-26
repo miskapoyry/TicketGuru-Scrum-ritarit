@@ -12,8 +12,8 @@ public class SaleDTO {
 
     // Fields
     private Long saleId;
-    @NotBlank(message = "Payment method is required")
-    private String paymentMethod;
+    @NotNull(message = "Payment method is required")
+    private Long paymentMethodId;
     @Min(value = 0, message = "Price cannot be negative")
     private double totalPrice;
     private Timestamp saleTimestamp;
@@ -25,10 +25,10 @@ public class SaleDTO {
     private List<TicketDTO> tickets;
 
     // Constructor to initialize all fields
-    public SaleDTO(Long saleId, String paymentMethod, double totalPrice, Timestamp saleTimestamp, Long userId,
+    public SaleDTO(Long saleId, Long paymentMethodId, double totalPrice, Timestamp saleTimestamp, Long userId,
             List<TicketDTO> tickets) {
         this.saleId = saleId;
-        this.paymentMethod = paymentMethod;
+        this.paymentMethodId = paymentMethodId;
         this.totalPrice = totalPrice;
         this.saleTimestamp = saleTimestamp;
         this.userId = userId;
@@ -44,12 +44,12 @@ public class SaleDTO {
         this.saleId = saleId;
     }
 
-    public String getPaymentMethod() {
-        return paymentMethod;
+    public Long getPaymentMethodId() {
+        return paymentMethodId;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
-        this.paymentMethod = paymentMethod;
+    public void setPaymentMethodId(Long paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     public double getTotalPrice() {
