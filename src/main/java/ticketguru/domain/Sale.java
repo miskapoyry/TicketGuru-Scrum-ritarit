@@ -31,9 +31,11 @@ public class Sale {
     @Column(name = "sale_timestamp", nullable = false)
     private Timestamp saleTimestamp;
 
-    // Payment method used for the sale
-    @Column(name = "payment_method", nullable = false)
-    private String paymentMethod;
+    // Payment method used for the sale, many to one relationship
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id", nullable = false)
+
+    private PaymentMethod paymentMethod;
 
     // Total price of the sale
     @Column(name = "total_price", nullable = false, scale = 2)
@@ -44,7 +46,7 @@ public class Sale {
     }
 
     // Constructor to initialize all fields
-    public Sale(AppUser appUser, Timestamp saleTimestamp, String paymentMethod, double totalPrice) {
+    public Sale(AppUser appUser, Timestamp saleTimestamp, PaymentMethod paymentMethod, double totalPrice) {
         this.appUser = appUser;
         this.saleTimestamp = saleTimestamp;
         this.paymentMethod = paymentMethod;
@@ -84,11 +86,11 @@ public class Sale {
         this.saleTimestamp = saleTimestamp;
     }
 
-    public String getPaymentMethod() {
+    public PaymentMethod getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(String paymentMethod) {
+    public void setPaymentMethod(PaymentMethod paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 

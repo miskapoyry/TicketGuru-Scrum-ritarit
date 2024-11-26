@@ -11,12 +11,14 @@ import ticketguru.domain.Ticket;
 import ticketguru.domain.TicketType;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.domain.EventTicketType;
+import ticketguru.domain.PaymentMethod;
 import ticketguru.domain.Event;
 import ticketguru.domain.AppUser;
 import ticketguru.repository.AppUserRepository;
 import ticketguru.repository.SaleRepository;
 import ticketguru.repository.TicketRepository;
 import ticketguru.repository.EventTicketTypeRepository;
+import ticketguru.repository.PaymentMethodRepository;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -42,6 +44,9 @@ public class SaleService {
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
 
+    @Autowired
+    private PaymentMethodRepository paymentMethodRepository;
+
     @Transactional
     public SaleDTO createSale(SaleDTO saleDTO) {
 
@@ -51,6 +56,10 @@ public class SaleService {
 
         // Tee localdatesta timestamp
         Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
+
+        // Hae maksutapa
+        PaymentMethod paymentMethod = paymentMethodRepository.findById(saleDTO.getPaymentMethodId())
+                .orElseThrow(() -> new ResourceNotFoundException("Payment method not found with given ID"));
 
         // Hae tietyn eventin lipputyypit ja niiden hinnat + pyöristä
         double totalPrice = saleDTO.getTickets().stream()
@@ -69,7 +78,7 @@ public class SaleService {
 
         // Luo uusi sale jossa on käyttäjä, aika, maksutyyppi sekä lippujen
         // kokonaishinta
-        Sale sale = new Sale(appUser, saleTimestamp, saleDTO.getPaymentMethod(), totalPrice);
+        Sale sale = new Sale(appUser, saleTimestamp, paymentMethod, totalPrice);
 
         // Tallenna luotu sale
         Sale newSale = saleRepository.save(sale);
@@ -166,6 +175,9 @@ public class SaleService {
         AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with given ID"));
 
+        PaymentMethod paymentMethod = paymentMethodRepository.findById(saleDTO.getPaymentMethodId())
+                .orElseThrow(() -> new ResourceNotFoundException("Payment method not found with given ID"));
+
         // Tee localdatesta timestamp
         Timestamp saleTimestamp = Timestamp.valueOf(LocalDateTime.now(ZoneId.systemDefault()));
 
@@ -185,7 +197,7 @@ public class SaleService {
         totalPrice = roundedTotalPrice.doubleValue();
 
         // Laita päivityt tiedot
-        existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
+        existingSale.setPaymentMethod(paymentMethod);
         existingSale.setTotalPrice(totalPrice);
         existingSale.setSaleTimestamp(saleTimestamp);
         existingSale.setAppUser(appUser);
@@ -247,7 +259,7 @@ public class SaleService {
 
         return new SaleDTO(
                 sale.getSaleId(),
-                sale.getPaymentMethod(),
+                sale.getPaymentMethod().getPaymentMethodId(),
                 sale.getTotalPrice(),
                 sale.getSaleTimestamp(),
                 sale.getAppUser().getUserId(),
