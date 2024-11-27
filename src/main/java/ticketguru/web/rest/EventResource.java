@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.service.EventService;
 import ticketguru.DTO.EventDTO;
+import ticketguru.DTO.EventReportDTO;
 
 import java.util.HashMap;
 import java.util.List;
@@ -43,6 +44,12 @@ public class EventResource {
         return ResponseEntity.of(event);
     }
 
+    @GetMapping("/{id}/report")
+    public ResponseEntity<List<EventReportDTO>> generateEventReport(@PathVariable Long id) {
+        List<EventReportDTO> report = eventService.generateEventReport(id);
+        return ResponseEntity.ok(report);
+    }
+
     @GetMapping("")
     public List<?> getAllEvents() {
         return eventService.getAllEvents();
@@ -50,7 +57,7 @@ public class EventResource {
 
     @GetMapping("/search")
     public ResponseEntity<?> searchEvents(@Valid @RequestParam(required = false) String eventName,
-                                          @RequestParam(required = false) String location) {
+            @RequestParam(required = false) String location) {
         try {
             List<EventDTO> events = eventService.searchEvents(eventName, location);
             if (events.isEmpty()) {
