@@ -123,25 +123,25 @@ public class SaleService {
      * Sale existingSale = saleRepository.findById(saleId)
      * .orElseThrow(() -> new
      * ResourceNotFoundException("Sale not found with given ID"));
-     * 
+     *
      * AppUser appUser = appUserRepository.findById(saleDTO.getUserId())
      * .orElseThrow(() -> new
      * ResourceNotFoundException("User not found with given ID"));
-     * 
+     *
      * List<Ticket> tickets = ticketRepository.findAllById(
      * saleDTO.getTickets().stream().map(TicketDTO::getTicketId).collect(Collectors.
      * toList()));
-     * 
+     *
      * if (tickets.size() != saleDTO.getTickets().size()) {
      * throw new ResourceNotFoundException("Tickets not found with given ID");
      * }
-     * 
+     *
      * existingSale.setPaymentMethod(saleDTO.getPaymentMethod());
      * existingSale.setTotalPrice(saleDTO.getTotalPrice());
      * existingSale.setSaleTimestamp(saleDTO.getSaleTimestamp());
-     * 
+     *
      * existingSale.setAppUser(appUser);
-     * 
+     *
      * tickets.forEach(ticket -> {
      * TicketDTO ticketDTO = saleDTO.getTickets().stream()
      * .filter(t -> t.getTicketId().equals(ticket.getTicketId()))
@@ -159,11 +159,11 @@ public class SaleService {
      * ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp());
      * ticket.setSale(existingSale);
      * });
-     * 
+     *
      * existingSale.setTickets(tickets);
-     * 
+     *
      * Sale updatedSale = saleRepository.save(existingSale);
-     * 
+     *
      * return convertToDTO(updatedSale);
      * }
      */
@@ -251,7 +251,7 @@ public class SaleService {
                         ticket.getUsedTimestamp(),
                         1, // Assuming quantity is 1 for each ticket
                         eventTicketTypeRepository.findByEvent_EventIdAndTicketType_TicketTypeId(
-                                ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
+                                        ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
                                 .orElseThrow(() -> new ResourceNotFoundException(
                                         "EventTicketType not found with given EventId and TicketTypeId"))
                                 .getPrice()))

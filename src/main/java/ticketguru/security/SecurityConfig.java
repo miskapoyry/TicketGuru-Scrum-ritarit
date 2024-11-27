@@ -71,7 +71,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/eventTicketTypes/**").hasRole("ADMIN")
 
                         // PaymentMethod: vain admineille
-                        .requestMatchers("/api/paymentmethods/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET,"/api/paymentmethods/**").hasAnyRole("ADMIN", "USER")
 
                         .anyRequest().authenticated())
                 .httpBasic(httpBasic -> {
