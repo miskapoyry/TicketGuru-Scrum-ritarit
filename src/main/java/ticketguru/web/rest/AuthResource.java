@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import ticketguru.DTO.LoginDTO;
-import ticketguru.repository.AppUserRepository;
-import ticketguru.service.AppUserService;
 import ticketguru.service.AuthService;
 
 @RestController
@@ -25,14 +23,11 @@ public class AuthResource {
     @Autowired
     private AuthService authService;
 
-    @Autowired
-    private AppUserRepository appUserRepository;
-
     @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO){
-        
+    public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
+
         boolean authenticated = authService.authenticatePassword(loginDTO);
-        if(authenticated){
+        if (authenticated) {
 
             String role = authService.getUserRole(loginDTO.getUsername());
             Long userId = authService.getUserId(loginDTO.getUsername());
@@ -42,9 +37,9 @@ public class AuthResource {
             response.put("role", role);
             response.put("userId", userId.toString());
             return ResponseEntity.ok(response);
-        }
-        else{
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(Map.of("error", "Username or password is wrong"));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Username or password is wrong"));
         }
     }
 }
