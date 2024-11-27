@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import ticketguru.DTO.SaleDTO;
+import ticketguru.DTO.SalesSummaryDTO;
 import ticketguru.DTO.TicketDTO;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
@@ -24,11 +25,15 @@ import ticketguru.repository.PaymentMethodRepository;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
+import java.util.Map;
 
 @Service
 public class SaleService {
@@ -240,6 +245,39 @@ public class SaleService {
                     .map(this::convertToDTO)
                     .collect(Collectors.toList());
         }
+    }
+    public SalesSummaryDTO generateSalesSummaryReport(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID"));
+
+        List<Sale> sales = saleRepository.findAll().stream()
+                .filter(sale -> sale.getTickets().stream().anyMatch(ticket -> ticket.getEvent().equals(event)))
+                .collect(Collectors.toList());
+
+        int totalSales = sales.size();
+        double totalRevenue = sales.stream().mapToDouble(Sale::getTotalPrice).sum();
+
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        Map<String, Integer> salesByWeek = sales.stream()
+                .collect(Collectors.groupingBy(sale -> {
+                    LocalDate saleDate = sale.getSaleTimestamp().toLocalDateTime().toLocalDate();
+                    int weekOfYear = saleDate.get(weekFields.weekOfWeekBasedYear());
+                    int year = saleDate.getYear();
+                    return year + "-W" + weekOfYear;
+                }, Collectors.summingInt(sale -> 1)));
+
+        Map<String, Double> revenueByWeek = sales.stream()
+                .collect(Collectors.groupingBy(sale -> {
+                    LocalDate saleDate = sale.getSaleTimestamp().toLocalDateTime().toLocalDate();
+                    int weekOfYear = saleDate.get(weekFields.weekOfWeekBasedYear());
+                    int year = saleDate.getYear();
+                    return year + "-W" + weekOfYear;
+                }, Collectors.summingDouble(Sale::getTotalPrice)));
+
+        Map<String, Integer> salesByUser = sales.stream()
+                .collect(Collectors.groupingBy(sale -> sale.getAppUser().getUsername(), Collectors.summingInt(sale -> 1)));
+
+        return new SalesSummaryDTO(totalSales, totalRevenue, salesByWeek, revenueByWeek, salesByUser);
     }
 
     public void deleteSale(Long id) {

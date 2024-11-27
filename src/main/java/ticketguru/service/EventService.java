@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import ticketguru.DTO.EventDTO;
+import ticketguru.DTO.EventReportDTO;
 import ticketguru.DTO.EventTicketTypeDTO;
 import ticketguru.domain.AppUser;
 import ticketguru.domain.Event;
@@ -11,6 +12,7 @@ import ticketguru.repository.AppUserRepository;
 import ticketguru.repository.EventRepository;
 import ticketguru.repository.EventTicketTypeRepository;
 import ticketguru.repository.TicketTypeRepository;
+import ticketguru.repository.TicketRepository;
 import ticketguru.domain.EventTicketType;
 import ticketguru.domain.TicketType;
 import ticketguru.exception.InvalidInputException;
@@ -28,6 +30,8 @@ public class EventService {
     @Autowired
     private AppUserRepository appUserRepository;
 
+    @Autowired
+    private TicketRepository ticketRepository;
     @Autowired
     private EventTicketTypeRepository eventTicketTypeRepository;
 
@@ -207,6 +211,21 @@ public class EventService {
         eventRepository.deleteById(id);
     }
 
+    public List<EventReportDTO> generateEventReport(Long eventId) {
+        Event event = eventRepository.findById(eventId)
+                .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID"));
+    
+        List<EventTicketType> eventTicketTypes = eventTicketTypeRepository.findByEvent(event);
+    
+        return eventTicketTypes.stream()
+                .map(eventTicketType -> {
+                    String ticketTypeName = eventTicketType.getTicketType().getTicketTypeName();
+                    int ticketsSold = ticketRepository.countByEventAndTicketType(event, eventTicketType.getTicketType());
+                    double totalRevenue = ticketsSold * eventTicketType.getPrice();
+                    return new EventReportDTO(event.getEventName(), ticketTypeName, ticketsSold, totalRevenue);
+                })
+                .collect(Collectors.toList());
+    }
     private EventDTO convertToEventDTO(Event event) {
 
         List<EventTicketTypeDTO> eventTicketTypeDTOList = event.getEventTicketTypes().stream()
