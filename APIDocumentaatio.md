@@ -71,13 +71,18 @@ The eventTicketType Resource allows you to manage eventTicketTypes in the Ticket
 * [Update a eventTicketTypes](EventTicketTypeAPI/put.md) : `/api/eventTicketTypes/{id}`
 * [Delete a eventTicketTypes](EventTicketTypeAPI/delete.md) : `/api/eventTicketTypes/{id}`
 
+## paymentMethod Resource
+
+* [Show All paymentMethods](PaymentMethodAPI/get.md) : `/api/paymentMethods`
+* [Show one paymentMethod](PaymentMethodAPI/getbyid.md) : `/api/paymentMethods/{id}`
+
 
 ## Endpoint Access Control
 
 This table provides an overview of the authorization requirements for each endpoint in the TicketGuru API.
 
 | Resource               | Endpoint                            | HTTP Method | Access Level/Role |
-|------------------------|-------------------------------------|-------------|--------------------|
+|------------------------|------------------------------------|-------------|--------------------|
 | **Event**              | `/api/event/`                      | `GET`       |    ADMIN, USER     |
 |                        | `/api/event/{id}`                  | `GET`       |    ADMIN, USER     |
 |                        | `/api/event?userId={Id}`           | `POST`      |    ADMIN           |
@@ -106,4 +111,6 @@ This table provides an overview of the authorization requirements for each endpo
 |                        | `/api/eventTicketTypes`            | `POST`      |    ADMIN           |
 |                        | `/api/eventTicketTypes/{id}`       | `PUT`       |    ADMIN           |
 |                        | `/api/eventTicketTypes/{id}`       | `DELETE`    |    ADMIN           |
-
+| **PaymentMethod**      | `/api/paymentMethods`              | `GET`       |    ADMIN, USER     |
+|                        | `/api/paymentMethods/{id}`         | `GET`       |    ADMIN, USER     |
+|------------------------|------------------------------------|-------------|--------------------|
