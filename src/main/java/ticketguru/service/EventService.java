@@ -80,6 +80,7 @@ public class EventService {
             eventTicketType.setEvent(newEvent);
             eventTicketType.setTicketType(ticketType);
             eventTicketType.setPrice(price);
+            eventTicketType.setTicketQuantity(ticketTypeDTO.getTicketQuantity());
 
             // Lisää EventTicketType-objekti listaan
             eventTicketTypes.add(eventTicketType);
@@ -151,6 +152,7 @@ public class EventService {
             eventTicketType.setEvent(existingEvent);
             eventTicketType.setTicketType(ticketType);
             eventTicketType.setPrice(price);
+            eventTicketType.setTicketQuantity(ticketTypeDTO.getTicketQuantity());
 
             // Lisää EventTicketType-objekti listaan
             eventTicketTypes.add(eventTicketType);
