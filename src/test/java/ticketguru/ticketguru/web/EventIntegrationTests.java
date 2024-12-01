@@ -31,6 +31,8 @@ public class EventIntegrationTests {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
     }
 
+    // Kaikkien tapahtumien haku. Varmistus, että palautettu tulos on JSON array ja
+    // status 200
     @Test
     public void testGetAllEvents() throws Exception {
         mockMvc.perform(get("/api/events"))
@@ -39,6 +41,7 @@ public class EventIntegrationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isArray());
     }
 
+    // Tapahtuman haku id:llä
     @Test
     public void testGetEventById() throws Exception {
         Long eventId = 1L;
@@ -48,25 +51,23 @@ public class EventIntegrationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.eventId", is(1)));
     }
 
+    // Uuden tapahtuman luominen - tarkistus, että statuskoodi 201 ja tapahtuman
+    // nimi oikea
     @Test
     public void testCreateEvent() throws Exception {
         String newEvent = """
                 {
-                    "eventId": 1,
                     "userId": 1,
                     "eventName": "New Event",
-                    "eventDate": "2024-12-01T00:00:00.000+00:00",
+                    "eventDate": "2024-12-10T00:00:00.000+00:00",
                     "location": "Helsinki",
                     "totalTickets": 100,
                     "availableTickets": 80,
                     "eventTicketTypes": [
                         {
-                            "eventTicketTypeId": 1,
-                            "eventId": 1,
                             "ticketTypeId": 2,
                             "ticketQuantity": 50,
                             "price": 50.0,
-                            "eventName": "New Event",
                             "ticketTypeName": "Regular"
                         }
                     ]
@@ -80,6 +81,7 @@ public class EventIntegrationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.eventName").value("New Event"));
     }
 
+    // Tapahtuman päivittäminen, tarkistus, että nimi päivittynyt
     @Test
     public void testUpdateEvent() throws Exception {
         Long eventId = 1L;
@@ -105,12 +107,13 @@ public class EventIntegrationTests {
                 }
                 """;
 
-        mockMvc.perform(put("/api/events/{id}", eventId)
+        mockMvc.perform(put("/api/events/1", eventId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedEvent)).andExpect(status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.eventName", is("Updated Event")));
     }
 
+    // Testataan tapahtuman etsimistä olemattomalla id:llä
     @Test
     public void testEventNotFound() throws Exception {
         Long invalidEventId = 999L;
