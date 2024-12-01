@@ -27,11 +27,13 @@ public class AppUserIntegrationTests {
 
         private MockMvc mockMvc;
 
+        // MockMvc simuloimaan HTTP-pyyntöjä ennen jokaista testiä
         @BeforeEach
         public void setup() {
                 this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
         }
 
+        // Uuden käyttäjän luominen
         @Test
         @Transactional
         public void testCreateUser() throws Exception {
@@ -49,6 +51,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.roleId", is(1)));
         }
 
+        // Kaikkien käyttäjien haku
         @Test
         public void testGetAllUsers() throws Exception {
                 mockMvc.perform(get("/api/users"))
@@ -56,6 +59,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$").isArray());
         }
 
+        // Käyttäjien haku id:llä
         @Test
         public void testGetUserById() throws Exception {
                 mockMvc.perform(get("/api/users/1"))
@@ -63,6 +67,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.userId", is(1)));
         }
 
+        // Käyttäjien haku olemattomalla id:llä
         @Test
         public void testGetUserByIdNotFound() throws Exception {
                 mockMvc.perform(get("/api/users/999"))
@@ -70,6 +75,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("User with ID 999 not found")));
         }
 
+        // Käyttäjän päivitys
         @Test
         @Transactional
         public void testUpdateUser() throws Exception {
@@ -87,6 +93,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.roleId", is(2)));
         }
 
+        // Käyttäjän poisto
         @Test
         @Transactional
         public void testDeleteUser() throws Exception {
@@ -98,6 +105,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("User with ID 1 not found")));
         }
 
+        // Olemattoman käyttäjän poistoyritys
         @Test
         public void testDeleteUserNotFound() throws Exception {
                 mockMvc.perform(delete("/api/users/999"))
@@ -105,6 +113,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("User with ID 999 not found")));
         }
 
+        // Yritys luoda käyttäjä ilman nimeä
         @Test
         public void testCreateUserWithMissingUsername() throws Exception {
                 String userJson = "{"
@@ -119,6 +128,7 @@ public class AppUserIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("Username cannot be blank")));
         }
 
+        // Yritys luoda käyttäjä ilman salasanaa
         @Test
         public void testCreateUserWithMissingPassword() throws Exception {
                 String userJson = "{"

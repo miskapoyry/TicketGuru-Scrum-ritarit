@@ -18,7 +18,7 @@ TicketGuru tarjoaa lipunmyyjille työkalut lipunmyyntiin, tulostukseen ja lipun 
 ### Toteutus- ja toimintaympäristö lyhyesti:
 
 -   Palvelinpuolen ratkaisut ja teknologiat: SpringBoot, MariaDB
--   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), Mobiililaitteet (Android ja iOS), React, Bootstrap
+-   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), React, Bootstrap
 
 ### Mitä valmiina, kun projekti päättyy?
 
@@ -66,7 +66,7 @@ Admin tasoinen käyttäjä kykenee myös näkemään valitsemansa tapahtuman kai
 
 ***Alapuolelle on luotu hahmotelmia, joiden avulla käyttöliittymään saadaan lisää selkeyttä. Huomioithan, että nämä eivät ole tässä vaiheessa vielä lopullisia, ja muutosten tullessa eteen, niitä voi käydä muuttamassa.***
 
-### Kirjatuminen
+### Kirjautuminen
 
 Näyttöhahmotelma kirjautumisruutuun sekä rekisteröimiseen. Niiden välinen suhde tulee tosin miettiä, sillä kuka tahansa ei voi tehdä käyttäjää järjestelmään, vaan sitä on rajattava jollakin tavalla (admin käyttäjä hyväksyy/luo käyttäjät?).
 
@@ -189,24 +189,69 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 ## Tekninen kuvaus
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
+### Kerrosarkkitehtuuri
 
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
+- Frontend (käyttöliittymä): Frontendin kehityksessä on käytetty Reactia, TypeScriptiä ja Viteä, jotka yhdessä mahdollistavat tehokkaan ja dynaamisen käyttöliittymän rakentamisen. Käyttöliittymässä hyödynnetään Reactstrapia ja Bootstrapia ulkoasun ja responsiivisuuden hallintaan. Asynkroniset HTTP-pyynnöt toteutetaan Axiosilla.
+- Backend (sovelluslogiikka): Spring Boot -sovellus, joka pyörii Rahti2-palvelimella.
+- Tietokanta: MariaDB, joka sijaitsee Rahti2-palvelimella.
 
-Tämän lisäksi
+#### Sovelluksen rakenne
 
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
+Sovellus noudattaa kerrosarkkitehtuuria, jossa web-kerros (Resource-luokat) kommunikoi service-kerroksen kanssa liiketoimintalogiikan käsittelemiseksi. Service-kerros kommunikoi tietokerroksen (repositorioiden) kanssa tietojen hakemiseksi tai tallentamiseksi. API:n ja tietokantarakenteen irrottamiseksi käytetään Data Transfer Objecteja (DTO), jotka siirtävät tietoa kerrosten välillä.
+
+![dataflow_tg](dataflow/dataflow_tg.jpg)
+
+Resource-luokat käsittelevät saapuvia HTTP-pyyntöjä ja välittävät liiketoimintalogiikan palvelukerrokseen (eli Service-luokille).
+
+DTOt: Käytetään siirtämään vain tarvittavat tiedot asiakkaalle. Esimerkiksi TicketDTO palauttaa lipun tiedoista kevyen vastauksen, joka sisältää riittävät lipun tiedot.
+
+Entiteetit: Edustavat tietomallia tietokannassa. Esimerkiksi Ticket edustaa lipun entiteettiä tietokannassa, ja se muutetaan vastauksessa TicketDTO:ksi.
+
+### Tietokantayhteys
+
+TicketGuru käyttää MariaDB-tietokantaa, joka sijaitsee osoitteessa 172.30.223.252 ja portissa 3306. Tietokannan nimi on ticketguru. JDBC-ajurina käytetään MariaDB:n virallista ajuria. Yhteyskonfiguraatio määritellään Spring Bootin application-prod.properties-tiedostossa, ja käyttäjätunnukset haetaan turvallisesti ympäristömuuttujista.
+
+### Tietokantamuutosten hallinta
+Tietokannan rakenteen muutokset hallitaan Liquibase-työkalun avulla. Tietokannan nykyinen tila ja tarvittavat muutokset määritellään db.master.xml-changelog-tiedostossa, joka ohjaa yksittäisten muutostiedostojen käyttöä.
+
+### Hibernate ja JPA
+Tietokantakyselyt suoritetaan Spring Bootin JPA- ja Hibernate-kirjastojen avulla. Hibernate säilyttää Java-koodissa määritellyt entiteettien nimet muuttumattomina tietokannan puolella. Lokitiedostoihin kirjataan kaikki suoritettavat SQL-kyselyt kehityksen ja virheenkorjauksen helpottamiseksi.
+
+### Palvelintoteutuksen yleiskuvaus
+
+- Backend: Spring Boot -sovellus, joka toimii RESTful API:n välityksellä. 
+- Frontend: Responsiivinen React-sovellus
+- Tietokanta: MariaDB/relaatiotietokanta. Spring Data JPA:n avulla käsitellään tietokannan kyselyjä. Liquibase huolehtii tietokannan rakenteellisten muutosten hallinnasta.
+
+### Deployment-ratkaisut
+
+Dovellus deployataan käyttäen Docker-kontteja ja suoritetaan Rahti2-palvelimella, joka on Kubernetes-pohjainen alusta. Dockerfile määrittelee sovelluksen rakennus- ja suoritusympäristön.
+
+Dockerfile rakentaa TicketGuru-sovelluksen kahdessa vaiheessa: ensin builder-vaiheessa sovellus käännetään käyttäen Mavenia ja valmiit riippuvuudet kerätään offline-tilassa. Tämän jälkeen runtime-vaiheessa käytetään kevyttä JRE-kuvaa, johon kopioidaan valmiiksi rakennettu .jar-tiedosto. Lopuksi kontti määritellään käynnistämään sovellus Spring Bootin oletusportissa 8080. Tämä kaksivaiheinen rakenne optimoi kuvan koon ja parantaa suorituskykyä tuotantoympäristössä.
+
+Sovellus käyttää ympäristömuuttujia ${DB_USER} ja ${DB_PASSWORD} tietokannan käyttäjänimen ja salasanan hallintaan. Tämä mahdollistaa arkaluonteisten tietojen erottamisen konfiguraatiotiedostoista ja eri asetusten käytön eri ympäristöissä. Ympäristömuuttujat määritellään ajonaikaisessa ympäristössä, ja ne lisäävät turvallisuutta, koska tietoja ei kovakoodata koodiin tai tallenneta versionhallintaan.
+
+### Rajapintojen kuvaus
+
+Rajapinnat toteutetaan RESTful API-rajapintoina. [Täydellinen API-dokumentaatio löytyy täältä.](APIDocumentaatio.md)
+
+### Autentikointi ja auktorisointi
+
+Sovellus käyttää Spring Securityä autentikointiin ja auktorisointiin. Käyttäjätiedot haetaan sovelluksen CustomUserDetailsService-palvelun kautta, joka lataa käyttäjät sovelluksen tietokannasta. Salasanat tallennetaan tietokantaan BCrypt-algoritmilla hajautettuna.
+
+Autentikointi suoritetaan "TicketGuru"-realmissa, ja epäonnistunut autentikointi palauttaa HTTP 401 Unauthorized -vastauksen. Salasanat tarkistetaan BCryptPasswordEncoder-komponentin avulla.
+
+Käyttöoikeudet perustuvat rooleihin, joita ovat ADMIN eli järjestelmänvalvojat ja USER eli tavalliset käyttäjät. Käyttäjiä hallitaan /api/users/**-resurssilla, mutta vain ADMIN-käyttäjät voivat käyttää tätä resurssia. Käyttäjätilit sisältävät roolin, joka määrittää käyttöoikeuksien laajuuden. Vain tiettyjen resurssien ja metodien käyttö on sallittu USER-tasoisille käyttäjille.Resurssipyyntöjen oikeudet määritellään [API-dokumentaatiossa](APIDocumentaatio.md) kohdassa Endpoint Access Control.
+
+CSRF-suojaus on poistettu käytöstä, sillä sovellus käyttää ensisijaisesti API-pohjaista kommunikointia. Kaikki pyyntöoikeudet määritellään tarkasti URL-pohjaisilla reitityksillä ja mainituilla roolipohjaisilla säännöillä. 
+
+Sovelluksessa on määritelty CORS-konfiguraatio, joka sallii pyynnöt paikallisesta kehitysympäristöstä (http://localhost:5173 ja http://localhost:8080) ja palvelimen osoitteesta https://ticket-guru-ticketguru-scrum-ritarit.2.rahtiapp.fi. Sovellus sallii credentials-tiedot, kuten evästeet ja Basic Auth -tunnisteet.
+
+### Virheenkäsittely ja lokitus
+
+Virheelliset API-pyynnöt palauttavat HTTP-virhekoodin (esim. 400 Bad Request) ja virheilmoituksen JSON-muodossa.
+
+Lokitusmekanismina on Spring Bootin Logback (perusasetusten mukainen oletuslokitusmekanismi). Hibernate-kyselyt tulostetaan konsoliin.
 
 ## Testaus
 
