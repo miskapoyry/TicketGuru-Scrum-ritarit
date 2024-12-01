@@ -37,7 +37,7 @@ public class SaleIntegrationTests {
         public void testCreateSale() throws Exception {
                 String saleJson = "{"
                                 + "\"userId\": 1, "
-                                + "\"paymentMethod\": \"Credit Card\", "
+                                + "\"paymentMethodId\": 1, "
                                 + "\"tickets\": ["
                                 + "    {"
                                 + "        \"eventId\": \"1\", "
@@ -53,7 +53,7 @@ public class SaleIntegrationTests {
                                 .content(saleJson))
                                 .andExpect(status().isCreated())
                                 .andExpect(jsonPath("$.userId", is(1)))
-                                .andExpect(jsonPath("$.paymentMethod", is("Credit Card")))
+                                .andExpect(jsonPath("$.paymentMethodId", is(1)))
                                 .andExpect(jsonPath("$.tickets", hasSize(2)))
                                 .andExpect(jsonPath("$.tickets[0].eventId", is(1)))
                                 .andExpect(jsonPath("$.tickets[0].ticketTypeId", is(1)))

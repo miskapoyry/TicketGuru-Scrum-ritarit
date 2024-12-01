@@ -53,7 +53,8 @@ public class SaleResource {
         // Tarkista, löytyykö sale ID:n perusteella
         SaleDTO sale = saleService.getSaleById(id);
         if (sale == null) {
-            // Jos myyntiä ei löydy, palautetaan virhevastauksena 404. Tehty samalla tavalla yllä olevan kanssa.
+            // Jos myyntiä ei löydy, palautetaan virhevastauksena 404. Tehty samalla tavalla
+            // yllä olevan kanssa.
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Sale not found with given ID");
             return ResponseEntity.status(404).body(errorResponse);
@@ -121,7 +122,6 @@ public class SaleResource {
             return ResponseEntity.status(400).body(errorResponse);
         }
     }
-
 
     // Poista sale tiettyä IDtä käyttäen
     @DeleteMapping("/{id}")

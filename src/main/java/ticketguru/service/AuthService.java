@@ -34,4 +34,11 @@ public class AuthService {
         }
         return "No role";
     }
+    public Long getUserId(String username){
+        AppUser user = appUserRepository.findByUsername(username);
+        if(user != null){
+            return user.getUserId();
+        }
+        return null;
+    }
 }
