@@ -9,9 +9,7 @@ import ticketguru.domain.EventTicketType;
 public class EventTicketTypeDTO {
 
     private Long eventTicketTypeId;
-    @NotNull(message = "Event ID cannot be null")
     private Long eventId; // Only event ID instead of the whole Event object
-
     @NotNull(message = "Ticket Type ID cannot be null")
     private Long ticketTypeId; // Only ticket type ID instead of the whole TicketType object
 
