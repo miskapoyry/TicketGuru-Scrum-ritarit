@@ -32,6 +32,8 @@ public class SaleIntegrationTests {
                 this.mockMvc = MockMvcBuilders.webAppContextSetup(this.webApplicationContext).build();
         }
 
+        // Uuden myyntitapahtuman luominen & tarkistus, että tiedot tallentuneet
+        // toivotusti. Tapahtumassa kaksi lippua.
         @Test
         @Transactional
         public void testCreateSale() throws Exception {
@@ -65,6 +67,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.tickets[1].used", is(false)));
         }
 
+        // Kaikkien myyntitapahtumien haku
         @Test
         public void testGetAllSales() throws Exception {
                 mockMvc.perform(get("/api/sales"))
@@ -72,6 +75,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$").isArray());
         }
 
+        // Myynnin haku id:llä
         @Test
         public void testGetSaleById() throws Exception {
                 mockMvc.perform(get("/api/sales/1"))
@@ -79,6 +83,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.saleId", is(1)));
         }
 
+        // Myynnin haku id:llä, jota ei ole
         @Test
         public void testGetSaleByIdNotFound() throws Exception {
                 mockMvc.perform(get("/api/sales/999"))
@@ -86,6 +91,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("Sale not found with given ID: 999")));
         }
 
+        // Myyntitapahtuman poisto
         @Transactional
         @Test
         public void testDeleteSale() throws Exception {
@@ -96,6 +102,7 @@ public class SaleIntegrationTests {
                                 .andExpect(status().isNotFound());
         }
 
+        // Myyntitapahtumien haku käyttäjän id:llä omasta endpointistaan
         @Test
         public void testSearchSalesByUserId() throws Exception {
                 mockMvc.perform(get("/api/sales/search")
@@ -104,6 +111,8 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$").isArray());
         }
 
+        // Myyntitapahtumien haku käyttäjän id:llä omasta endpointistaan id:llä, jota ei
+        // ole
         @Test
         public void testSearchSalesByInvalidUserId() throws Exception {
                 mockMvc.perform(get("/api/sales/search")
@@ -112,6 +121,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("User(s) not found with given ID(s): 999")));
         }
 
+        // Useiden myyntitapahtumien haku id:illä
         @Test
         public void testSearchSalesBySaleIds() throws Exception {
                 mockMvc.perform(get("/api/sales/search")
@@ -121,6 +131,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$[1].saleId", is(2)));
         }
 
+        // Useiden myyntitapahtumien haku olemattomilla id:illä
         @Test
         public void testSearchSalesByInvalidSaleIds() throws Exception {
                 mockMvc.perform(get("/api/sales/search")
@@ -129,6 +140,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("No sales found for sale IDs: 999,1000")));
         }
 
+        // Väärän muotoisilla id:illä haku
         @Test
         public void testSearchSalesInvalidSaleIdFormat() throws Exception {
                 mockMvc.perform(get("/api/sales/search")
@@ -137,6 +149,7 @@ public class SaleIntegrationTests {
                                 .andExpect(jsonPath("$.message", is("Invalid sale ID format in: invalid,ids")));
         }
 
+        // search-endpointin haku ilman parametreja
         @Test
         public void testSearchSalesMissingParameters() throws Exception {
                 mockMvc.perform(get("/api/sales/search"))
