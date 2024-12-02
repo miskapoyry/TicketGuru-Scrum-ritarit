@@ -338,7 +338,7 @@ Kloonaa projektin lähdekoodi GitHubista:
 
 Web URL: *https://github.com/miskapoyry/TicketGuru-Scrum-ritarit.git*
 
-```json
+```bash
 cd <haluttu-polku>
 git clone <repository-url>
 cd <project-folder>
@@ -348,7 +348,7 @@ cd <project-folder>
 
 Tietokantakonfiguraatiot löytyvät application-dev.properties-tiedostosta.
 
-````json
+```properties
 spring.application.name=ticketguru
 spring.datasource.url=jdbc:mariadb://localhost:3306/ticketguru
 spring.datasource.username=your_username_here
@@ -359,6 +359,7 @@ spring.jpa.show-sql=true
 spring.liquibase.change-log=classpath:db/changelog/db.master.xml
 spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
 ````
+
 **MariaDB:n ja Liquibasen käyttö**
 
 Tietokanta generoidaan automaattisesti Liquibasen avulla, kun projekti käynnistetään ensimmäisen kerran. Voit tarkastella tietokantaa käyttämällä esim. **HeidiSQL** tai muuta vastaavaa.
@@ -369,7 +370,7 @@ Tietokanta generoidaan automaattisesti Liquibasen avulla, kun projekti käynnist
 
 Aja seuraava komento projektikansion juuresta:
 
- ```json
+```bash
 mvn clean install
 ```
 
@@ -377,7 +378,7 @@ Tämä varmistaa, että kaikki riippuvuudet ladataan ja projekti rakennetaan.
 
 **Projektin käynnistäminen:**
 
-```json
+```bash
 mvn spring-boot:run
 ```
 
@@ -389,7 +390,7 @@ Mikäli käytät esim. **Visual Studio Codea**, voit käynnistää sovelluksen m
 
 - **Node.js** ja **npm**
     - Tarkista syöttämällä komennot:
-    ```json
+    ```bash
     node -v
     npm -v
     ```
@@ -401,7 +402,8 @@ Kloonaa projektin lähdekoodi GitHubista:
 
 Web URL: *https://github.com/duomaz49/scrum-ritarit-front-end.git*
 
-```json
+
+```bash
 cd <haluttu-polku>
 git clone <repository-url>
 cd <project-folder>
@@ -411,7 +413,7 @@ cd <project-folder>
 
 Kaikki tarvittavat riippuvuudet voidaan asentaa seuraavalla komennolla:
 
-```json
+```bash
 npm install
 ```
 
@@ -419,7 +421,7 @@ npm install
 
 Saat projektin käynnistymään komennolla:
 
-```json
+```bash
 npm run dev
 ```
 
