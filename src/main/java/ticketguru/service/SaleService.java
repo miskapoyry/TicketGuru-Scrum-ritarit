@@ -26,6 +26,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.WeekFields;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -289,10 +290,38 @@ public class SaleService {
                     return year + "-W" + weekOfYear;
                 }, Collectors.summingDouble(Sale::getTotalPrice)));
 
-        Map<String, Integer> salesByUser = sales.stream()
-                .collect(Collectors.groupingBy(sale -> sale.getAppUser().getUsername(), Collectors.summingInt(sale -> 1)));
+        Map<Long, Map<String, SalesSummaryDTO.TicketTypeSummary>> salesByUserAndTicketType = new HashMap<>();
+        Map<String, Integer> salesByTicketType = new HashMap<>();
+        Map<String, Double> revenueByTicketType = new HashMap<>();
 
-        return new SalesSummaryDTO(totalSales, totalRevenue, salesByWeek, revenueByWeek, salesByUser);
+        for (Sale sale : sales) {
+            Long userId = sale.getAppUser().getUserId();
+            for (Ticket ticket : sale.getTickets()) {
+                String ticketTypeName = ticket.getTicketType().getTicketTypeName();
+                salesByUserAndTicketType
+                        .computeIfAbsent(userId, k -> new HashMap<>())
+                        .computeIfAbsent(ticketTypeName, k -> new SalesSummaryDTO.TicketTypeSummary(0, 0.0));
+
+                SalesSummaryDTO.TicketTypeSummary summary = salesByUserAndTicketType.get(userId).get(ticketTypeName);
+                summary.setTicketsSold(summary.getTicketsSold() + 1);
+                EventTicketType eventTicketType = eventTicketTypeRepository
+                        .findByEvent_EventIdAndTicketType_TicketTypeId(
+                                ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "EventTicketType not found with given EventId and TicketTypeId"));
+                summary.setRevenue(summary.getRevenue() + eventTicketType.getPrice());
+
+                salesByTicketType.merge(ticketTypeName, 1, Integer::sum);
+                EventTicketType eventTicketTypeForRevenue = eventTicketTypeRepository
+                        .findByEvent_EventIdAndTicketType_TicketTypeId(
+                                ticket.getEvent().getEventId(), ticket.getTicketType().getTicketTypeId())
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "EventTicketType not found with given EventId and TicketTypeId"));
+                revenueByTicketType.merge(ticketTypeName, eventTicketTypeForRevenue.getPrice(), Double::sum);
+            }
+        }
+
+        return new SalesSummaryDTO(event.getEventName(), totalSales, totalRevenue, salesByWeek, revenueByWeek, salesByUserAndTicketType, salesByTicketType, revenueByTicketType);
     }
 
     public void deleteSale(Long id) {
