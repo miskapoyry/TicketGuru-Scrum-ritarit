@@ -289,7 +289,7 @@ Testin konfiguraatiot on suoritettu application-test.properties-tiedostossa, jos
 
 Testeissä ei testata lainkaan auktorisointia, ja se onkin kytketty pois päältä erillisessä TestSecurityConfig-luokassa, jota testit käyttävät.
 
-## Testattavat kohteet (End to End -testit)
+### Testattavat kohteet (End to End -testit)
 
 Testattavat kohteet on valittu ohjelmiston alkuperäisten käyttäjätarinoiden pohjalta. Testasimme muun muassa:
 
