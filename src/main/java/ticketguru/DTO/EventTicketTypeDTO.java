@@ -1,32 +1,32 @@
 package ticketguru.DTO;
 
-import jakarta.validation.constraints.NotNull;
-
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import ticketguru.domain.EventTicketType;
 
 public class EventTicketTypeDTO {
 
     private Long eventTicketTypeId;
-    private Long eventId; // Only event ID instead of the whole Event object
+
+    @NotNull(message = "Event ID cannot be null")
+    private Long eventId;
+
     @NotNull(message = "Ticket Type ID cannot be null")
-    private Long ticketTypeId; // Only ticket type ID instead of the whole TicketType object
+    private Long ticketTypeId;
 
     @Min(value = 1, message = "Ticket quantity must be at least 1")
     private int ticketQuantity;
 
     @Positive(message = "Price must be positive")
     private double price;
+
     private String eventName;
     private String ticketTypeName;
 
-    // Constructors
-    public EventTicketTypeDTO() {
-    }
+    public EventTicketTypeDTO() {}
 
-    public EventTicketTypeDTO(Long eventTicketTypeId, Long eventId, Long ticketTypeId, int ticketQuantity,
-            double price, String eventName, String ticketTypeName) {
+    public EventTicketTypeDTO(Long eventTicketTypeId, Long eventId, Long ticketTypeId, int ticketQuantity, double price, String eventName, String ticketTypeName) {
         this.eventTicketTypeId = eventTicketTypeId;
         this.eventId = eventId;
         this.ticketTypeId = ticketTypeId;
@@ -36,7 +36,7 @@ public class EventTicketTypeDTO {
         this.ticketTypeName = ticketTypeName;
     }
 
-        public EventTicketTypeDTO(EventTicketType eventTicketType) {
+    public EventTicketTypeDTO(EventTicketType eventTicketType) {
         this.eventTicketTypeId = eventTicketType.getEventTicketTypeId();
         this.eventId = eventTicketType.getEvent().getEventId();
         this.ticketTypeId = eventTicketType.getTicketType().getTicketTypeId();
@@ -45,7 +45,6 @@ public class EventTicketTypeDTO {
         this.eventName = eventTicketType.getEvent().getEventName();
         this.ticketTypeName = eventTicketType.getTicketType().getTicketTypeName();
     }
-
 
     // Getters and setters
     public Long getEventTicketTypeId() {
@@ -95,9 +94,11 @@ public class EventTicketTypeDTO {
     public void setEventName(String eventName) {
         this.eventName = eventName;
     }
+
     public String getTicketTypeName() {
         return ticketTypeName;
     }
+
     public void setTicketTypeName(String ticketTypeName) {
         this.ticketTypeName = ticketTypeName;
     }

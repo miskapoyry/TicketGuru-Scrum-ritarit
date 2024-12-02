@@ -3,18 +3,20 @@ package ticketguru.DTO;
 import jakarta.validation.constraints.NotBlank;
 
 public class PaymentMethodDTO {
+
     private Long id;
+
     @NotBlank(message = "Payment method name must not be blank")
     private String name;
 
-    public PaymentMethodDTO() {
-    }
+    public PaymentMethodDTO() {}
 
     public PaymentMethodDTO(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
+    // Getters and setters
     public Long getId() {
         return id;
     }

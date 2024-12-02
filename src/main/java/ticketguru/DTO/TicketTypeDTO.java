@@ -5,18 +5,15 @@ import jakarta.validation.constraints.NotBlank;
 public class TicketTypeDTO {
 
     private Long ticketTypeId;
-    @NotBlank(message = "Ticket type name is required") // Lisätty validaatio ainoaan kenttään
+
+    @NotBlank(message = "Ticket type name is required")
     private String ticketTypeName;
 
-    // Default constructor
-    public TicketTypeDTO() {
-    }
+    public TicketTypeDTO() {}
 
-    // Constructor with fields
     public TicketTypeDTO(Long ticketTypeId, String ticketTypeName) {
         this.ticketTypeId = ticketTypeId;
         this.ticketTypeName = ticketTypeName;
-        
     }
 
     // Getters and setters
@@ -35,6 +32,4 @@ public class TicketTypeDTO {
     public void setTicketTypeName(String ticketTypeName) {
         this.ticketTypeName = ticketTypeName;
     }
-
 }
-

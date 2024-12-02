@@ -10,23 +10,27 @@ import jakarta.validation.constraints.*;
 
 public class SaleDTO {
 
-    // Fields
     private Long saleId;
+
     @NotNull(message = "Payment method is required")
     private Long paymentMethodId;
+
     @Min(value = 0, message = "Price cannot be negative")
     private double totalPrice;
+
     private Timestamp saleTimestamp;
+
     @NotNull(message = "UserID is required")
     private Long userId;
+
     @NotNull(message = "Sale must be assigned with tickets")
     @Size(min = 1, message = "Sale must contain at least one ticket")
     @Valid
     private List<TicketDTO> tickets;
 
-    // Constructor to initialize all fields
-    public SaleDTO(Long saleId, Long paymentMethodId, double totalPrice, Timestamp saleTimestamp, Long userId,
-            List<TicketDTO> tickets) {
+    public SaleDTO() {}
+
+    public SaleDTO(Long saleId, Long paymentMethodId, double totalPrice, Timestamp saleTimestamp, Long userId, List<TicketDTO> tickets) {
         this.saleId = saleId;
         this.paymentMethodId = paymentMethodId;
         this.totalPrice = totalPrice;

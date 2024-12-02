@@ -1,11 +1,11 @@
 package ticketguru.DTO;
 
-import java.util.List;
-
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+
+import java.util.List;
 
 public class AppUserDTO {
 
@@ -25,9 +25,9 @@ public class AppUserDTO {
     private List<Long> eventIds; // List of event IDs associated with this user
     private List<Long> saleIds; // List of sale IDs associated with this user
 
-    // Constructor to initialize all fields
-    public AppUserDTO(Long userId, String username, String passwordHash, Long roleId, List<Long> eventIds,
-            List<Long> saleIds) {
+    public AppUserDTO() {}
+
+    public AppUserDTO(Long userId, String username, String passwordHash, Long roleId, List<Long> eventIds, List<Long> saleIds) {
         this.userId = userId;
         this.username = username;
         this.passwordHash = passwordHash;

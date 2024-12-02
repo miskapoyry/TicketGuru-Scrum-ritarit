@@ -4,15 +4,15 @@ public class LoginDTO {
 
     private String username;
     private String password;
-    
-    public LoginDTO() {
-    }
+
+    public LoginDTO() {}
 
     public LoginDTO(String username, String password) {
         this.username = username;
         this.password = password;
     }
 
+    // Getters and setters
     public String getUsername() {
         return username;
     }
@@ -28,5 +28,4 @@ public class LoginDTO {
     public void setPassword(String password) {
         this.password = password;
     }
-    
 }
