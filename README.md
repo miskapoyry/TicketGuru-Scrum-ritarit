@@ -323,14 +323,14 @@ käyttäjätunnus, salasana, tietokannan luonti yms.).
 
 ### Järjestelmän kehitysympäristö (Back end)
 
-### 1. Vaatimukset ennen asentamista: ###
+### 1. Vaatimukset ennen asentamista:
 
 - **Java** versio *17*
 - **Spring Boot** versio 3.3.3
 - **Maven** versio *4.0.0*
 - **MariaDB** -tietokannan asennus
 
-### 2. Kehitysympäristön valmistelu: ###
+### 2. Kehitysympäristön valmistelu:
 
 **Projektin kloonaus**
 
@@ -386,7 +386,7 @@ Mikäli käytät esim. **Visual Studio Codea**, voit käynnistää sovelluksen m
 
 ### Järjestelmän kehitysympäristö (Front end)
 
-### 1. Vaatimuksen ennen asentamista: ###
+### 1. Vaatimuksen ennen asentamista: 
 
 - **Node.js** ja **npm**
     - Tarkista syöttämällä komennot:
@@ -396,7 +396,7 @@ Mikäli käytät esim. **Visual Studio Codea**, voit käynnistää sovelluksen m
     ```
     Jos Node.js puuttuu, asenna se Node.js:n viralliselta sivustolta: https://nodejs.org/.
 
-### 2. Repositorion kloonaus: ###
+### 2. Repositorion kloonaus: 
 
 Kloonaa projektin lähdekoodi GitHubista:
 
@@ -409,7 +409,7 @@ git clone <repository-url>
 cd <project-folder>
 ```
 
-### 3. Kirjastojen asentaminen: ###
+### 3. Kirjastojen asentaminen:
 
 Kaikki tarvittavat riippuvuudet voidaan asentaa seuraavalla komennolla:
 
@@ -417,7 +417,7 @@ Kaikki tarvittavat riippuvuudet voidaan asentaa seuraavalla komennolla:
 npm install
 ```
 
-### 4. Clientin käynnistys ###
+### 4. Clientin käynnistys:
 
 Saat projektin käynnistymään komennolla:
 
@@ -426,6 +426,31 @@ npm run dev
 ```
 
 Kun projekti on käynnissä, sovellus löytyy selaimesta osoitteesta: *http://localhost:5137*
+
+### Asennus tuotantoympäristöön
+
+Julkaisimme projektin Rahti2-palvelimella, mutta sovelluksen voi asentaa myös muihinkin  tuotantoympäristöihin. Huomioon otettavia seikkoja tuotantoympäristöön siirtyessä on muun muassa:
+
+- **Ympäristömuuttujat:**
+    - Älä koskaan tallenna salasanoja koodiin vaan käytä ympäristömuuttujia
+    - Esimerkki konfiguraatiosta:
+
+```properties
+    spring.datasource.username=${DB_USER}
+    spring.datasource.password=${DB_PASSWORD}
+```
+
+- **Cors-säädöt:**
+    - Määritä sallitut lähteet (originit), jotta sovellus ei hyväksy pyyntöjä mistä tahansa.
+
+- **Spring Bootin asetukset:**
+    - Varmista, että Spring Boot käyttää prod -profiilia tuotannossa
+
+- **Tietokanta**:
+    - Käytä Liquibasea varmistamaan, että tietokanta pysyy synkronoituna sovelluksen kanssa.
+
+- **Dockerointi:**
+    - Luo sovelluksesta Docker-kuva ja varmista, että se voidaan ajaa riippumattomasti ympäristöstä.
 
 ## Käynnistys- ja käyttöohje
 
