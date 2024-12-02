@@ -289,6 +289,20 @@ Testin konfiguraatiot on suoritettu application-test.properties-tiedostossa, jos
 
 Testeissä ei testata lainkaan auktorisointia, ja se onkin kytketty pois päältä erillisessä TestSecurityConfig-luokassa, jota testit käyttävät.
 
+## Testattavat kohteet (End to End -testit)
+
+Testattavat kohteet on valittu ohjelmiston alkuperäisten käyttäjätarinoiden pohjalta. Testasimme muun muassa:
+
+- Sisäänkirjautumista
+- Admin-oikeuksia
+- Tapahtumien tarkastelua, hakua ja muokkaamista
+- Lipun myyntiä, tulostamista ja tarkastusta
+- Tapahtuman lisäämistä
+
+#### Miten testit toteutettiin?
+
+End to end -testit toteutettiin manuaalisesti ja testeistä luotiin excel-taulukko. Excel-taulukon löydät muutettuna md-taulukoksi erillisestä testausdokumentaatiosta, jonne ohjataan alempana.
+
 ### Erillinen testausdokumentaatio
 
 Löydät tarkemman dokumentaation testauksesta ja sen tuloksista [täältä](TestausDokumentaatio.md).
