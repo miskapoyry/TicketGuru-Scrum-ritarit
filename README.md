@@ -220,7 +220,7 @@ Tietokantakyselyt suoritetaan Spring Bootin JPA- ja Hibernate-kirjastojen avulla
 ### Palvelintoteutuksen yleiskuvaus
 
 - Backend: Spring Boot -sovellus, joka toimii RESTful API:n välityksellä. 
-- Frontend: Responsiivinen React-sovellus
+- Frontend: React-sovellus
 - Tietokanta: MariaDB/relaatiotietokanta. Spring Data JPA:n avulla käsitellään tietokannan kyselyjä. Liquibase huolehtii tietokannan rakenteellisten muutosten hallinnasta.
 
 ### Deployment-ratkaisut
