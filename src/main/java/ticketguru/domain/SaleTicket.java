@@ -19,8 +19,7 @@ public class SaleTicket {
     @JoinColumn(name = "sale_id", nullable = false)
     private Sale sale;
 
-    public SaleTicket() {
-    }
+    public SaleTicket() {}
 
     public SaleTicket(Ticket ticket, Sale sale) {
         this.ticket = ticket;
@@ -50,5 +49,4 @@ public class SaleTicket {
     public void setSale(Sale sale) {
         this.sale = sale;
     }
-
 }

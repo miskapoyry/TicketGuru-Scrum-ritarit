@@ -10,33 +10,26 @@ import jakarta.persistence.*;
 @Table(name = "role")
 public class Role {
 
-    // Unique identifier for the role
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id", nullable = false, updatable = false)
     private Long roleId;
 
-    // Name of the role
     @Column(name = "role_name", nullable = false)
     private String roleName;
 
-    // One to many relationship with AppUser
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonIgnore
     private List<AppUser> users;
 
-    // Default constructor
-    public Role() {
-    }
+    public Role() {}
 
-    // Constructor to initialize all fields
     public Role(Long roleId, String roleName, List<AppUser> users) {
         this.roleId = roleId;
         this.roleName = roleName;
         this.users = users;
     }
 
-    // Getters and setters
     public Long getRoleId() {
         return roleId;
     }
