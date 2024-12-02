@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ticketguru.DTO.SaleDTO;
+import ticketguru.DTO.SalesSummaryDTO;
 import ticketguru.service.SaleService;
 import ticketguru.repository.AppUserRepository;
 
@@ -61,6 +62,12 @@ public class SaleResource {
         }
         // Palauta myyntitiedot, jos löytyi
         return ResponseEntity.ok(sale);
+    }
+
+    @GetMapping("/summary/{eventId}")
+    public ResponseEntity<SalesSummaryDTO> generateSalesSummaryReport(@PathVariable Long eventId) {
+        SalesSummaryDTO report = saleService.generateSalesSummaryReport(eventId);
+        return ResponseEntity.ok(report);
     }
 
     @GetMapping("/search")

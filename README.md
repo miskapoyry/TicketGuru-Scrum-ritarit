@@ -18,7 +18,7 @@ TicketGuru tarjoaa lipunmyyjille työkalut lipunmyyntiin, tulostukseen ja lipun 
 ### Toteutus- ja toimintaympäristö lyhyesti:
 
 -   Palvelinpuolen ratkaisut ja teknologiat: SpringBoot, MariaDB
--   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), Mobiililaitteet (Android ja iOS), React, Bootstrap
+-   Käyttöliittymäratkaisut ja teknologiat: Desktop (Windows), React, Bootstrap
 
 ### Mitä valmiina, kun projekti päättyy?
 
@@ -44,7 +44,6 @@ Projektin päättyessä ovat valmiina seuraavat osa-alueet: lipunmyyntijärjeste
 -   Lipunmyyjänä haluan myydä ja tulostaa lippuja asiakkaille, että he voivat osallistua tapahtumaan.
 -   Lipunmyyjänä haluan merkitä liput käytetyiksi ovella varmistuakseni, että vain maksaneet asiakkaat pääsevät osallistumaan tapahtumaan.
 -   Lipunmyyjänä haluan tarkastella tulevia tapahtumia ja lipputilannetta, että voin etsiä ja tarjota sopivia vaihtoehtoja asiakkaille.
--   Lipunmyyjänä haluan, että järjestelmä on saatavilla 99,9 % ajasta, että voin myydä asiakkaille lippuja ja tarkastaa niitä ilman keskeytyksiä.
 -   Lipunmyyjänä haluan, että lipun myyntitapahtuma kestää alle 2 sekuntia, että voin myydä lippuja nopeasti ilman asiakaspalvelun ruuhkautumista.
 
 
@@ -110,63 +109,63 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> user_id | Long PK | Käyttäjän yksilöivä tunniste
-> role_id | Long FK | Roolin tunniste (viittaus role-tauluun)
-> username | varchar(50) |  Käyttäjän käyttäjätunnus
-> passwordhash | varchar(255) | Käyttäjän salasana
+> user_id | BIGINT PK NOT NULL AUTO_INCREMENT | Käyttäjän yksilöivä tunniste
+> role_id | BIGINT FK NOT NULL | Roolin tunniste (viittaus role-tauluun)
+> username | VARCHAR (255) NOT NULL UNIQUE |  Käyttäjän käyttäjätunnus
+> passwordhash | VARCHAR (255)  NOT NULL | Käyttäjän salasana
 
 > ### _role_
 > _rooli-taulu sisältää roolien tiedot. Yhdellä käyttäjällä voi olla vain yksi rooli._
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> role_id | Long PK | Roolin yksilöivä tunniste
-> role_name | varchar(20) |  Roolin nimi
+> role_id | BIGINT PK NOT NULL AUTO_INCREMENT | Roolin yksilöivä tunniste
+> role_name | VARCHAR NOT NULL |  Roolin nimi
 
 > ### _event_
 > _event-taulu sisältää yksittäisen tapahtuman tiedot._
 >
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> event_id | Long PK | Tapahtuman yksilöivä tunniste
-> user_id | Long FK | Käyttäjä, joka on luonut tapahtuman (viittaus tauluun app_user)
-> event_name | varchar(100) |  Tapahtuman nimi
-> event_date | timestamp | Tapahtuman päivämäärä ja aika
-> location | varchar(100) | Tapahtuman sijainti
-> total_tickets | int | Lippujen määrä tapahtumassa kaikkiaan
-> available_tickets | int | Saatavilla olevien lippujen määrä tapahtumassa
+> event_id | BIGINT PK NOT NULL AUTO_INCREMENT | Tapahtuman yksilöivä tunniste
+> user_id | BIGINT FK NOT NULL | Käyttäjä, joka on luonut tapahtuman (viittaus tauluun app_user)
+> event_name | VARCHAR (255) NOT NULL |  Tapahtuman nimi
+> event_date | TIMESTAMP NOT NULL | Tapahtuman päivämäärä ja aika
+> location | VARCHAR (255) NOT NULL | Tapahtuman sijainti
+> total_tickets | INT NOT NULL | Lippujen määrä tapahtumassa kaikkiaan
+> available_tickets | INT NOT NULL| Saatavilla olevien lippujen määrä tapahtumassa
 
 > ### _ticket_type_
 > _ticket_type -taulu sisältää lipputyyppien tiedot._
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> ticket_type_id | Long PK | Lipputyypin yksilöivä tunniste
-> ticket_type_name | varchar (50) | Lipputyypin nimi (esim. "aikuinen" tai "lapsi")
+> ticket_type_id | BIGINT PK NOT NULL AUTO_INCREMENT | Lipputyypin yksilöivä tunniste
+> ticket_type_name | VARCHAR (255) NOT NULL| Lipputyypin nimi (esim. "aikuinen" tai "lapsi")
 
 > ### _event_ticket_type_
 > _event_ticket_type-taulu yhdistää tapahtumat ja lipputyypit mahdollistaen erilaisten lippujen hallinnan tapahtumakohtaisesti. Taulu tallentaa tiedot tietyn lipputyypin saatavuudesta ja määrästä kullekin tapahtumalle sekä lipputyypin hinnan._
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> event_ticket_type_id | Long PK | Tapahtuma, johon lippu liittyy (viittaus tauluun event)
-> ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
-> event_id | Long FK | Tapahtuma (viittaus tauluun event)
-> ticket_quantity | int |  Saatavilla oleva määrä tietylle lipputyypille
-> price | decimal (10, 2) |  Lipun hinta
+> event_ticket_type_id | BIGINT PK NOT NULL AUTO_INCREMENT | Event ticket typen yksilöivä tunniste
+> ticket_type_id | BIGINT FK NOT NULL | Lipputyyppi (viittaus tauluun ticket_type)
+> event_id | BIGINT FK NOT NULL | Tapahtuma (viittaus tauluun event)
+> ticket_quantity | INT NOT NULL |  Saatavilla oleva määrä tietylle lipputyypille
+> price | DECIMAL (10, 2) NOT NULL|  Lipun hinta
 
 > ### _ticket_
 > _ticket-taulu sisältää yksittäisen lipun tiedot._
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> ticket_id | Long PK | Lipun yksilöivä tunniste
-> ticket_number | varchar (50) | Lipun numero tai tunniste
-> ticket_type_id | Long FK | Lipputyyppi (viittaus tauluun ticket_type)
-> event_id | Long FK | Tapahtuma (viittaus tauluun event)
-> sale_id | Long FK | Myyntitapahtuman id (viittaus tauluun sale)
-> sale_timestamp | TIMESTAMP | Lipun myyntiaika
-> is_used | BOOLEAN | Lipun käyttötilanne
+> ticket_id | BIGINT PK NOT NULL AUTO_INCREMENT | Lipun yksilöivä tunniste
+> ticket_number | VARCHAR (255) NOT NULL | Lipun numero tai tunniste
+> ticket_type_id | BIGINT FI NOT NULL | Lipputyyppi (viittaus tauluun ticket_type)
+> event_id | BIGINT FK NOT NULL | Tapahtuma (viittaus tauluun event)
+> sale_id | BIGINT FK NOT NULL | Myyntitapahtuman id (viittaus tauluun sale)
+> sale_timestamp | TIMESTAMP NOT NULL | Lipun myyntiaika
+> is_used | TINYINT NOT NULL | Lipun käyttötilanne
 > used_timestamp | TIMESTAMP | Ajankohta, jolloin lippu on käytetty (null, jos ei ole käytetty)
 
 > ### _sale_
@@ -174,31 +173,27 @@ Tietokanta on suunniteltu tukemaan käyttäjien, tapahtumien ja lippujen hallint
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> sale_id | Long PK | Myyntitapahtuman yksilöivä tunniste
-> sale_timestamp | TIMESTAMP | Myyntitapahtuman ajankohta
-> user_id | Long FK | Myynnin suorittanut käyttäjä (viittaus tauluun app_user)
-> payment_method_id | Long FK | Maksutapa (viittaus tauluun payment_method)
-> total_price | decimal (10, 2) | Myynnin kokonaissumma
+> sale_id | BIGINT PK NOT NULL AUTO_INCREMENT | Myyntitapahtuman yksilöivä tunniste
+> sale_timestamp | TIMESTAMP NOT NULL | Myyntitapahtuman ajankohta
+> user_id | BIGINT FK | Myynnin suorittanut käyttäjä (viittaus tauluun app_user)
+> payment_method_id | BIGINT FK | Maksutapa (viittaus tauluun payment_method)
+> total_price | DECIMAL (10, 2) | Myynnin kokonaissumma
 
 > ### _payment_method_
 > _payment_method -taulu sisältää maksutapatyyppien tiedot._
 
 > Kenttä | Tyyppi | Kuvaus
 > ------ | ------ | ------
-> payment_method_id | Long PK | Maksutavan yksilöivä tunniste
-> payment_method_name | varchar (20) | Maksutavan nimi (esim. "Credit card" tai "Cash")
+> payment_method_id | BIGINT PK NOT NULL AUTO_INCREMENT | Maksutavan yksilöivä tunniste
+> payment_method_name | VARCHAR (255) | Maksutavan nimi (esim. "Credit card" tai "Cash")
 
 ## Tekninen kuvaus
 
-### Laitteisto
-
-Käyttäjät voivat käyttää järjestelmää sekä tietokoneella että mobiililaitteilla. 
-
 ### Kerrosarkkitehtuuri
 
-- Frontend (käyttöliittymä): Bootstrap-kirjastoa hyödyntävä React-sovellus, joka ajetaan käyttäjän selaimessa
-- Backend (sovelluslogiikka): Spring Boot -sovellus, joka pyörii Rahti2-palvelimella
-- Tietokanta: MariaDB, joka sijaitsee samalla palvelimella
+- Frontend (käyttöliittymä): Frontendin kehityksessä on käytetty Reactia, TypeScriptiä ja Viteä, jotka yhdessä mahdollistavat tehokkaan ja dynaamisen käyttöliittymän rakentamisen. Käyttöliittymässä hyödynnetään Reactstrapia ja Bootstrapia ulkoasun ja responsiivisuuden hallintaan. Asynkroniset HTTP-pyynnöt toteutetaan Axiosilla.
+- Backend (sovelluslogiikka): Spring Boot -sovellus, joka pyörii Rahti2-palvelimella.
+- Tietokanta: MariaDB, joka sijaitsee Rahti2-palvelimella.
 
 #### Sovelluksen rakenne
 
@@ -258,25 +253,6 @@ Virheelliset API-pyynnöt palauttavat HTTP-virhekoodin (esim. 400 Bad Request) j
 
 Lokitusmekanismina on Spring Bootin Logback (perusasetusten mukainen oletuslokitusmekanismi). Hibernate-kyselyt tulostetaan konsoliin.
 
-Teknisessä kuvauksessa esitetään järjestelmän toteutuksen suunnittelussa tehdyt tekniset
-ratkaisut, esim.
-
--   Missä mikäkin järjestelmän komponentti ajetaan (tietokone, palvelinohjelma)
-    ja komponenttien väliset yhteydet (vaikkapa tähän tyyliin:
-    https://security.ufl.edu/it-workers/risk-assessment/creating-an-information-systemdata-flow-diagram/)
--   Palvelintoteutuksen yleiskuvaus: teknologiat, deployment-ratkaisut yms.
--   Keskeisten rajapintojen kuvaukset, esimerkit REST-rajapinta. Tarvittaessa voidaan rajapinnan käyttöä täsmentää
-    UML-sekvenssikaavioilla.
--   Toteutuksen yleisiä ratkaisuja, esim. turvallisuus.
-
-Tämän lisäksi
-
--   ohjelmakoodin tulee olla kommentoitua
--   luokkien, metodien ja muuttujien tulee olla kuvaavasti nimettyjä ja noudattaa
-    johdonmukaisia nimeämiskäytäntöjä
--   ohjelmiston pitää olla organisoitu komponentteihin niin, että turhalta toistolta
-    vältytään
-
 ## Testaus
 
 Sovellukseen on tehty yksikkötestejä (JUnit) joihinkin service-kerroksen luokkiin sekä integraatiotestejä joihinkin web-kerroksen luokkiin. Kokonaisvaltaista testausta ei aikataulusyiden ja rajallisten resurssien takia pystytty tekemään. Alla tarkempi erittely siitä, mitä luokkia testattiin.
@@ -312,6 +288,20 @@ Testit suoritetaan MockMvc-kirjaston avulla, joka simuloi HTTP-pyyntöjä ja vas
 Testin konfiguraatiot on suoritettu application-test.properties-tiedostossa, jossa on määritelty, että testeissä käytetään ajonaikaista H2-kantaa. Kaikkien toiminnallisuuksien onnistumiseksi testeihin on määritelty, että siitä huolimatta käytetään MariaDB-dialectiä. Tietokannan skeemaa hallinnoidaan Liquibasessa, jossa sijaitsee myös testeissä käytettävä testidata.
 
 Testeissä ei testata lainkaan auktorisointia, ja se onkin kytketty pois päältä erillisessä TestSecurityConfig-luokassa, jota testit käyttävät.
+
+### Testattavat kohteet (End to End -testit)
+
+Testattavat kohteet on valittu ohjelmiston alkuperäisten käyttäjätarinoiden pohjalta. Testasimme muun muassa:
+
+- Sisäänkirjautumista
+- Admin-oikeuksia
+- Tapahtumien tarkastelua, hakua ja muokkaamista
+- Lipun myyntiä, tulostamista ja tarkastusta
+- Tapahtuman lisäämistä
+
+#### Miten testit toteutettiin?
+
+End to end -testit toteutettiin manuaalisesti ja testeistä luotiin excel-taulukko. Excel-taulukon löydät muutettuna md-taulukoksi erillisestä testausdokumentaatiosta, jonne ohjataan alempana.
 
 ### Erillinen testausdokumentaatio
 

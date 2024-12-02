@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import ticketguru.domain.Event;
 import ticketguru.domain.Sale;
 import ticketguru.domain.Ticket;
+import ticketguru.domain.TicketType;
 
 // This interface is a repository for the Ticket entity
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
@@ -20,5 +21,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     List<Ticket> findByEventAndSale(Event event, Sale sale);
 
     Optional<Ticket> findByTicketNumber(String ticketNumber);
+
+    int countByEventAndTicketType(Event event, TicketType ticketType);
 
 }
