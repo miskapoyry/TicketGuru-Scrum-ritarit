@@ -321,6 +321,137 @@ Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
 käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
 käyttäjätunnus, salasana, tietokannan luonti yms.).
 
+### Järjestelmän kehitysympäristö (Back end)
+
+### 1. Vaatimukset ennen asentamista:
+
+- **Java** versio *17*
+- **Spring Boot** versio 3.3.3
+- **Maven** versio *4.0.0*
+- **MariaDB** -tietokannan asennus
+
+### 2. Kehitysympäristön valmistelu:
+
+**Projektin kloonaus**
+
+Kloonaa projektin lähdekoodi GitHubista:
+
+Web URL: *https://github.com/miskapoyry/TicketGuru-Scrum-ritarit.git*
+
+```bash
+cd <haluttu-polku>
+git clone <repository-url>
+cd <project-folder>
+```
+
+**Tietokannan konfigurointi**
+
+Tietokantakonfiguraatiot löytyvät application-dev.properties-tiedostosta.
+
+```properties
+spring.application.name=ticketguru
+spring.datasource.url=jdbc:mariadb://localhost:3306/ticketguru
+spring.datasource.username=your_username_here
+spring.datasource.password=your_password_here
+spring.datasource.driver-class-name=org.mariadb.jdbc.Driver
+spring.jpa.hibernate.ddl-auto=none
+spring.jpa.show-sql=true
+spring.liquibase.change-log=classpath:db/changelog/db.master.xml
+spring.jpa.hibernate.naming.physical-strategy=org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+````
+
+**MariaDB:n ja Liquibasen käyttö**
+
+Tietokanta generoidaan automaattisesti Liquibasen avulla, kun projekti käynnistetään ensimmäisen kerran. Voit tarkastella tietokantaa käyttämällä esim. **HeidiSQL** tai muuta vastaavaa.
+
+### 3. Projektin rakentaminen ja ajaminen ###
+
+**Riippuvuuksien lataaminen:**
+
+Aja seuraava komento projektikansion juuresta:
+
+```bash
+mvn clean install
+```
+
+Tämä varmistaa, että kaikki riippuvuudet ladataan ja projekti rakennetaan.
+
+**Projektin käynnistäminen:**
+
+```bash
+mvn spring-boot:run
+```
+
+Mikäli käytät esim. **Visual Studio Codea**, voit käynnistää sovelluksen myös Spring Boot Dashboardista painamalla *"Run"*-nappulaa.
+
+### Järjestelmän kehitysympäristö (Front end)
+
+### 1. Vaatimuksen ennen asentamista: 
+
+- **Node.js** ja **npm**
+    - Tarkista syöttämällä komennot:
+    ```bash
+    node -v
+    npm -v
+    ```
+    Jos Node.js puuttuu, asenna se Node.js:n viralliselta sivustolta: https://nodejs.org/.
+
+### 2. Repositorion kloonaus: 
+
+Kloonaa projektin lähdekoodi GitHubista:
+
+Web URL: *https://github.com/duomaz49/scrum-ritarit-front-end.git*
+
+
+```bash
+cd <haluttu-polku>
+git clone <repository-url>
+cd <project-folder>
+```
+
+### 3. Kirjastojen asentaminen:
+
+Kaikki tarvittavat riippuvuudet voidaan asentaa seuraavalla komennolla:
+
+```bash
+npm install
+```
+
+### 4. Clientin käynnistys:
+
+Saat projektin käynnistymään komennolla:
+
+```bash
+npm run dev
+```
+
+Kun projekti on käynnissä, sovellus löytyy selaimesta osoitteesta: *http://localhost:5137*
+
+### Asennus tuotantoympäristöön
+
+Julkaisimme projektin Rahti2-palvelimella, mutta sovelluksen voi asentaa myös muihinkin  tuotantoympäristöihin. Huomioon otettavia seikkoja tuotantoympäristöön siirtyessä on muun muassa:
+
+- **Ympäristömuuttujat:**
+    - Älä koskaan tallenna salasanoja koodiin vaan käytä ympäristömuuttujia
+    - Esimerkki konfiguraatiosta:
+
+```properties
+    spring.datasource.username=${DB_USER}
+    spring.datasource.password=${DB_PASSWORD}
+```
+
+- **Cors-säädöt:**
+    - Määritä sallitut lähteet (originit), jotta sovellus ei hyväksy pyyntöjä mistä tahansa.
+
+- **Spring Bootin asetukset:**
+    - Varmista, että Spring Boot käyttää prod -profiilia tuotannossa
+
+- **Tietokanta**:
+    - Käytä Liquibasea varmistamaan, että tietokanta pysyy synkronoituna sovelluksen kanssa.
+
+- **Dockerointi:**
+    - Luo sovelluksesta Docker-kuva ja varmista, että se voidaan ajaa riippumattomasti ympäristöstä.
+
 ## Käynnistys- ja käyttöohje
 
 Sovellus pyörii Rahti2-palvelimella osoitteessa: https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi/.
