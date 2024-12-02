@@ -30,7 +30,8 @@ public class EventTicketTypeResource {
             errorResponse.put("message", "EventTicketTypeDTO list is null or empty.");
             return ResponseEntity.badRequest().body(errorResponse);
         }
-        List<EventTicketTypeDTO> createdEventTicketTypes = eventTicketTypeService.createEventTicketTypes(eventTicketTypeDTOs);
+        List<EventTicketTypeDTO> createdEventTicketTypes = eventTicketTypeService
+                .createEventTicketTypes(eventTicketTypeDTOs);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdEventTicketTypes);
     }
 

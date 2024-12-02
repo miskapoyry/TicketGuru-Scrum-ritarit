@@ -25,10 +25,8 @@ public class AuthResource {
 
     @PostMapping("/login")
     public ResponseEntity<Map<String, String>> login(@RequestBody LoginDTO loginDTO) {
-
         boolean authenticated = authService.authenticatePassword(loginDTO);
         if (authenticated) {
-
             String role = authService.getUserRole(loginDTO.getUsername());
             Long userId = authService.getUserId(loginDTO.getUsername());
 
