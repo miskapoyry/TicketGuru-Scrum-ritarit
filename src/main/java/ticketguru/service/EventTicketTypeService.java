@@ -30,13 +30,7 @@ public class EventTicketTypeService {
 
     public List<EventTicketTypeDTO> createEventTicketTypes(List<EventTicketTypeDTO> eventTicketTypeDTOs) {
         List<EventTicketType> eventTicketTypes = eventTicketTypeDTOs.stream().map(dto -> {
-            if (dto.getTicketQuantity() <= 0) {
-                throw new InvalidInputException("Ticket quantity must be greater than zero");
-            }
-            if (dto.getPrice() <= 0) {
-                throw new InvalidInputException("Price must be greater than zero");
-            }
-    
+            validateEventTicketTypeDTO(dto);
 
             Event event = eventRepository.findById(dto.getEventId())
                     .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID"));
@@ -57,33 +51,31 @@ public class EventTicketTypeService {
     }
 
     public List<EventTicketTypeDTO> getAllEventTicketTypes() {
-        List<EventTicketType> eventTicketTypes = eventTicketTypeRepository.findAll();
-        return eventTicketTypes.stream()
+        return eventTicketTypeRepository.findAll().stream()
                 .map(this::convertToDto)
                 .collect(Collectors.toList());
     }
 
     public Optional<EventTicketTypeDTO> getEventTicketTypeById(Long id) {
-        EventTicketType eventTicketType = eventTicketTypeRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("EventTicketType with ID " + id + " not found"));
-        return Optional.of(convertToDto(eventTicketType));
+        return eventTicketTypeRepository.findById(id)
+                .map(this::convertToDto)
+                .or(() -> {
+                    throw new ResourceNotFoundException("EventTicketType with ID " + id + " not found");
+                });
     }
 
     public Optional<EventTicketTypeDTO> updateEventTicketType(Long id, EventTicketType updatedEventTicketType) {
-        if (updatedEventTicketType.getTicketQuantity() <= 0) {
-            throw new InvalidInputException("Ticket quantity must be greater than zero");
-        }
-        if (updatedEventTicketType.getPrice() <= 0) {
-            throw new InvalidInputException("Price must be greater than zero");
-        }
+        validateEventTicketType(updatedEventTicketType);
 
         EventTicketType existingEventTicketType = eventTicketTypeRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("EventTicketType with ID " + id + " not found"));
 
         Event event = eventRepository.findById(updatedEventTicketType.getEvent().getEventId())
-                .orElseThrow(() -> new ResourceNotFoundException("Event not found with given ID: " + updatedEventTicketType.getEvent().getEventId()));
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Event not found with given ID: " + updatedEventTicketType.getEvent().getEventId()));
         TicketType ticketType = ticketTypeRepository.findById(updatedEventTicketType.getTicketType().getTicketTypeId())
-                .orElseThrow(() -> new ResourceNotFoundException("TicketType not found with given ID: " + updatedEventTicketType.getTicketType().getTicketTypeId()));
+                .orElseThrow(() -> new ResourceNotFoundException("TicketType not found with given ID: "
+                        + updatedEventTicketType.getTicketType().getTicketTypeId()));
 
         existingEventTicketType.setEvent(event);
         existingEventTicketType.setTicketType(ticketType);
@@ -93,6 +85,7 @@ public class EventTicketTypeService {
         EventTicketType savedEventTicketType = eventTicketTypeRepository.save(existingEventTicketType);
         return Optional.of(convertToDto(savedEventTicketType));
     }
+
     public boolean deleteEventTicketType(Long id) {
         if (!eventTicketTypeRepository.existsById(id)) {
             return false;
@@ -111,5 +104,25 @@ public class EventTicketTypeService {
                 eventTicketType.getPrice(),
                 eventTicketType.getEvent().getEventName(), // Mapping event name
                 eventTicketType.getTicketType().getTicketTypeName()); // Mapping ticket type name
+    }
+
+    // Utility function to validate EventTicketTypeDTO
+    private void validateEventTicketTypeDTO(EventTicketTypeDTO dto) {
+        if (dto.getTicketQuantity() <= 0) {
+            throw new InvalidInputException("Ticket quantity must be greater than zero");
+        }
+        if (dto.getPrice() <= 0) {
+            throw new InvalidInputException("Price must be greater than zero");
+        }
+    }
+
+    // Utility function to validate EventTicketType
+    private void validateEventTicketType(EventTicketType eventTicketType) {
+        if (eventTicketType.getTicketQuantity() <= 0) {
+            throw new InvalidInputException("Ticket quantity must be greater than zero");
+        }
+        if (eventTicketType.getPrice() <= 0) {
+            throw new InvalidInputException("Price must be greater than zero");
+        }
     }
 }

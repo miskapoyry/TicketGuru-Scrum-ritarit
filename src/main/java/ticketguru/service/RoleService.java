@@ -16,6 +16,7 @@ public class RoleService {
     @Autowired
     private RoleRepository roleRepository;
 
+    // Create a new role
     public Role createRole(Role role) {
         if (role.getRoleId() != null) {
             throw new IllegalArgumentException("New role cannot already have an ID");
@@ -23,43 +24,38 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
+    // Update an existing role
     public Role updateRole(Long id, Role role) {
-        Optional<Role> existingRoleOptional = roleRepository.findById(id);
-
-        if (existingRoleOptional.isEmpty()) {
-            throw new IllegalArgumentException("Role not found");
-        }
-
-        Role existingRole = existingRoleOptional.get();
+        Role existingRole = roleRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Role not found"));
 
         existingRole.setRoleName(role.getRoleName()); // Roolinimen päivitys
 
-         
         if (role.getUsers() != null) {
             // Tyhjennetään nykyiset
             existingRole.getUsers().clear();
-        
+
             // Lisätään uudet käyttäjät ja asetetaan roolit
             for (AppUser user : role.getUsers()) {
-                user.setRole(existingRole);  
+                user.setRole(existingRole);
                 existingRole.getUsers().add(user);
             }
         }
-            
-
-       // existingRole.setUsers(role.getUsers()); // Optional: update users if needed // tämä pois
 
         return roleRepository.save(existingRole);
     }
 
+    // Get a role by ID
     public Optional<Role> getRole(Long id) {
         return roleRepository.findById(id);
     }
 
+    // Get all roles
     public List<Role> getAllRoles() {
         return roleRepository.findAll();
     }
 
+    // Delete a role by ID
     public void deleteRole(Long id) {
         if (!roleRepository.existsById(id)) {
             throw new IllegalArgumentException("Role not found");
