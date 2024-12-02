@@ -1,6 +1,6 @@
 # TicketGuru
 
-SCRUM-Ritarit
+**SCRUM-Ritarit**
 
 Tiimi: Miska Pöyry, Tuomas Sirviö, Hanna-Riikka Happonen, Roosa Karjalainen, Pekka Näätsaari, Jesse Ritola
 
@@ -309,14 +309,6 @@ Löydät tarkemman dokumentaation testauksesta ja sen tuloksista [täältä](Tes
 
 ## Asennustiedot
 
-Järjestelmän asennus on syytä dokumentoida kahdesta näkökulmasta:
-
--   järjestelmän kehitysympäristö: miten järjestelmän kehitysympäristön saisi
-    rakennettua johonkin toiseen koneeseen
-
--   järjestelmän asentaminen tuotantoympäristöön: miten järjestelmän saisi
-    asennettua johonkin uuteen ympäristöön.
-
 Asennusohjeesta tulisi ainakin käydä ilmi, miten käytettävä tietokanta ja
 käyttäjät tulee ohjelmistoa asentaessa määritellä (käytettävä tietokanta,
 käyttäjätunnus, salasana, tietokannan luonti yms.).
@@ -394,7 +386,7 @@ Mikäli käytät esim. **Visual Studio Codea**, voit käynnistää sovelluksen m
     node -v
     npm -v
     ```
-    Jos Node.js puuttuu, asenna se Node.js:n viralliselta sivustolta: https://nodejs.org/.
+    Jos Node.js puuttuu, asenna se Node.js:n viralliselta sivustolta: *https://nodejs.org/*.
 
 ### 2. Repositorion kloonaus: 
 
@@ -454,7 +446,7 @@ Julkaisimme projektin Rahti2-palvelimella, mutta sovelluksen voi asentaa myös m
 
 ## Käynnistys- ja käyttöohje
 
-Sovellus pyörii Rahti2-palvelimella osoitteessa: https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi/.
+Sovellus pyörii Rahti2-palvelimella osoitteessa: *https://scrum-ritarit-frontend-ticketguru-scrum-ritarit.2.rahtiapp.fi/*.
 
 Käyttöliittymä ohjaa automaattisesti kirjautumiseen.
 
@@ -471,10 +463,3 @@ Tässä **admin**-tasoisen käyttäjän tunnukset:
 >**Password:** *admin*
 
 **Huomaathan, että frontend on yhdistettynä rahdissa julkaistuun MariaDB:hen, joten muutokset tulevat siis sinne!**
-
-Tyypillisesti tässä riittää kertoa ohjelman käynnistykseen tarvittava URL sekä
-mahdolliset kirjautumiseen tarvittavat tunnukset. Jos järjestelmän
-käynnistämiseen tai käyttöön liittyy joitain muita toimenpiteitä tai toimintajärjestykseen liittyviä asioita, nekin kerrotaan tässä yhteydessä.
-
-Usko tai älä, tulet tarvitsemaan tätä itsekin, kun tauon jälkeen palaat
-järjestelmän pariin !
