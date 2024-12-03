@@ -3,6 +3,7 @@ package ticketguru.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.util.Optional;
 
 import ticketguru.DTO.LoginDTO;
 import ticketguru.domain.AppUser;
@@ -17,28 +18,21 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public boolean authenticatePassword(LoginDTO loginDTO){
-        AppUser user = appUserRepository.findByUsername(loginDTO.getUsername());
-        if(user == null){
-            return false;
-        }
-        else{
-            return passwordEncoder.matches(loginDTO.getPassword(), user.getPasswordHash()); 
-        }
+    public boolean authenticatePassword(LoginDTO loginDTO) {
+        return Optional.ofNullable(appUserRepository.findByUsername(loginDTO.getUsername()))
+                .map(user -> passwordEncoder.matches(loginDTO.getPassword(), user.getPasswordHash()))
+                .orElse(false);
     }
-    
-    public String getUserRole(String username){
-        AppUser user = appUserRepository.findByUsername(username);
-        if(user != null){
-            return user.getRole().getRoleName();
-        }
-        return "No role";
+
+    public String getUserRole(String username) {
+        return Optional.ofNullable(appUserRepository.findByUsername(username))
+                .map(user -> user.getRole().getRoleName())
+                .orElse("No role");
     }
-    public Long getUserId(String username){
-        AppUser user = appUserRepository.findByUsername(username);
-        if(user != null){
-            return user.getUserId();
-        }
-        return null;
+
+    public Long getUserId(String username) {
+        return Optional.ofNullable(appUserRepository.findByUsername(username))
+                .map(AppUser::getUserId)
+                .orElse(null);
     }
 }

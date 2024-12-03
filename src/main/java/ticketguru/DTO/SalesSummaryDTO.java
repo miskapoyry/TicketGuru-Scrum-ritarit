@@ -3,6 +3,7 @@ package ticketguru.DTO;
 import java.util.Map;
 
 public class SalesSummaryDTO {
+
     private String eventName;
     private int totalSales;
     private double totalRevenue;
@@ -23,6 +24,7 @@ public class SalesSummaryDTO {
         this.revenueByTicketType = revenueByTicketType;
     }
 
+    // Getters and setters
     public String getEventName() {
         return eventName;
     }
@@ -31,7 +33,6 @@ public class SalesSummaryDTO {
         this.eventName = eventName;
     }
 
-    // Getters and setters
     public int getTotalSales() {
         return totalSales;
     }

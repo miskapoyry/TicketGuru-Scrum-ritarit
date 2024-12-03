@@ -5,33 +5,31 @@ import jakarta.validation.constraints.*;
 
 public class TicketDTO {
 
-    // Fields
     private Long ticketId;
     private String ticketNumber;
+
     @NotNull(message = "Event ID is required")
     private Long eventId;
     private String eventName;
+
     @NotNull(message = "Ticket type ID is required")
     private Long ticketTypeId;
     private String ticketTypeName;
 
     private Long saleId;
     private Timestamp saleTimestamp;
+
     @NotNull(message = "isUsed field is required")
     private Boolean isUsed;
     private Timestamp usedTimestamp;
+
     @Min(value = 1, message = "Quantity must be at least 1")
     private int quantity;
     private double price;
 
-    // Default constructor
-    public TicketDTO() {
-    }
+    public TicketDTO() {}
 
-    // Constructor to initialize all fields
-    public TicketDTO(Long ticketId, String ticketNumber, Long eventId, String eventName, Long ticketTypeId,
-            String ticketTypeName, Long saleId,
-            Timestamp saleTimestamp, Boolean isUsed, Timestamp usedTimestamp, int quantity, double price) {
+    public TicketDTO(Long ticketId, String ticketNumber, Long eventId, String eventName, Long ticketTypeId, String ticketTypeName, Long saleId, Timestamp saleTimestamp, Boolean isUsed, Timestamp usedTimestamp, int quantity, double price) {
         this.ticketId = ticketId;
         this.ticketNumber = ticketNumber;
         this.eventId = eventId;
@@ -111,7 +109,7 @@ public class TicketDTO {
         this.saleTimestamp = saleTimestamp;
     }
 
-    public Boolean isUsed() {
+    public Boolean IsUsed() {
         return isUsed;
     }
 
@@ -142,5 +140,4 @@ public class TicketDTO {
     public void setPrice(double price) {
         this.price = price;
     }
-
 }

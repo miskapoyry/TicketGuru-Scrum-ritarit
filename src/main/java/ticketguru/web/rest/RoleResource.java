@@ -20,7 +20,7 @@ public class RoleResource {
     @Autowired
     private RoleService roleService;
 
-    @PostMapping("")
+    @PostMapping
     public ResponseEntity<Role> createRole(@Valid @RequestBody Role role) {
         try {
             Role createdRole = roleService.createRole(role);
@@ -46,7 +46,7 @@ public class RoleResource {
         return ResponseEntity.of(role);
     }
 
-    @GetMapping("")
+    @GetMapping
     public List<Role> getAllRoles() {
         return roleService.getAllRoles();
     }

@@ -1,6 +1,7 @@
 package ticketguru.DTO;
 
 public class TicketSummaryDTO {
+
     private Long ticketId;
     private int quantity;
     private double price;
@@ -45,5 +46,4 @@ public class TicketSummaryDTO {
     public void setEventId(Long eventId) {
         this.eventId = eventId;
     }
-
 }

@@ -17,25 +17,18 @@ public class PaymentMethod {
     @Column(name = "payment_method_name", nullable = false, unique = true)
     private String paymentMethodName;
 
-    // One to many relationship with Sale
     @OneToMany(mappedBy = "paymentMethod")
     private List<Sale> sales = new ArrayList<>();
 
-    public PaymentMethod(Long paymentMethodId, String paymentMethodName, List<Sale> sales) {
-        this.paymentMethodId = paymentMethodId;
-        this.paymentMethodName = paymentMethodName;
-        this.sales = sales;
-    }
+    public PaymentMethod() {}
 
     public PaymentMethod(String paymentMethodName) {
         this.paymentMethodName = paymentMethodName;
     }
 
-    public List<Sale> getSales() {
-        return sales;
-    }
-
-    public void setSales(List<Sale> sales) {
+    public PaymentMethod(Long paymentMethodId, String paymentMethodName, List<Sale> sales) {
+        this.paymentMethodId = paymentMethodId;
+        this.paymentMethodName = paymentMethodName;
         this.sales = sales;
     }
 
@@ -55,8 +48,11 @@ public class PaymentMethod {
         this.paymentMethodName = paymentMethodName;
     }
 
-    public PaymentMethod() {
-
+    public List<Sale> getSales() {
+        return sales;
     }
 
+    public void setSales(List<Sale> sales) {
+        this.sales = sales;
+    }
 }

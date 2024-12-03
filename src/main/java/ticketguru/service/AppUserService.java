@@ -11,7 +11,6 @@ import ticketguru.repository.RoleRepository;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class AppUserService {
@@ -25,62 +24,49 @@ public class AppUserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private AppUser convertToEntity(AppUserDTO dto) {
-        Role role = roleRepository.findById(dto.getRoleId()).orElse(null);
-        return new AppUser(dto.getUsername(), dto.getPasswordHash(), role, null, null);
+    private AppUser toEntity(AppUserDTO dto) {
+        return new AppUser(dto.getUsername(), dto.getPasswordHash(),
+                roleRepository.findById(dto.getRoleId()).orElse(null), null, null);
     }
 
-    private AppUserDTO convertToDTO(AppUser user) {
+    private AppUserDTO toDTO(AppUser user) {
         return new AppUserDTO(
                 user.getUserId(),
                 user.getUsername(),
                 user.getPasswordHash(),
-                user.getRole() != null ? user.getRole().getRoleId() : null,
-                user.getEvents().stream().map(event -> event.getEventId()).collect(Collectors.toList()),
-                user.getSales().stream().map(sale -> sale.getSaleId()).collect(Collectors.toList()));
+                Optional.ofNullable(user.getRole()).map(Role::getRoleId).orElse(null),
+                user.getEvents().stream().map(event -> event.getEventId()).toList(),
+                user.getSales().stream().map(sale -> sale.getSaleId()).toList());
     }
 
     public List<AppUserDTO> getAllUsers() {
-        return appUserRepository.findAll().stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return appUserRepository.findAll().stream().map(this::toDTO).toList();
     }
 
     public Optional<AppUserDTO> getUserById(Long id) {
-        return appUserRepository.findById(id).map(this::convertToDTO);
+        return appUserRepository.findById(id).map(this::toDTO);
     }
 
-    public AppUserDTO createUser(AppUserDTO appUserDTO) {
-        if (appUserRepository.existsByUsername(appUserDTO.getUsername())) {
+    public AppUserDTO createUser(AppUserDTO dto) {
+        if (appUserRepository.existsByUsername(dto.getUsername())) {
             throw new IllegalArgumentException("Username already exists");
         }
-    
-        AppUser appUser = convertToEntity(appUserDTO);
-        appUser.setPasswordHash(passwordEncoder.encode(appUserDTO.getPasswordHash()));
-        AppUser savedUser = appUserRepository.save(appUser);
-        return convertToDTO(savedUser);
+        dto.setPasswordHash(passwordEncoder.encode(dto.getPasswordHash()));
+        return toDTO(appUserRepository.save(toEntity(dto)));
     }
 
-    public Optional<AppUserDTO> updateUser(Long id, AppUserDTO appUserDetails) {
-
-        if (!appUserRepository.existsById(id)) {
-            return Optional.empty();
-        }
-
-        AppUser existingUser = appUserRepository.findById(id).get();
-        existingUser.setUsername(appUserDetails.getUsername());
-        existingUser.setPasswordHash(passwordEncoder.encode(appUserDetails.getPasswordHash()));
-        Role role = roleRepository.findById(appUserDetails.getRoleId()).orElse(null);
-        existingUser.setRole(role);
-
-        AppUser updatedUser = appUserRepository.save(existingUser);
-        return Optional.of(convertToDTO(updatedUser));
+    public Optional<AppUserDTO> updateUser(Long id, AppUserDTO dto) {
+        return appUserRepository.findById(id).map(user -> {
+            user.setUsername(dto.getUsername());
+            user.setPasswordHash(passwordEncoder.encode(dto.getPasswordHash()));
+            user.setRole(roleRepository.findById(dto.getRoleId()).orElse(null));
+            return toDTO(appUserRepository.save(user));
+        });
     }
 
     public boolean deleteUser(Long id) {
-        if (!appUserRepository.existsById(id)) {
+        if (!appUserRepository.existsById(id))
             return false;
-        }
         appUserRepository.deleteById(id);
         return true;
     }
