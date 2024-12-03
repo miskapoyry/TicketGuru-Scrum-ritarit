@@ -109,7 +109,7 @@ public class TicketDTO {
         this.saleTimestamp = saleTimestamp;
     }
 
-    public Boolean IsUsed() {
+    public Boolean isUsed() {
         return isUsed;
     }
 

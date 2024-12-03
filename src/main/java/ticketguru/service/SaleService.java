@@ -122,7 +122,7 @@ public class SaleService {
                 ticket.setEvent(event); // Määritellään tapahtuma, johon lippu(t) luodaan
                 ticket.setTicketType(new TicketType(ticketDTO.getTicketTypeId())); // Asetetaan ID:n avulla lipputyyppi
                 ticket.setSaleTimestamp(saleTimestamp); // Käytä jokaiselle lipulle samaa luontiaikaa
-                ticket.setUsed(ticketDTO.IsUsed()); // Määritä onko lippu käytetty vai ei
+                ticket.setUsed(ticketDTO.isUsed()); // Määritä onko lippu käytetty vai ei
                 ticket.setUsedTimestamp(ticketDTO.getUsedTimestamp()); // Käytetyn lipun aika
                 tickets.add(ticket);
             }
