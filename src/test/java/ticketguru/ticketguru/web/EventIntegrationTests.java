@@ -61,14 +61,11 @@ public class EventIntegrationTests {
                     "eventName": "New Event",
                     "eventDate": "2024-12-10T00:00:00.000+00:00",
                     "location": "Helsinki",
-                    "totalTickets": 100,
-                    "availableTickets": 80,
                     "eventTicketTypes": [
                         {
                             "ticketTypeId": 2,
-                            "ticketQuantity": 50,
-                            "price": 50.0,
-                            "ticketTypeName": "Regular"
+                            "ticketQuantity": 500,
+                            "price": 50.0
                         }
                     ]
                 }
@@ -86,22 +83,16 @@ public class EventIntegrationTests {
     public void testUpdateEvent() throws Exception {
         Long eventId = 1L;
         String updatedEvent = """
-                {
+                     {
                     "userId": 1,
-                    "eventName": "Updated Event",
-                    "eventDate": "2024-12-15T00:00:00.000+00:00",
-                    "location": "Espoo",
-                    "totalTickets": 150,
-                    "availableTickets": 120,
+                    "eventName": "Newer Event",
+                    "eventDate": "2024-12-10T00:00:00.000+00:00",
+                    "location": "Helsinki",
                     "eventTicketTypes": [
                         {
-                            "eventTicketTypeId": 1,
-                            "eventId": 1,
                             "ticketTypeId": 2,
-                            "ticketQuantity": 50,
-                            "price": 50.0,
-                            "eventName": "New Event",
-                            "ticketTypeName": "Regular"
+                            "ticketQuantity": 500,
+                            "price": 50.0
                         }
                     ]
                 }
@@ -110,7 +101,7 @@ public class EventIntegrationTests {
         mockMvc.perform(put("/api/events/1", eventId)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(updatedEvent)).andExpect(status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.eventName", is("Updated Event")));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.eventName", is("Newer Event")));
     }
 
     // Testataan tapahtuman etsimistä olemattomalla id:llä
