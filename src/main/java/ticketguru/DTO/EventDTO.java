@@ -29,7 +29,6 @@ public class EventDTO {
     @Size(max = 150, message = "Location can be at most 150 characters long")
     private String location;
 
-    @Min(value = 1, message = "Total tickets must be at least 1")
     private int totalTickets;
 
     @Min(value = 0, message = "Available tickets cannot be negative")
@@ -38,9 +37,11 @@ public class EventDTO {
     @Size(min = 1, message = "Event must contain at least one ticket type")
     private List<EventTicketTypeDTO> eventTicketTypes;
 
-    public EventDTO() {}
+    public EventDTO() {
+    }
 
-    public EventDTO(Long eventId, Long userId, String eventName, Timestamp eventDate, String location, int totalTickets, int availableTickets, List<EventTicketTypeDTO> eventTicketTypes) {
+    public EventDTO(Long eventId, Long userId, String eventName, Timestamp eventDate, String location, int totalTickets,
+            int availableTickets, List<EventTicketTypeDTO> eventTicketTypes) {
         this.eventId = eventId;
         this.userId = userId;
         this.eventName = eventName;

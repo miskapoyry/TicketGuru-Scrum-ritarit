@@ -45,15 +45,8 @@ public class EventService {
         event.setEventName(eventDTO.getEventName());
         event.setEventDate(eventDTO.getEventDate());
         event.setLocation(eventDTO.getLocation());
-        event.setTotalTickets(eventDTO.getTotalTickets());
-        // Tarkistetaan onko available suurempi kuin total (EventDTO). Jos näin on niin
-        // palautetaan 400 error invalidinput
         eventDTO.validateAvailableTickets();
-        event.setAvailableTickets(eventDTO.getAvailableTickets());
         event.setAppUser(user); // Aseta käyttäjä ennen tallennusta!
-
-        // Tallenna tapahtuma tietokantaan
-        Event newEvent = eventRepository.save(event);
 
         // Lisää lipputyypit tapahtumaan
         List<EventTicketType> eventTicketTypes = eventDTO.getEventTicketTypes().stream()
@@ -78,13 +71,22 @@ public class EventService {
 
                     // Luo uusi EventTicketType ja aseta hinta
                     EventTicketType eventTicketType = new EventTicketType();
-                    eventTicketType.setEvent(newEvent);
+                    eventTicketType.setEvent(event);
                     eventTicketType.setTicketType(ticketType);
                     eventTicketType.setPrice(price);
                     eventTicketType.setTicketQuantity(ticketTypeDTO.getTicketQuantity());
                     return eventTicketType;
                 })
                 .collect(Collectors.toList());
+
+        // Laske kokonaisliput EventTicketType-objekteista
+        int totalTickets = eventTicketTypes.stream()
+                .mapToInt(EventTicketType::getTicketQuantity)
+                .sum();
+        event.setTotalTickets(totalTickets);
+        event.setAvailableTickets(totalTickets);
+        // Tallenna tapahtuma tietokantaan
+        Event newEvent = eventRepository.save(event);
 
         // Tallenna kaikki EventTicketType-objektit
         eventTicketTypeRepository.saveAll(eventTicketTypes);
