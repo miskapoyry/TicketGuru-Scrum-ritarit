@@ -64,7 +64,7 @@ Admin tasoinen käyttäjä kykenee myös näkemään valitsemansa tapahtuman kai
 
 ![alustava_kayttoliittymakaavio](kayttoliittyma_kuvat/kayttoliittymakaavio.png)
 
-***Alapuolelle on luotu hahmotelmia, joiden avulla käyttöliittymään saadaan lisää selkeyttä. Huomioithan, että nämä eivät ole tässä vaiheessa vielä lopullisia, ja muutosten tullessa eteen, niitä voi käydä muuttamassa.***
+***Alapuolelle on luotu alustavat hahmotelmat siitä, millaisia näkymiä käyttöliittymästä voidaan odottaa suunnitelmiemme perusteella. Huomioithan, että nämä ovat alkuperäisiä suunnitelmia ja lopullisessa ratkaisussa saattaa olla jonkin verran eroavaisuuksia***
 
 ### Kirjautuminen
 
@@ -74,7 +74,7 @@ Näyttöhahmotelma kirjautumisruutuun sekä rekisteröimiseen. Niiden välinen s
 
 ### Lippujen myynti
 
-Lipunmyynti on avoinna Myyjille ja siellä myyjä kykenee valitsemaan tapahtuman, lippujen määrän ja tyypin sekä tulostamaan liput ostamisen jälkeen.
+Lipunmyynti on avoinna Myyjille (user rooli) ja siellä myyjä kykenee valitsemaan tapahtuman, lippujen määrän ja tyypin sekä tulostamaan liput ostamisen jälkeen.
 
 ![lipunmyynti_hahmotelma](kayttoliittyma_kuvat/lipunmyynti_nayttohahmotelma.png)
 
@@ -86,7 +86,7 @@ Hallinnointiin pääsee "admin" tasoisilla tunnuksilla. Siellä käyttäjä kyke
 
 ### Lippujen tarkastus
 
-Lippujen tarkastus vaatii myyjän roolin. Se toimii yksinkertaisesti syöttämällä käyttäjän antaman lipun hash koodi järjestelmään. Järjestelmä hakee lipun ja sen tiedot. Mikäli lippu on käyttökelpoinen kaikin puolin, voi myyjä tällöin merkitä sen käytetyksi.
+Lippujen tarkastus vaatii myyjän (user) roolin. Se toimii yksinkertaisesti syöttämällä käyttäjän antaman lipun hash koodi järjestelmään. Järjestelmä hakee lipun ja sen tiedot. Mikäli lippu on käyttökelpoinen kaikin puolin, voi myyjä tällöin merkitä sen käytetyksi.
 
 ![lipuntarkistus_hahmotelma](kayttoliittyma_kuvat/lipuntarkastus_nayttohahmotelma.png)
 
@@ -433,7 +433,7 @@ Julkaisimme projektin Rahti2-palvelimella, mutta sovelluksen voi asentaa myös m
 ```
 
 - **Cors-säädöt:**
-    - Määritä sallitut lähteet (originit), jotta sovellus ei hyväksy pyyntöjä mistä tahansa.
+    - Määritä sallitut lähteet (originit), jotta sovellus ei hyväksy pyyntöjä mistä tahansa. Sallittuja lähteitä voi olla esimerkiksi kehitysvaiheessa frontendin kehitysympäristöt ja lopullinen frontendin tuotantodomaini.
 
 - **Spring Bootin asetukset:**
     - Varmista, että Spring Boot käyttää prod -profiilia tuotannossa
@@ -442,7 +442,7 @@ Julkaisimme projektin Rahti2-palvelimella, mutta sovelluksen voi asentaa myös m
     - Käytä Liquibasea varmistamaan, että tietokanta pysyy synkronoituna sovelluksen kanssa.
 
 - **Dockerointi:**
-    - Luo sovelluksesta Docker-kuva ja varmista, että se voidaan ajaa riippumattomasti ympäristöstä.
+    - Luo frontend sovelluksesta valmiin Dockerfilen avulla Docker-kuva (halutessasi myös kontti) ja varmista, että se voidaan ajaa riippumattomasti ympäristöstä.
 
 ## Käynnistys- ja käyttöohje
 
