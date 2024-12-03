@@ -28,8 +28,8 @@ public class AppUserResource {
     @GetMapping("/{id}")
     public ResponseEntity<AppUserDTO> getUserById(@PathVariable Long id) {
         AppUserDTO user = appUserService.getUserById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
-            return ResponseEntity.ok(user);
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
+        return ResponseEntity.ok(user);
     }
 
     @PostMapping
@@ -43,26 +43,27 @@ public class AppUserResource {
         if (appUserDTO.getUserId() != null) {
             throw new DuplicateResourceException("User ID must not be provided for new users");
         }
-        
+
         AppUserDTO createdUser = appUserService.createUser(appUserDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(createdUser);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Long id, @Valid @RequestBody AppUserDTO appUserDetails) {
+    public ResponseEntity<AppUserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody AppUserDTO appUserDetails) {
         // Checking if the username already exists (excluding own username)
         if (appUserService.getAllUsers().stream()
-                .anyMatch(user -> !user.getUserId().equals(id) && user.getUsername().equals(appUserDetails.getUsername()))) {
+                .anyMatch(user -> !user.getUserId().equals(id)
+                        && user.getUsername().equals(appUserDetails.getUsername()))) {
             throw new DuplicateResourceException("Username already exists: " + appUserDetails.getUsername());
         }
 
         AppUserDTO updatedUser = appUserService.updateUser(id, appUserDetails)
-            .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
+                .orElseThrow(() -> new ResourceNotFoundException("User with ID " + id + " not found"));
         return ResponseEntity.ok(updatedUser);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         boolean deleted = appUserService.deleteUser(id);
         if (!deleted) {
             throw new ResourceNotFoundException("User with ID " + id + " not found");

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.validation.Valid;
 import ticketguru.DTO.SaleDTO;
+import ticketguru.DTO.SalesSummaryDTO;
 import ticketguru.service.SaleService;
 import ticketguru.repository.AppUserRepository;
 
@@ -22,6 +23,7 @@ public class SaleResource {
 
     @Autowired
     private SaleService saleService;
+
     @Autowired
     private AppUserRepository appUserRepository;
 
@@ -42,7 +44,7 @@ public class SaleResource {
         if (userId != null && !appUserRepository.existsById(userId)) {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "User not found with given ID");
-            return ResponseEntity.status(404).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
         List<SaleDTO> sales = saleService.getAllSales(userId);
         return ResponseEntity.ok(sales);
@@ -50,22 +52,24 @@ public class SaleResource {
 
     @GetMapping("/{id}")
     public ResponseEntity<?> getSaleById(@PathVariable Long id) {
-        // Tarkista, löytyykö sale ID:n perusteella
         SaleDTO sale = saleService.getSaleById(id);
         if (sale == null) {
-            // Jos myyntiä ei löydy, palautetaan virhevastauksena 404. Tehty samalla tavalla
-            // yllä olevan kanssa.
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Sale not found with given ID");
-            return ResponseEntity.status(404).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
-        // Palauta myyntitiedot, jos löytyi
         return ResponseEntity.ok(sale);
+    }
+
+    @GetMapping("/summary/{eventId}")
+    public ResponseEntity<SalesSummaryDTO> generateSalesSummaryReport(@PathVariable Long eventId) {
+        SalesSummaryDTO report = saleService.generateSalesSummaryReport(eventId);
+        return ResponseEntity.ok(report);
     }
 
     @GetMapping("/search")
     public ResponseEntity<?> getSales(@RequestParam(required = false) String userId,
-            @RequestParam(required = false) String saleIds) {
+                                      @RequestParam(required = false) String saleIds) {
         if (userId != null) {
             List<String> userIds = Arrays.asList(userId.split(","));
             List<String> nonExistentUserIds = userIds.stream()
@@ -78,7 +82,7 @@ public class SaleResource {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message",
                         "User(s) not found with given ID(s): " + String.join(", ", nonExistentUserIds));
-                return ResponseEntity.status(404).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
             List<SaleDTO> sales = userIds.stream()
@@ -91,7 +95,7 @@ public class SaleResource {
             if (sales.isEmpty()) {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "No sales found for user ID(s): " + userId);
-                return ResponseEntity.status(404).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
 
             return ResponseEntity.ok(sales);
@@ -106,24 +110,23 @@ public class SaleResource {
             } catch (NumberFormatException e) {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "Invalid sale ID format in: " + saleIds);
-                return ResponseEntity.status(400).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
             }
 
             List<SaleDTO> sales = saleService.getSales(saleIdList);
             if (sales.isEmpty()) {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "No sales found for sale IDs: " + saleIds);
-                return ResponseEntity.status(404).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
             return ResponseEntity.ok(sales);
         } else {
             Map<String, String> errorResponse = new HashMap<>();
             errorResponse.put("message", "Either userId or saleIds must be provided");
-            return ResponseEntity.status(400).body(errorResponse);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
 
-    // Poista sale tiettyä IDtä käyttäen
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteSale(@PathVariable Long id) {
         saleService.deleteSale(id);

@@ -52,6 +52,7 @@ public class TicketIntegrationTests {
         assertFalse(executedChangesets.isEmpty());
     }
 
+    // Haetaan kaikki testidatassa olevat liput
     @Test
     public void testGetAllTickets() throws Exception {
         mockMvc.perform(get("/api/tickets"))
@@ -64,6 +65,7 @@ public class TicketIntegrationTests {
                 .andExpect(jsonPath("$[2].ticketNumber").value("TICKET-1003"));
     }
 
+    // Lipun haku numerolla
     @Test
     @Transactional
     public void testFetchTicketByTicketNumber() {
@@ -79,6 +81,7 @@ public class TicketIntegrationTests {
         assertThat(ticket.isUsed()).isFalse();
     }
 
+    // Lippujen haku eventin id:n perusteella
     @Test
     public void testGetTicketsByEventId() throws Exception {
         mockMvc.perform(get("/api/tickets")
@@ -89,6 +92,7 @@ public class TicketIntegrationTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].eventId").value(1));
     }
 
+    // lippujen haku numerolla, jota ei ole
     @Test
     public void shouldReturnNotFoundForInvalidTicketNumber() throws Exception {
         String invalidTicketNumber = "99999";

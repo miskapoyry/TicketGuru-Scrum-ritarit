@@ -13,30 +13,33 @@
 
 **Request Body** : 
 
-- {
-  "eventName": String,
-  "eventDate": LocalDateTime,
-  "location": String,
-  "totalTickets": Integer,
-  "availableTickets": Integer,
-  "userId": Long,
-  "ticketTypes": Map<String, Double>
+{
+  "userId": "integer",
+  "eventName": "string",
+  "eventDate": "string (ISO 8601 format)",
+  "location": "string",
+  "eventTicketTypes": [
+        {
+            "ticketTypeId": "integer",
+            "ticketQuantity": "integer",
+            "price": "decimal"
+        }
+    ]
 }
 
 ```json
 {
     "userId": 1,
     "eventName": "Ooppera",
-    "eventDate": "2024-11-25T18:00:00.000+00:00",
+    "eventDate": "2024-12-25T18:00:00.000+00:00",
     "location": "Helsinki",
-    "totalTickets": 1000,
-    "availableTickets": 1000,
-    "ticketTypes": {
-        "Pensioner": 25.0,
-        "Student": 25.0,
-        "Child": 50.0,
-        "Adult": 60.0
-    }
+    "eventTicketTypes": [
+        {
+            "ticketTypeId": 1,
+            "ticketQuantity": 1000,
+            "price": 200
+        }
+    ]
 }
 ```
 
@@ -45,17 +48,16 @@
 ```json
 {
     "userId": 1,
-    "eventName": "Ei ooppera",
-    "eventDate": "2024-11-25T18:00:00.000+00:00",
+    "eventName": "Ei ainakaan ooppera",
+    "eventDate": "2024-12-25T18:00:00.000+00:00",
     "location": "Helsinki",
-    "totalTickets": 1000,
-    "availableTickets": 1000,
-    "ticketTypes": {
-        "Pensioner": 25.0,
-        "Student": 25.0,
-        "Child": 50.0,
-        "Adult":60.0
-    }
+    "eventTicketTypes": [
+        {
+            "ticketTypeId": 1,
+            "ticketQuantity": 1000,
+            "price": 200
+        }
+    ]
 }
 ```
 
@@ -132,36 +134,6 @@ Error example:
     "message": "Location cannot be empty",
     "status": 400,
     "timestamp": "2024-10-28T16:58:53.2901244",
-    "path": "uri=/api/events"
-}
-```
-
-**Condition: Total tickets is 0 or empty**
-
-Code: ```400 Bad Request``` 
-
-Error example:
-
-```json
-{
-    "message": "Total tickets must be at least 1",
-    "status": 400,
-    "timestamp": "2024-10-28T17:00:50.1643958",
-    "path": "uri=/api/events"
-}
-```
-
-**Condition: Available tickets is greater than total tickets**
-
-Code: ```400 Bad Request``` 
-
-Error example:
-
-```json
-{
-    "message": "Available tickets cannot be greater than total tickets",
-    "status": 400,
-    "timestamp": "2024-10-28T17:01:32.0485452",
     "path": "uri=/api/events"
 }
 ```

@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.*;
 import ticketguru.exception.ResourceNotFoundException;
 import ticketguru.service.EventService;
 import ticketguru.DTO.EventDTO;
+import ticketguru.DTO.EventReportDTO;
 
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
@@ -35,16 +35,20 @@ public class EventResource {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findEventById(@PathVariable Long id) {
-        Optional<EventDTO> event = eventService.findEventById(id);
-        if (event.isEmpty()) {
-            throw new ResourceNotFoundException("Event with ID " + id + " not found");
-        }
-        return ResponseEntity.of(event);
+    public ResponseEntity<EventDTO> findEventById(@PathVariable Long id) {
+        EventDTO event = eventService.findEventById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Event with ID " + id + " not found"));
+        return ResponseEntity.ok(event);
     }
 
-    @GetMapping("")
-    public List<?> getAllEvents() {
+    @GetMapping("/{id}/report")
+    public ResponseEntity<List<EventReportDTO>> generateEventReport(@PathVariable Long id) {
+        List<EventReportDTO> report = eventService.generateEventReport(id);
+        return ResponseEntity.ok(report);
+    }
+
+    @GetMapping
+    public List<EventDTO> getAllEvents() {
         return eventService.getAllEvents();
     }
 
@@ -56,7 +60,7 @@ public class EventResource {
             if (events.isEmpty()) {
                 Map<String, String> errorResponse = new HashMap<>();
                 errorResponse.put("message", "No events found with the given criteria");
-                return ResponseEntity.status(404).body(errorResponse);
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
             }
             return ResponseEntity.ok(events);
         } catch (IllegalArgumentException e) {
