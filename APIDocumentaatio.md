@@ -10,6 +10,7 @@ retrieving, and deleting events.
 * [Create An event](eventAPI/post.md) : `POST /api/event/api/event?userId={Id}`
 * [Update An Event](eventAPI/put.md) : `PUT /api/event/{id}`
 * [Delete An Account](eventAPI/delete.md) : `DELETE /api/event/{id}`
+* [Show an event report](eventAPI/getEventReportByID.md) : `GET /api/events/{id}/report`
 
 ## Ticket Resource
 
@@ -29,6 +30,7 @@ The Sale Resource allows you to manage sales in the TicketGuru application. It s
 * [Create a Sale](saleAPI/post.md) : `POST /api/sales`
 * [Update a Sale](saleAPI/put.md) : `PUT /api/sales/{id}`
 * [Delete a Sale](saleAPI/delete.md) : `DELETE /api/sales/{id}`
+* [Show an sales report of an event](saleAPI/getSaleReportbyEventID.md) : `GET /api/sales/summary/{id}`
 
 ## AppUser Resource
 
