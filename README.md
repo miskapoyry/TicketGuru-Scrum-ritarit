@@ -418,6 +418,7 @@ npm run dev
 ```
 
 Kun projekti on käynnissä, sovellus löytyy selaimesta osoitteesta: *http://localhost:5137*
+Huomaathan, että mikäli haluat yhdistää lokaalin frontendin lokaaliin backendiin, tulee frontendissä käydä muuttamassa osoitteita kahdessa tiedostossa. Login.tsx tiedoston osoite, sekä api.ts osoitteet tulee vaihtaa vastaamaan lokaalin backendisi osoitteita. Tällä hetkellä osoitteet ovat rahdissa julkaistun backendin osoitteita, mutta rahdin "student projekti" päättyy 31.12.2024, jonka jälkeen osoitteet eivät välttämättä toimi.
 
 ### Asennus tuotantoympäristöön
 
